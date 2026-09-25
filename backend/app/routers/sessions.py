@@ -32,6 +32,7 @@ from app.schemas.report import AssessmentReportSchema
 from app.services.adaptive_engine import AdaptiveEngine
 from app.services.answer_evaluator import AnswerEvaluator
 from app.services.skill_estimator import SkillEstimator
+from app.services.course_recommendation_service import course_recommendation_service
 
 router = APIRouter(prefix="/api/sessions", tags=["sessions"])
 
@@ -301,6 +302,24 @@ async def get_report(session_id: str, db: AsyncSession = Depends(get_db)) -> Ass
 
     overall_score = int(sum(e.score for e in estimates) / len(estimates)) if estimates else 0
 
+    # Generate course recommendations from gaps
+    from app.schemas.report import ResourceRecommendationsSchema, CourseResourceSchema
+    gap_dicts = [
+        {
+            "competency_id": g.competency_id,
+            "competency_name": g.competency_name,
+            "current_score": g.current_score,
+            "target_score": g.target_score,
+            "gap": g.gap,
+            "priority": g.priority,
+        }
+        for g in gaps
+    ]
+    all_resources = course_recommendation_service.get_recommendations_for_gaps(gap_dicts, max_per_competency=2)
+    free_resources = [CourseResourceSchema(**r) for r in all_resources if r["price_type"] == "free"]
+    paid_resources = [CourseResourceSchema(**r) for r in all_resources if r["price_type"] == "paid"]
+    resources = ResourceRecommendationsSchema(free=free_resources, paid=paid_resources, source="curated")
+
     return AssessmentReportSchema(
         session_id=session_id,
         completed_at=session.completed_at or session.started_at,
@@ -311,6 +330,7 @@ async def get_report(session_id: str, db: AsyncSession = Depends(get_db)) -> Ass
         gaps=gaps,
         evidence=evidence_items,
         recommendations=_generate_recommendations(gaps),
+        resources=resources,
     )
 
 

@@ -554,12 +554,14 @@ input, textarea, select {
 
 .assess-sidebar {
   border-right: 1px solid var(--c-rule);
-  padding: var(--space-12) var(--space-8);
+  padding: var(--space-10) var(--space-8);
   background: var(--c-surface);
   position: sticky;
   top: 56px;
   height: calc(100vh - 56px);
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .assess-main {
@@ -650,6 +652,8 @@ input, textarea, select {
   text-align: center;
   transition: all var(--t-base);
   border: none;
+  height: auto;
+  line-height: 1.4;
 }
 
 .level-option:hover {

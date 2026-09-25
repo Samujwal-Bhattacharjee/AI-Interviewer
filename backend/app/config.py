@@ -27,11 +27,15 @@ class Settings(BaseSettings):
     def effective_neo4j_user(self) -> str:
         return self.neo4j_user or self.neo4j_username or "neo4j"
 
-    # LLM
-    openai_api_key: str = ""
-    llm_model: str = "gpt-4o-mini"
+    # LLM — Groq (primary, no OpenAI dependency)
+    groq_api_key: str = ""
+    groq_model: str = "llama-3.3-70b-versatile"
 
-    # STT / TTS (future)
+    # Legacy OpenAI (kept for backward compat but NOT used at runtime)
+    openai_api_key: str = ""
+    llm_model: str = ""  # unused — use groq_model
+
+    # STT / TTS
     deepgram_api_key: str = ""
     elevenlabs_api_key: str = ""
     elevenlabs_voice_id: str = ""

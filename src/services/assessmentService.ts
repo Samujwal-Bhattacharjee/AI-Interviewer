@@ -152,6 +152,32 @@ export async function getAssessmentReport(sessionId: string): Promise<Assessment
     confidence: ev.confidence as number,
   }));
 
+  // Map course resources if present
+  type RawResource = Record<string, unknown>;
+  const mapResource = (r: RawResource) => ({
+    id: r.id as string,
+    title: r.title as string,
+    provider: r.provider as string,
+    skill: r.skill as string,
+    resourceType: r.resource_type as string,
+    difficulty: r.difficulty as string,
+    estimatedDuration: r.estimated_duration as string,
+    priceType: r.price_type as 'free' | 'paid',
+    url: r.url as string,
+    reason: r.reason as string,
+    priority: r.priority as string | undefined,
+    forCompetency: r.for_competency as string | undefined,
+  });
+
+  const rawResources = d.resources as Record<string, unknown> | undefined;
+  const resources = rawResources
+    ? {
+        free: ((rawResources.free as RawResource[]) ?? []).map(mapResource),
+        paid: ((rawResources.paid as RawResource[]) ?? []).map(mapResource),
+        source: (rawResources.source as string) ?? 'curated',
+      }
+    : undefined;
+
   return {
     sessionId: d.session_id as string,
     completedAt: d.completed_at as string,
@@ -162,5 +188,6 @@ export async function getAssessmentReport(sessionId: string): Promise<Assessment
     gapAnalysis,
     evidence,
     recommendations: (d.recommendations as string[]) ?? [],
+    resources,
   };
 }

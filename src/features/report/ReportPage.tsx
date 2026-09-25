@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useInterviewStore } from '../../store/interviewStore';
 import { getAssessmentReport } from '../../services/assessmentService';
 import { getRoleById } from '../../services/roleService';
-import type { AssessmentReport } from '../../types/assessment';
+import type { AssessmentReport, CourseResource } from '../../types/assessment';
 import type { TargetRole } from '../../types/roles';
 import { formatScore, formatConfidence, trendSymbol } from '../../lib/utils';
 
@@ -504,18 +504,179 @@ export function ReportPage() {
           </section>
         )}
 
+        {/* ── SECTION: COURSE RESOURCES ── */}
+        {report?.resources && (report.resources.free.length > 0 || report.resources.paid.length > 0) && (
+          <section style={{ marginBottom: 'var(--space-16)' }}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'baseline',
+                borderBottom: '1px solid var(--c-rule)',
+                paddingBottom: 'var(--space-4)',
+                marginBottom: 'var(--space-8)',
+              }}
+            >
+              <div className="sys-label" style={{ color: 'var(--c-ink)' }}>
+                {report.recommendations && report.recommendations.length > 0 ? '04' : '03'} / Learning Resources
+              </div>
+              <span style={{ fontSize: 'var(--text-xs)', color: 'var(--c-mid)', fontFamily: 'var(--f-mono)' }}>
+                Curated — {report.resources.source}
+              </span>
+            </div>
+
+            {/* FREE resources */}
+            {report.resources.free.length > 0 && (
+              <div style={{ marginBottom: 'var(--space-8)' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-3)',
+                    marginBottom: 'var(--space-4)',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: 'var(--f-mono)',
+                      fontSize: '10px',
+                      letterSpacing: '0.12em',
+                      padding: '2px 8px',
+                      background: 'rgba(26, 122, 74, 0.1)',
+                      color: 'var(--c-success)',
+                      border: '1px solid rgba(26, 122, 74, 0.2)',
+                    }}
+                  >
+                    FREE
+                  </span>
+                  <span style={{ fontSize: 'var(--text-xs)', color: 'var(--c-mid)' }}>
+                    {report.resources.free.length} resource{report.resources.free.length !== 1 ? 's' : ''}
+                  </span>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 'var(--space-4)' }}>
+                  {report.resources.free.map((r) => (
+                    <ResourceCard key={r.id} resource={r} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* PAID resources */}
+            {report.resources.paid.length > 0 && (
+              <div>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-3)',
+                    marginBottom: 'var(--space-4)',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: 'var(--f-mono)',
+                      fontSize: '10px',
+                      letterSpacing: '0.12em',
+                      padding: '2px 8px',
+                      background: 'rgba(100, 100, 200, 0.1)',
+                      color: 'var(--c-accent)',
+                      border: '1px solid rgba(100, 100, 200, 0.2)',
+                    }}
+                  >
+                    PAID
+                  </span>
+                  <span style={{ fontSize: 'var(--text-xs)', color: 'var(--c-mid)' }}>
+                    {report.resources.paid.length} resource{report.resources.paid.length !== 1 ? 's' : ''}
+                  </span>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 'var(--space-4)' }}>
+                  {report.resources.paid.map((r) => (
+                    <ResourceCard key={r.id} resource={r} />
+                  ))}
+                </div>
+              </div>
+            )}
+          </section>
+        )}
+
         {/* ── CALL TO ACTION ROW ── */}
         <div style={{ display: 'flex', gap: 'var(--space-4)', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
           <button className="btn btn-primary" onClick={() => navigate('/assess')}>
             Start Next Assessment →
           </button>
-          <Link to="/skills">
-            <button className="btn btn-secondary">
-              View Complete Skill Profile
+          {report?.gapAnalysis && report.gapAnalysis.filter((g) => g.gap < 0).length > 0 && (
+            <button
+              className="btn btn-secondary"
+              onClick={() => {
+                // Navigate to reassessment focused on weakest competencies
+                const weakest = report.gapAnalysis
+                  .filter((g) => g.gap < 0)
+                  .sort((a, b) => a.gap - b.gap)
+                  .slice(0, 3)
+                  .map((g) => g.competencyId);
+                navigate('/assess', { state: { focusCompetencies: weakest, isReassessment: true } });
+              }}
+            >
+              Targeted Reassessment
             </button>
+          )}
+          <Link to="/skills">
+            <button className="btn btn-secondary">View Complete Skill Profile</button>
           </Link>
         </div>
       </div>
     </main>
+  );
+}
+
+// ── ResourceCard component ──────────────────────────────────────────────────
+function ResourceCard({ resource }: { resource: CourseResource }) {
+  return (
+    <motion.a
+      href={resource.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      style={{
+        display: 'block',
+        padding: 'var(--space-5)',
+        background: 'var(--c-surface)',
+        border: '1px solid var(--c-rule)',
+        borderRadius: '2px',
+        textDecoration: 'none',
+        color: 'inherit',
+        transition: 'border-color 0.15s ease',
+      }}
+      whileHover={{ borderColor: 'var(--c-accent)' }}
+    >
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 'var(--space-2)', marginBottom: 'var(--space-3)' }}>
+        <span
+          style={{
+            fontFamily: 'var(--f-mono)',
+            fontSize: '9px',
+            letterSpacing: '0.1em',
+            padding: '1px 5px',
+            background: 'var(--c-surface-2)',
+            color: 'var(--c-mid)',
+            border: '1px solid var(--c-rule)',
+          }}
+        >
+          {resource.resourceType.toUpperCase()}
+        </span>
+        <span style={{ fontSize: 'var(--text-xs)', color: 'var(--c-mid)', fontFamily: 'var(--f-mono)' }}>
+          {resource.estimatedDuration}
+        </span>
+      </div>
+      <div style={{ fontWeight: 600, fontSize: 'var(--text-sm)', marginBottom: 'var(--space-2)', lineHeight: 1.35 }}>
+        {resource.title}
+      </div>
+      <div style={{ fontSize: 'var(--text-xs)', color: 'var(--c-mid)', marginBottom: 'var(--space-3)' }}>
+        {resource.provider} · {resource.difficulty}
+      </div>
+      <p style={{ fontSize: 'var(--text-xs)', color: 'var(--c-mid)', lineHeight: 1.5, marginBottom: 0 }}>
+        {resource.reason}
+      </p>
+    </motion.a>
   );
 }

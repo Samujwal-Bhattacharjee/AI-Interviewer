@@ -71,6 +71,27 @@ export interface ReportEvidence {
   confidence: number;
 }
 
+export interface CourseResource {
+  id: string;
+  title: string;
+  provider: string;
+  skill: string;
+  resourceType: string;
+  difficulty: string;
+  estimatedDuration: string;
+  priceType: 'free' | 'paid';
+  url: string;
+  reason: string;
+  priority?: string;
+  forCompetency?: string;
+}
+
+export interface ResourceRecommendations {
+  free: CourseResource[];
+  paid: CourseResource[];
+  source: string;
+}
+
 export interface AssessmentReport {
   sessionId: string;
   completedAt: string;
@@ -82,4 +103,5 @@ export interface AssessmentReport {
   overallScore: number;
   evidence?: ReportEvidence[];
   recommendations?: string[];
+  resources?: ResourceRecommendations;
 }
