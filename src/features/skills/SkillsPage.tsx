@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useSkillProfile, useGapAnalysis } from '../../hooks/useSkillProfile';
-import { mockRoles } from '../../mock/roles';
 import { trendSymbol, formatConfidence } from '../../lib/utils';
+import { SystemFooter } from '../../components/layout/SystemFooter';
 
 const competencyNameMap: Record<string, string> = {
   'comp-dsa': 'DSA',
@@ -349,6 +349,7 @@ export function SkillsPage() {
           )}
         </div>
       </div>
+      <SystemFooter />
     </main>
   );
 }

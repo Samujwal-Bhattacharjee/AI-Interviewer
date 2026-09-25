@@ -7,6 +7,7 @@ import { LiveEstimatePanel } from '../../components/interview/LiveEstimatePanel'
 import { AdaptiveStatePanel } from '../../components/interview/AdaptiveStatePanel';
 import { padIndex } from '../../lib/utils';
 import { mockRoles } from '../../mock/roles';
+import { SystemFooter } from '../../components/layout/SystemFooter';
 
 const competencyNameMap: Record<string, string> = {
   'comp-dsa': 'DSA',
@@ -332,6 +333,7 @@ export function InterviewPage() {
           <LiveEstimatePanel estimates={skillEstimates} roleId={targetRoleId ?? 'role-001'} />
         </aside>
       </div>
+      <SystemFooter />
     </main>
   );
 }

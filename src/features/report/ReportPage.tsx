@@ -5,8 +5,8 @@ import { useInterviewStore } from '../../store/interviewStore';
 import { getAssessmentReport } from '../../services/assessmentService';
 import { getRoleById } from '../../services/roleService';
 import type { AssessmentReport, CourseResource } from '../../types/assessment';
-import type { TargetRole } from '../../types/roles';
 import { formatScore, formatConfidence, trendSymbol } from '../../lib/utils';
+import { SystemFooter } from '../../components/layout/SystemFooter';
 
 const competencyNameMap: Record<string, string> = {
   'comp-dsa': 'Algorithms & Data Structures',
@@ -625,6 +625,7 @@ export function ReportPage() {
           </Link>
         </div>
       </div>
+      <SystemFooter />
     </main>
   );
 }

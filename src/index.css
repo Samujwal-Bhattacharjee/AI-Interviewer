@@ -4,23 +4,24 @@
    DESIGN TOKENS
    ============================================= */
 :root {
-  /* Colors */
-  --c-ink: #0A0A0A;
-  --c-paper: #F5F4F0;
-  --c-paper-alt: #EFEDE8;
-  --c-surface: #FAFAF8;
-  --c-surface-2: #F2F0EB;
-  --c-mid: #7A7A7A;
-  --c-mid-2: #B8B8B4;
-  --c-rule: #D8D6D0;
-  --c-rule-strong: #B0ADA6;
-  --c-accent: #1A5CE4;
-  --c-accent-dim: rgba(26, 92, 228, 0.12);
-  --c-accent-glow: rgba(26, 92, 228, 0.25);
-  --c-danger: #B83232;
-  --c-danger-dim: rgba(184, 50, 50, 0.1);
+  /* Colors — High Contrast Stark Brutalist */
+  --c-ink: #000000;
+  --c-paper: #FFFFFF;
+  --c-paper-alt: #F9FAFB;
+  --c-surface: #FFFFFF;
+  --c-surface-2: #F3F4F6;
+  --c-mid: #555555;
+  --c-mid-2: #888888;
+  --c-rule: #000000;
+  --c-rule-subtle: #E5E7EB;
+  --c-rule-strong: #000000;
+  --c-accent: #0047FF;
+  --c-accent-dim: rgba(0, 71, 255, 0.08);
+  --c-accent-glow: rgba(0, 71, 255, 0.25);
+  --c-danger: #D90429;
+  --c-danger-dim: rgba(217, 4, 41, 0.1);
   --c-warning: #B87C28;
-  --c-success: #1A7A4A;
+  --c-success: #0047FF;
 
   /* Typography */
   --f-sans: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;

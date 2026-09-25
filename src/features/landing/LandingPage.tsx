@@ -1,516 +1,793 @@
 import { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, useInView } from 'framer-motion';
 import { AdaptivePathDiagram } from '../../components/charts/AdaptivePathDiagram';
+import { SystemFooter } from '../../components/layout/SystemFooter';
+import { useTargetRoles } from '../../hooks/useAssessment';
 
 const processSteps = [
   { num: '01', label: 'TARGET' },
   { num: '02', label: 'COMPETENCY MAP' },
   { num: '03', label: 'ASSESSMENT' },
   { num: '04', label: 'EVIDENCE' },
-  { num: '05', label: 'SKILL ESTIMATE' },
+  { num: '05', label: 'SKILL ESTIMATE', active: true },
   { num: '06', label: 'GAP ANALYSIS' },
   { num: '07', label: 'IMPROVEMENT' },
   { num: '08', label: 'REASSESS' },
 ];
 
-const mockSkillDisplay = [
-  { name: 'DSA', score: 78, conf: 0.89, target: 72 },
-  { name: 'Python', score: 71, conf: 0.84, target: 74 },
-  { name: 'SQL', score: 63, conf: 0.76, target: 68 },
-  { name: 'Debugging', score: 46, conf: 0.71, target: 74 },
-  { name: 'System Design', score: 39, conf: 0.57, target: 55 },
-];
-
 export function LandingPage() {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
   const skillsRef = useRef<HTMLDivElement>(null);
-  const skillsInView = useInView(skillsRef, { once: true, margin: '-80px' });
+  const skillsInView = useInView(skillsRef, { once: true, margin: '-60px' });
+
+  // Load real target role from backend
+  const { data: roles } = useTargetRoles();
+  const primaryRole = roles?.[0]; // Junior Software Engineer
+
+  // Competency display using real backend data if available, with calibrated defaults
+  const competencies = primaryRole?.competencies?.length
+    ? primaryRole.competencies.map((c) => {
+        const req = primaryRole.requirements.find((r) => r.competencyId === c.id);
+        const target = req?.targetLevel ?? 70;
+        // Default demo scores reflecting realistic IRT estimation
+        const demoScores: Record<string, { score: number; conf: number; tag?: string }> = {
+          'comp-dsa': { score: 78, conf: 0.89 },
+          'comp-python': { score: 71, conf: 0.84 },
+          'comp-sql': { score: 63, conf: 0.76, tag: 'STRENGTH' },
+          'comp-debugging': { score: 46, conf: 0.71 },
+          'comp-system-design': { score: 39, conf: 0.57 },
+        };
+        const demo = demoScores[c.id] ?? { score: Math.round(target * 0.9), conf: 0.8 };
+        return {
+          id: c.id,
+          name: c.name.toUpperCase(),
+          score: demo.score,
+          target,
+          conf: demo.conf,
+          tag: demo.tag,
+        };
+      })
+    : [
+        { id: '1', name: 'DSA', score: 78, target: 72, conf: 0.89 },
+        { id: '2', name: 'PYTHON', score: 71, target: 74, conf: 0.84 },
+        { id: '3', name: 'SQL', score: 63, target: 68, conf: 0.76, tag: 'STRENGTH' },
+        { id: '4', name: 'DEBUGGING', score: 46, target: 74, conf: 0.71 },
+        { id: '5', name: 'SYSTEM DESIGN', score: 39, target: 60, conf: 0.57 },
+      ];
 
   return (
-    <main className="page-shell" style={{ background: 'var(--c-paper)' }}>
-      {/* ── HERO ── */}
+    <div style={{ background: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      {/* ── HERO SECTION ── */}
       <section
         style={{
-          minHeight: 'calc(100vh - 56px)',
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          alignItems: 'center',
-          gap: 'var(--space-12)',
-          maxWidth: '1400px',
-          margin: '0 auto',
-          padding: 'var(--space-24) var(--space-8)',
-        }}
-      >
-        {/* Left — typography */}
-        <div>
-          <motion.div
-            className="hero-label"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            Adaptive Assessment Engine / v0.1
-          </motion.div>
-
-          <motion.h1
-            className="hero-title"
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          >
-            KNOW<br />WHERE<br />YOU STAND.
-          </motion.h1>
-
-          <motion.p
-            className="hero-sub"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            An adaptive voice assessment that measures demonstrated ability against the role you're trying to reach.
-          </motion.p>
-
-          <motion.div
-            style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)', flexWrap: 'wrap' }}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.55 }}
-          >
-            <Link to="/assess">
-              <button className="btn btn-primary btn-lg" aria-label="Begin your adaptive assessment">
-                Begin Assessment →
-              </button>
-            </Link>
-            <Link to="/skills">
-              <button className="btn btn-ghost btn-lg">
-                View Profile
-              </button>
-            </Link>
-          </motion.div>
-
-          {/* Stats row */}
-          <motion.div
-            className="hero-meta"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.75 }}
-            style={{ marginTop: 'var(--space-12)', paddingTop: 'var(--space-8)', borderTop: '1px solid var(--c-rule)' }}
-          >
-            <div className="hero-stat">
-              <span className="hero-stat-value">5+</span>
-              <span className="hero-stat-label">Competencies</span>
-            </div>
-            <div style={{ width: '1px', height: '32px', background: 'var(--c-rule)' }} />
-            <div className="hero-stat">
-              <span className="hero-stat-value">IRT</span>
-              <span className="hero-stat-label">Engine</span>
-            </div>
-            <div style={{ width: '1px', height: '32px', background: 'var(--c-rule)' }} />
-            <div className="hero-stat">
-              <span className="hero-stat-value">∞</span>
-              <span className="hero-stat-label">Adaptive</span>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Right — adaptive path diagram */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 'var(--space-6)',
-            alignItems: 'center',
-          }}
-        >
-          {/* System annotation */}
-          <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '4px',
-                alignItems: 'flex-end',
-              }}
-            >
-              <span className="sys-label">Assessment Engine</span>
-              <span className="sys-label" style={{ color: 'var(--c-accent)' }}>
-                State / Adaptive
-              </span>
-            </div>
-          </div>
-
-          {/* Path diagram */}
-          <div style={{ width: '100%', maxWidth: '360px', padding: 'var(--space-4)' }}>
-            <AdaptivePathDiagram />
-          </div>
-
-          {/* Annotations */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: 'var(--space-3) var(--space-8)',
-              borderTop: '1px solid var(--c-rule)',
-              paddingTop: 'var(--space-6)',
-              width: '100%',
-            }}
-          >
-            {[
-              ['QUESTION', '04 / 10'],
-              ['DIFFICULTY', 'HARD'],
-              ['SEARCHING', 'MED → HARD'],
-              ['ESTIMATE', '72'],
-            ].map(([k, v]) => (
-              <div key={k} style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                <span className="sys-label">{k}</span>
-                <span
-                  style={{
-                    fontFamily: 'var(--f-mono)',
-                    fontSize: 'var(--text-sm)',
-                    color: 'var(--c-ink)',
-                    fontWeight: 500,
-                  }}
-                >
-                  {v}
-                </span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </section>
-
-      {/* ── PROCESS STRIP ── */}
-      <motion.div
-        className="process-strip"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.9, duration: 0.5 }}
-      >
-        <div className="process-items">
-          {processSteps.map((step) => (
-            <div key={step.num} className="process-item">
-              <span className="process-step-num">{step.num}</span>
-              <span className="process-step-label">{step.label}</span>
-            </div>
-          ))}
-        </div>
-      </motion.div>
-
-      {/* ── SKILL PROFILE PREVIEW ── */}
-      <section
-        ref={skillsRef}
-        style={{
-          maxWidth: '1400px',
-          margin: '0 auto',
-          padding: 'var(--space-24) var(--space-8)',
+          borderBottom: '1px solid #000000',
+          maxWidth: '100%',
         }}
       >
         <div
           style={{
+            maxWidth: '1440px',
+            margin: '0 auto',
             display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: 'var(--space-16)',
-            alignItems: 'start',
+            gridTemplateColumns: '1.2fr 1fr',
+            minHeight: 'calc(100vh - 52px)',
           }}
         >
-          {/* Left — copy */}
-          <div>
-            <div className="section-label" style={{ marginBottom: 'var(--space-6)' }}>
-              The Skill Model
+          {/* Left Column — Editorial Typography */}
+          <div
+            style={{
+              padding: '64px 48px 48px',
+              borderRight: '1px solid #000000',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+            }}
+          >
+            <div>
+              <motion.div
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                style={{
+                  fontFamily: 'var(--f-mono)',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  letterSpacing: '0.16em',
+                  textTransform: 'uppercase',
+                  color: '#555555',
+                  marginBottom: '32px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}
+              >
+                <span>—</span> ADAPTIVE ASSESSMENT ENGINE / V0.1
+              </motion.div>
+
+              <motion.h1
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                style={{
+                  fontFamily: 'var(--f-sans)',
+                  fontSize: 'clamp(56px, 6.5vw, 92px)',
+                  fontWeight: 900,
+                  lineHeight: 0.94,
+                  letterSpacing: '-0.04em',
+                  color: '#000000',
+                  textTransform: 'uppercase',
+                  margin: '0 0 28px 0',
+                }}
+              >
+                KNOW<br />WHERE<br />YOU STAND.
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                style={{
+                  fontFamily: 'var(--f-sans)',
+                  fontSize: '16px',
+                  lineHeight: 1.6,
+                  color: '#333333',
+                  maxWidth: '460px',
+                  marginBottom: '36px',
+                }}
+              >
+                An adaptive voice assessment that measures demonstrated ability against the role you're trying to reach.
+              </motion.p>
+
+              {/* CTAs */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4, delay: 0.3 }}
+                style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}
+              >
+                <button
+                  onClick={() => navigate('/assess')}
+                  style={{
+                    background: '#000000',
+                    color: '#FFFFFF',
+                    border: '1px solid #000000',
+                    padding: '12px 28px',
+                    fontFamily: 'var(--f-mono)',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    letterSpacing: '0.14em',
+                    textTransform: 'uppercase',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.background = '#FFFFFF';
+                    e.currentTarget.style.color = '#000000';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.background = '#000000';
+                    e.currentTarget.style.color = '#FFFFFF';
+                  }}
+                >
+                  BEGIN ASSESSMENT →
+                </button>
+
+                <button
+                  onClick={() => navigate('/skills')}
+                  style={{
+                    background: '#FFFFFF',
+                    color: '#000000',
+                    border: '1px solid #000000',
+                    padding: '12px 28px',
+                    fontFamily: 'var(--f-mono)',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    letterSpacing: '0.14em',
+                    textTransform: 'uppercase',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.background = '#000000';
+                    e.currentTarget.style.color = '#FFFFFF';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.background = '#FFFFFF';
+                    e.currentTarget.style.color = '#000000';
+                  }}
+                >
+                  VIEW PROFILE
+                </button>
+              </motion.div>
             </div>
-            <h2
+
+            {/* Bottom 3-Stat Row */}
+            <div
               style={{
-                fontFamily: 'var(--f-sans)',
-                fontSize: 'clamp(36px, 5vw, 64px)',
-                fontWeight: 700,
-                letterSpacing: '-0.03em',
-                lineHeight: 1.05,
-                marginBottom: 'var(--space-8)',
-                color: 'var(--c-ink)',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                borderTop: '1px solid #000000',
+                paddingTop: '28px',
+                marginTop: '48px',
               }}
             >
-              NOT A SCORE.<br />A MAP OF<br />ABILITY.
-            </h2>
-            <p
-              style={{
-                fontSize: 'var(--text-base)',
-                color: 'var(--c-mid)',
-                maxWidth: '400px',
-                lineHeight: 1.7,
-                marginBottom: 'var(--space-8)',
-              }}
-            >
-              Each competency is estimated independently with a confidence score. The system tracks your evolution across multiple sessions and identifies exactly where the gap is — not just whether you passed.
-            </p>
+              <div style={{ borderRight: '1px solid #000000', paddingRight: '20px' }}>
+                <div style={{ fontFamily: 'var(--f-sans)', fontSize: '32px', fontWeight: 900, color: '#000000', lineHeight: 1 }}>
+                  5+
+                </div>
+                <div style={{ fontFamily: 'var(--f-mono)', fontSize: '9px', letterSpacing: '0.16em', color: '#666666', marginTop: '6px', textTransform: 'uppercase' }}>
+                  COMPETENCIES
+                </div>
+              </div>
+
+              <div style={{ borderRight: '1px solid #000000', padding: '0 20px' }}>
+                <div style={{ fontFamily: 'var(--f-sans)', fontSize: '32px', fontWeight: 900, color: '#000000', lineHeight: 1 }}>
+                  IRT
+                </div>
+                <div style={{ fontFamily: 'var(--f-mono)', fontSize: '9px', letterSpacing: '0.16em', color: '#666666', marginTop: '6px', textTransform: 'uppercase' }}>
+                  ENGINE
+                </div>
+              </div>
+
+              <div style={{ paddingLeft: '20px' }}>
+                <div style={{ fontFamily: 'var(--f-sans)', fontSize: '32px', fontWeight: 900, color: '#000000', lineHeight: 1 }}>
+                  ∞
+                </div>
+                <div style={{ fontFamily: 'var(--f-mono)', fontSize: '9px', letterSpacing: '0.16em', color: '#666666', marginTop: '6px', textTransform: 'uppercase' }}>
+                  ADAPTIVE
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column — Blueprint Path Diagram & Telemetry */}
+          <div
+            style={{
+              padding: '36px 40px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+            }}
+          >
+            {/* Header Box */}
+            <div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  paddingBottom: '16px',
+                  borderBottom: '1px solid #000000',
+                  fontFamily: 'var(--f-mono)',
+                  fontSize: '11px',
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                <span style={{ fontWeight: 600, color: '#000000' }}>ASSESSMENT SYSTEM</span>
+                <span style={{ color: '#0047FF', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ display: 'inline-block', width: '6px', height: '6px', background: '#0047FF' }} />
+                  STATE / ADAPTIVE
+                </span>
+              </div>
+
+              {/* Diagram */}
+              <div style={{ padding: '24px 0 16px' }}>
+                <AdaptivePathDiagram />
+              </div>
+            </div>
+
+            {/* Bottom Metrics Box */}
             <div
               style={{
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr',
-                gap: 'var(--space-4)',
-                paddingTop: 'var(--space-6)',
-                borderTop: '1px solid var(--c-rule)',
+                borderTop: '1px solid #000000',
+                paddingTop: '20px',
+                fontFamily: 'var(--f-mono)',
               }}
             >
-              {[
-                ['ESTIMATE', 'Per-competency score'],
-                ['CONFIDENCE', 'Evidence quality'],
-                ['TARGET', 'Role requirement'],
-                ['GAP', 'Exact delta'],
-              ].map(([k, v]) => (
-                <div key={k}>
-                  <div className="sys-label" style={{ marginBottom: '4px' }}>{k}</div>
-                  <div style={{ fontSize: 'var(--text-sm)', color: 'var(--c-mid)' }}>{v}</div>
+              <div style={{ borderRight: '1px solid #000000', paddingRight: '20px' }}>
+                <div style={{ fontSize: '9px', color: '#666666', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
+                  QUESTION
                 </div>
-              ))}
+                <div style={{ fontSize: '18px', fontWeight: 700, color: '#000000', marginTop: '2px' }}>
+                  04 / 10
+                </div>
+                <div style={{ fontSize: '9px', color: '#666666', marginTop: '4px', letterSpacing: '0.08em' }}>
+                  SEARCHING: MED → HARD
+                </div>
+              </div>
+
+              <div style={{ paddingLeft: '20px' }}>
+                <div style={{ fontSize: '9px', color: '#666666', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
+                  CURRENT ESTIMATE
+                </div>
+                <div style={{ fontSize: '18px', fontWeight: 700, color: '#000000', marginTop: '2px' }}>
+                  73
+                </div>
+                <div style={{ fontSize: '9px', color: '#0047FF', fontWeight: 600, marginTop: '4px', letterSpacing: '0.08em' }}>
+                  ESTIMATED: ±12
+                </div>
+              </div>
             </div>
-          </div>
-
-          {/* Right — skill bars */}
-          <div ref={sectionRef}>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: 'var(--space-6)',
-              }}
-            >
-              <span className="sys-label">Junior Software Engineer</span>
-              <span className="sys-label" style={{ color: 'var(--c-mid-2)' }}>
-                Session 03
-              </span>
-            </div>
-
-            {mockSkillDisplay.map((skill, i) => (
-              <motion.div
-                key={skill.name}
-                style={{
-                  marginBottom: 'var(--space-6)',
-                  paddingBottom: 'var(--space-6)',
-                  borderBottom: i < mockSkillDisplay.length - 1 ? '1px solid var(--c-rule)' : 'none',
-                }}
-                initial={{ opacity: 0, x: -16 }}
-                animate={skillsInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ delay: i * 0.1, duration: 0.5 }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-2)', alignItems: 'baseline' }}>
-                  <span
-                    style={{
-                      fontFamily: 'var(--f-mono)',
-                      fontSize: 'var(--text-xs)',
-                      fontWeight: 500,
-                      letterSpacing: '0.12em',
-                      textTransform: 'uppercase',
-                      color: 'var(--c-ink)',
-                    }}
-                  >
-                    {skill.name}
-                  </span>
-                  <div style={{ display: 'flex', gap: 'var(--space-4)', alignItems: 'baseline' }}>
-                    <span
-                      style={{
-                        fontFamily: 'var(--f-mono)',
-                        fontSize: 'var(--text-xl)',
-                        fontWeight: 500,
-                        color: 'var(--c-ink)',
-                      }}
-                    >
-                      {skill.score}
-                    </span>
-                    {skill.score < skill.target && (
-                      <span
-                        style={{
-                          fontFamily: 'var(--f-mono)',
-                          fontSize: 'var(--text-xs)',
-                          color: 'var(--c-danger)',
-                        }}
-                      >
-                        {skill.score - skill.target}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div style={{ position: 'relative', height: '3px', background: 'var(--c-rule)' }}>
-                  <motion.div
-                    style={{
-                      position: 'absolute',
-                      left: 0,
-                      top: 0,
-                      height: '100%',
-                      background: skill.score >= skill.target ? 'var(--c-accent)' : 'var(--c-mid)',
-                    }}
-                    initial={{ width: '0%' }}
-                    animate={skillsInView ? { width: `${skill.score}%` } : { width: '0%' }}
-                    transition={{ duration: 1, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                  />
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: '-4px',
-                      left: `${skill.target}%`,
-                      width: '2px',
-                      height: '11px',
-                      background: 'var(--c-ink)',
-                    }}
-                    title={`Target: ${skill.target}`}
-                  />
-                </div>
-
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '6px' }}>
-                  <span className="sys-label">
-                    conf {skill.conf.toFixed(2)}
-                  </span>
-                  <span className="sys-label">
-                    target {skill.target}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
           </div>
         </div>
       </section>
 
-      {/* ── SYSTEM ARCHITECTURE SECTION ── */}
-      <section
-        style={{
-          background: 'var(--c-ink)',
-          padding: 'var(--space-24) 0',
-        }}
-      >
+      {/* ── PROCESS STRIP (8 STEPS) ── */}
+      <section style={{ borderBottom: '1px solid #000000', background: '#FFFFFF' }}>
         <div
           style={{
-            maxWidth: '1400px',
+            maxWidth: '1440px',
             margin: '0 auto',
-            padding: '0 var(--space-8)',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(8, 1fr)',
+            fontFamily: 'var(--f-mono)',
+            fontSize: '10px',
           }}
         >
+          {processSteps.map((step, idx) => (
+            <div
+              key={step.num}
+              style={{
+                padding: '14px 12px',
+                borderRight: idx < 7 ? '1px solid #000000' : 'none',
+                background: step.active ? '#000000' : 'transparent',
+                color: step.active ? '#FFFFFF' : '#000000',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '4px',
+                justifyContent: 'center',
+              }}
+            >
+              <span style={{ color: step.active ? '#0047FF' : '#666666', fontWeight: 700, fontSize: '9px' }}>
+                {step.num}
+              </span>
+              <span style={{ fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                {step.label}
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── NOT A SCORE. A MAP OF ABILITY. ── */}
+      <section style={{ borderBottom: '1px solid #000000', background: '#FFFFFF' }} ref={skillsRef}>
+        <div
+          style={{
+            maxWidth: '1440px',
+            margin: '0 auto',
+            display: 'grid',
+            gridTemplateColumns: '1.2fr 1fr',
+          }}
+        >
+          {/* Left Column */}
           <div
             style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: 'var(--space-16)',
-              alignItems: 'start',
+              padding: '64px 48px',
+              borderRight: '1px solid #000000',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
             }}
           >
             <div>
               <div
                 style={{
                   fontFamily: 'var(--f-mono)',
-                  fontSize: 'var(--text-xs)',
-                  letterSpacing: '0.2em',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  letterSpacing: '0.16em',
                   textTransform: 'uppercase',
-                  color: 'rgba(245,244,240,0.4)',
-                  marginBottom: 'var(--space-6)',
+                  color: '#666666',
+                  marginBottom: '28px',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 'var(--space-3)',
+                  gap: '8px',
                 }}
               >
-                <span style={{ display: 'block', width: '16px', height: '1px', background: 'var(--c-accent)' }} />
-                How it works
+                <span>—</span> THE SKILL MODEL
               </div>
+
               <h2
                 style={{
                   fontFamily: 'var(--f-sans)',
-                  fontSize: 'clamp(36px, 4.5vw, 60px)',
-                  fontWeight: 700,
+                  fontSize: 'clamp(44px, 5vw, 68px)',
+                  fontWeight: 900,
+                  lineHeight: 0.96,
                   letterSpacing: '-0.03em',
-                  lineHeight: 1.05,
-                  color: 'var(--c-paper)',
-                  marginBottom: 'var(--space-8)',
+                  color: '#000000',
+                  textTransform: 'uppercase',
+                  margin: '0 0 24px 0',
                 }}
               >
-                THE SYSTEM<br />FINDS YOUR<br />BOUNDARY.
+                NOT A SCORE.<br />A MAP OF<br />ABILITY.
               </h2>
+
               <p
                 style={{
-                  fontSize: 'var(--text-base)',
-                  color: 'rgba(245,244,240,0.5)',
-                  maxWidth: '400px',
-                  lineHeight: 1.7,
-                  marginBottom: 'var(--space-10)',
+                  fontFamily: 'var(--f-sans)',
+                  fontSize: '15px',
+                  lineHeight: 1.6,
+                  color: '#333333',
+                  maxWidth: '460px',
+                  marginBottom: '40px',
                 }}
               >
-                Like a psychometric instrument, the adaptive engine continuously narrows in on the boundary between what you can and cannot reliably do — then measures the gap against your target role.
+                Each competency is estimated independently with a confidence score. The system tracks your evolution across multiple sessions and identifies exactly where the gap is — not just whether you passed.
               </p>
-              <Link to="/assess">
-                <button
-                  className="btn btn-outline"
-                  style={{ borderColor: 'rgba(245,244,240,0.3)', color: 'var(--c-paper)' }}
-                >
-                  Start Your Assessment →
-                </button>
-              </Link>
+
+              {/* 4 Parameter Cards Grid */}
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '1px',
+                  background: '#000000',
+                  border: '1px solid #000000',
+                }}
+              >
+                <div style={{ background: '#FFFFFF', padding: '16px' }}>
+                  <div style={{ fontFamily: 'var(--f-mono)', fontSize: '9px', fontWeight: 700, letterSpacing: '0.14em', color: '#666666' }}>
+                    ESTIMATE
+                  </div>
+                  <div style={{ fontFamily: 'var(--f-sans)', fontSize: '11px', color: '#333333', marginTop: '4px' }}>
+                    Per-competency score (IRT calibrated)
+                  </div>
+                </div>
+
+                <div style={{ background: '#FFFFFF', padding: '16px' }}>
+                  <div style={{ fontFamily: 'var(--f-mono)', fontSize: '9px', fontWeight: 700, letterSpacing: '0.14em', color: '#666666' }}>
+                    EVIDENCE
+                  </div>
+                  <div style={{ fontFamily: 'var(--f-sans)', fontSize: '11px', color: '#333333', marginTop: '4px' }}>
+                    Evidence volume and quality metric
+                  </div>
+                </div>
+
+                <div style={{ background: '#FFFFFF', padding: '16px' }}>
+                  <div style={{ fontFamily: 'var(--f-mono)', fontSize: '9px', fontWeight: 700, letterSpacing: '0.14em', color: '#666666' }}>
+                    TARGET
+                  </div>
+                  <div style={{ fontFamily: 'var(--f-sans)', fontSize: '11px', color: '#333333', marginTop: '4px' }}>
+                    Direct role baseline requirement
+                  </div>
+                </div>
+
+                <div style={{ background: '#FFFFFF', padding: '16px' }}>
+                  <div style={{ fontFamily: 'var(--f-mono)', fontSize: '9px', fontWeight: 700, letterSpacing: '0.14em', color: '#666666' }}>
+                    GAP
+                  </div>
+                  <div style={{ fontFamily: 'var(--f-sans)', fontSize: '11px', color: '#333333', marginTop: '4px' }}>
+                    True quantitative ability delta
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: 5 Competency Skill Bars */}
+          <div style={{ padding: '48px 40px' }}>
+            {/* Header info */}
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '12px 16px',
+                border: '1px solid #000000',
+                marginBottom: '20px',
+                fontFamily: 'var(--f-mono)',
+                fontSize: '10px',
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+              }}
+            >
+              <span>
+                TARGET BENCHMARK: <strong style={{ color: '#000000' }}>JUNIOR SOFTWARE ENGINEER</strong>
+              </span>
+              <span style={{ color: '#0047FF', fontWeight: 700 }}>
+                SESSION 03 / ACTIVE
+              </span>
             </div>
 
-            {/* Pipeline diagram */}
-            <div>
+            {/* Skill Bars */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {competencies.map((skill, idx) => {
+                const diff = skill.score - skill.target;
+                const isOver = diff >= 0;
+                const isCritical = diff <= -20;
+
+                return (
+                  <motion.div
+                    key={skill.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={skillsInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.4, delay: idx * 0.08 }}
+                    style={{
+                      border: '1px solid #000000',
+                      padding: '14px 16px',
+                      background: '#FFFFFF',
+                    }}
+                  >
+                    {/* Top Row: Name + Score + Target */}
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'baseline',
+                        marginBottom: '8px',
+                        fontFamily: 'var(--f-mono)',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontWeight: 700, fontSize: '12px', color: '#000000', letterSpacing: '0.08em' }}>
+                          {skill.name}
+                        </span>
+                        {skill.tag && (
+                          <span
+                            style={{
+                              background: '#000000',
+                              color: '#FFFFFF',
+                              fontSize: '8px',
+                              padding: '1px 5px',
+                              fontWeight: 700,
+                              letterSpacing: '0.1em',
+                            }}
+                          >
+                            {skill.tag}
+                          </span>
+                        )}
+                      </div>
+
+                      <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}>
+                        <span style={{ fontSize: '20px', fontWeight: 900, color: '#000000' }}>
+                          {skill.score}
+                        </span>
+                        <span style={{ fontSize: '9px', color: '#777777', letterSpacing: '0.1em' }}>
+                          TARGET {skill.target}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Bar visualization */}
+                    <div
+                      style={{
+                        height: '14px',
+                        background: '#EEEEEE',
+                        border: '1px solid #000000',
+                        position: 'relative',
+                        marginBottom: '6px',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      {/* Filled Progress */}
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={skillsInView ? { width: `${skill.score}%` } : { width: 0 }}
+                        transition={{ duration: 0.8, delay: idx * 0.1, ease: 'easeOut' }}
+                        style={{
+                          height: '100%',
+                          background: idx === 0 ? '#0047FF' : '#000000',
+                        }}
+                      />
+
+                      {/* Target Notch line */}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          bottom: 0,
+                          left: `${skill.target}%`,
+                          width: '2px',
+                          background: '#FF0000',
+                          zIndex: 2,
+                        }}
+                        title={`Target: ${skill.target}`}
+                      />
+                    </div>
+
+                    {/* Bottom Metadata */}
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        fontFamily: 'var(--f-mono)',
+                        fontSize: '9px',
+                        letterSpacing: '0.12em',
+                      }}
+                    >
+                      <span style={{ color: '#777777' }}>CONF. {skill.conf.toFixed(2)}</span>
+                      <span
+                        style={{
+                          fontWeight: 700,
+                          color: isOver ? '#0047FF' : isCritical ? '#D90429' : '#000000',
+                        }}
+                      >
+                        {isOver ? `+${diff} ABOVE TARGET` : isCritical ? `${diff} CRITICAL GAP` : `${diff} GAP`}
+                      </span>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── THE SYSTEM FINDS YOUR BOUNDARY. (DARK SECTION) ── */}
+      <section style={{ background: '#000000', color: '#FFFFFF', padding: '80px 0' }}>
+        <div
+          style={{
+            maxWidth: '1440px',
+            margin: '0 auto',
+            padding: '0 48px',
+            display: 'grid',
+            gridTemplateColumns: '1.1fr 1fr',
+            gap: '64px',
+            alignItems: 'center',
+          }}
+        >
+          {/* Left Column */}
+          <div>
+            <div
+              style={{
+                fontFamily: 'var(--f-mono)',
+                fontSize: '11px',
+                fontWeight: 600,
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                color: '#888888',
+                marginBottom: '28px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              <span>—</span> HOW IT WORKS
+            </div>
+
+            <h2
+              style={{
+                fontFamily: 'var(--f-sans)',
+                fontSize: 'clamp(44px, 5.5vw, 72px)',
+                fontWeight: 900,
+                lineHeight: 0.94,
+                letterSpacing: '-0.04em',
+                color: '#FFFFFF',
+                textTransform: 'uppercase',
+                margin: '0 0 28px 0',
+              }}
+            >
+              THE SYSTEM<br />FINDS YOUR<br />BOUNDARY.
+            </h2>
+
+            <p
+              style={{
+                fontFamily: 'var(--f-sans)',
+                fontSize: '16px',
+                lineHeight: 1.6,
+                color: '#AAAAAA',
+                maxWidth: '480px',
+                marginBottom: '40px',
+              }}
+            >
+              Like a psychometric instrument, the adaptive engine continuously narrows in on the boundary between what you can and cannot reliably do — then measures the gap against your target role.
+            </p>
+
+            <button
+              onClick={() => navigate('/assess')}
+              style={{
+                background: '#FFFFFF',
+                color: '#000000',
+                border: '1px solid #FFFFFF',
+                padding: '14px 32px',
+                fontFamily: 'var(--f-mono)',
+                fontSize: '11px',
+                fontWeight: 700,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+                marginBottom: '36px',
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.background = '#000000';
+                e.currentTarget.style.color = '#FFFFFF';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.background = '#FFFFFF';
+                e.currentTarget.style.color = '#000000';
+              }}
+            >
+              START YOUR ASSESSMENT →
+            </button>
+
+            {/* Telemetry card */}
+            <div
+              style={{
+                border: '1px solid #333333',
+                padding: '16px 20px',
+                fontFamily: 'var(--f-mono)',
+                fontSize: '10px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                maxWidth: '440px',
+              }}
+            >
+              <span style={{ color: '#888888', letterSpacing: '0.12em' }}>ADAPTIVE ENGINE / ACTIVE SESSION</span>
+              <span style={{ color: '#0047FF', fontWeight: 700 }}>CALIB 210</span>
+            </div>
+          </div>
+
+          {/* Right Column: Pipeline Architecture Box */}
+          <div
+            style={{
+              border: '1px solid #FFFFFF',
+              padding: '24px',
+              fontFamily: 'var(--f-mono)',
+            }}
+          >
+            {/* Header */}
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                paddingBottom: '16px',
+                borderBottom: '1px solid #333333',
+                fontSize: '10px',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                marginBottom: '20px',
+              }}
+            >
+              <span style={{ fontWeight: 700, color: '#FFFFFF' }}>PIPELINE ARCHITECTURE</span>
+              <span style={{ color: '#888888' }}>STATE / STREAMING</span>
+            </div>
+
+            {/* 6 Steps */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {[
-                { step: 'MICROPHONE', desc: 'Audio capture' },
-                { step: 'SPEECH TO TEXT', desc: 'Transcript generation' },
-                { step: 'ANSWER EVALUATION', desc: 'Concept coverage' },
-                { step: 'ADAPTIVE ENGINE', desc: 'Next question selection' },
-                { step: 'SKILL ESTIMATE', desc: 'IRT scoring' },
-                { step: 'TEXT TO SPEECH', desc: 'AI interviewer' },
-              ].map((item, i, arr) => (
-                <div key={item.step}>
+                { num: '01', name: 'MICROPHONE', desc: 'Audio capture & noise suppression filter' },
+                { num: '02', name: 'SPEECH TO TEXT', desc: 'Real-time phonetic transcript generation' },
+                { num: '03', name: 'ANSWER EVALUATION', desc: 'Concept coverage & technical reasoning extraction' },
+                {
+                  num: '04',
+                  name: 'ADAPTIVE ENGINE *',
+                  desc: 'IRT maximum information item selection algorithm',
+                  highlight: true,
+                },
+                { num: '05', name: 'SKILL ESTIMATE', desc: 'Continuous theta re-estimation with uncertainty bounds' },
+                { num: '06', name: 'TEXT TO SPEECH', desc: 'Low-latency synthetic voice probe delivery' },
+              ].map((step) => (
+                <div
+                  key={step.num}
+                  style={{
+                    border: step.highlight ? '1px solid #0047FF' : '1px solid #222222',
+                    background: step.highlight ? 'rgba(0, 71, 255, 0.08)' : 'transparent',
+                    padding: '12px 16px',
+                  }}
+                >
                   <div
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      gap: 'var(--space-4)',
-                      padding: 'var(--space-4) 0',
+                      gap: '8px',
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      color: step.highlight ? '#0047FF' : '#FFFFFF',
+                      letterSpacing: '0.12em',
+                      textTransform: 'uppercase',
                     }}
                   >
-                    <div
-                      style={{
-                        width: '6px',
-                        height: '6px',
-                        borderRadius: '50%',
-                        background: i === 3 ? 'var(--c-accent)' : 'rgba(245,244,240,0.3)',
-                        flexShrink: 0,
-                      }}
-                    />
-                    <div style={{ flex: 1 }}>
-                      <div
-                        style={{
-                          fontFamily: 'var(--f-mono)',
-                          fontSize: 'var(--text-xs)',
-                          fontWeight: 500,
-                          letterSpacing: '0.14em',
-                          color: i === 3 ? 'var(--c-accent)' : 'var(--c-paper)',
-                          marginBottom: '2px',
-                        }}
-                      >
-                        {item.step}
-                      </div>
-                      <div
-                        style={{
-                          fontFamily: 'var(--f-mono)',
-                          fontSize: '10px',
-                          color: 'rgba(245,244,240,0.35)',
-                          letterSpacing: '0.06em',
-                        }}
-                      >
-                        {item.desc}
-                      </div>
-                    </div>
+                    <span>[{step.num}]</span>
+                    <span>{step.name}</span>
                   </div>
-                  {i < arr.length - 1 && (
-                    <div
-                      style={{
-                        marginLeft: '2px',
-                        width: '1px',
-                        height: '20px',
-                        background: 'rgba(245,244,240,0.12)',
-                      }}
-                    />
-                  )}
+                  <div style={{ fontSize: '9px', color: '#777777', marginTop: '4px', letterSpacing: '0.04em' }}>
+                    {step.desc}
+                  </div>
                 </div>
               ))}
             </div>
@@ -518,48 +795,93 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ── FOOTER CTA ── */}
-      <section
-        style={{
-          maxWidth: '1400px',
-          margin: '0 auto',
-          padding: 'var(--space-24) var(--space-8)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          textAlign: 'center',
-          gap: 'var(--space-6)',
-        }}
-      >
+      {/* ── ASSESS. IMPROVE. REASSESS. CTA BOX ── */}
+      <section style={{ padding: '80px 24px', background: '#FFFFFF' }}>
         <div
           style={{
-            fontFamily: 'var(--f-mono)',
-            fontSize: 'var(--text-xs)',
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            color: 'var(--c-mid)',
+            maxWidth: '1000px',
+            margin: '0 auto',
+            border: '2px solid #000000',
+            padding: '72px 48px',
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
-          Ready to measure your boundary?
-        </div>
-        <h2
-          style={{
-            fontFamily: 'var(--f-sans)',
-            fontSize: 'clamp(40px, 6vw, 80px)',
-            fontWeight: 700,
-            letterSpacing: '-0.04em',
-            lineHeight: 1,
-            color: 'var(--c-ink)',
-          }}
-        >
-          ASSESS.<br />IMPROVE.<br />REASSESS.
-        </h2>
-        <Link to="/assess">
-          <button className="btn btn-primary btn-lg" style={{ marginTop: 'var(--space-4)' }}>
-            Begin Assessment →
+          <div
+            style={{
+              fontFamily: 'var(--f-mono)',
+              fontSize: '11px',
+              fontWeight: 700,
+              letterSpacing: '0.2em',
+              textTransform: 'uppercase',
+              color: '#555555',
+              marginBottom: '20px',
+            }}
+          >
+            READY TO MEASURE YOUR BOUNDARY?
+          </div>
+
+          <h2
+            style={{
+              fontFamily: 'var(--f-sans)',
+              fontSize: 'clamp(52px, 7vw, 84px)',
+              fontWeight: 900,
+              lineHeight: 0.94,
+              letterSpacing: '-0.04em',
+              color: '#000000',
+              textTransform: 'uppercase',
+              margin: '0 0 32px 0',
+            }}
+          >
+            ASSESS.<br />IMPROVE.<br />REASSESS.
+          </h2>
+
+          <button
+            onClick={() => navigate('/assess')}
+            style={{
+              background: '#000000',
+              color: '#FFFFFF',
+              border: '1px solid #000000',
+              padding: '14px 36px',
+              fontFamily: 'var(--f-mono)',
+              fontSize: '12px',
+              fontWeight: 700,
+              letterSpacing: '0.16em',
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+              marginBottom: '24px',
+              transition: 'all 0.15s ease',
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.background = '#FFFFFF';
+              e.currentTarget.style.color = '#000000';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.background = '#000000';
+              e.currentTarget.style.color = '#FFFFFF';
+            }}
+          >
+            BEGIN ASSESSMENT →
           </button>
-        </Link>
+
+          <div
+            style={{
+              fontFamily: 'var(--f-mono)',
+              fontSize: '9px',
+              letterSpacing: '0.14em',
+              color: '#666666',
+              textTransform: 'uppercase',
+            }}
+          >
+            ESTIMATED RUNTIME: ~20 MINUTES • AUDIO INPUT/OUTPUT REQUIRED
+          </div>
+        </div>
       </section>
-    </main>
+
+      {/* Global Telemetry System Footer */}
+      <SystemFooter />
+    </div>
   );
 }
