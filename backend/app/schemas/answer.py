@@ -45,6 +45,10 @@ class SubmitAnswerResponse(BaseModel):
     attempt_id: uuid.UUID
     question_id: str
     correctness: float
+    assessment: str = "partial"  # demonstrated | partial | missing
+    confidence: float = 0.85
+    concepts_demonstrated: list[str] = []
+    concepts_missing: list[str] = []
     evidence: list[AnswerEvidenceSchema]
     updated_skill_estimates: list[SkillEstimateSchema]
     adaptive_state: AdaptiveStateSchema

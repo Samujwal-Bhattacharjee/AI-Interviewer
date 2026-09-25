@@ -62,13 +62,24 @@ export interface AdaptiveState {
   currentEstimate: number;
 }
 
+export interface ReportEvidence {
+  questionId: string;
+  competencyId: string;
+  concept: string;
+  status: 'demonstrated' | 'partial' | 'missing';
+  explanation: string;
+  confidence: number;
+}
+
 export interface AssessmentReport {
   sessionId: string;
   completedAt: string;
   targetRoleId: string;
-  competencies: Competency[];
+  competencies?: Competency[];
   skillEstimates: import('./skills').SkillEstimate[];
   gapAnalysis: import('./skills').GapAnalysis[];
   summary: string;
   overallScore: number;
+  evidence?: ReportEvidence[];
+  recommendations?: string[];
 }

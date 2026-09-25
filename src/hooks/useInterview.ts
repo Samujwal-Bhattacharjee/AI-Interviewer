@@ -1,73 +1,237 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useRef } from 'react';
 import { useInterviewStore } from '../store/interviewStore';
 import { getNextQuestion, submitAnswer } from '../services/interviewService';
-import type { VoiceState } from '../types/interview';
+import { startInterview } from '../services/assessmentService';
+import { voiceService } from '../services/voiceService';
+import { DATA_MODE } from '../lib/api';
+
+interface SpeechRecognitionEventLike {
+  results: {
+    length: number;
+    [index: number]: {
+      length: number;
+      [index: number]: {
+        transcript: string;
+      };
+    };
+  };
+}
+
+interface SpeechRecognitionErrorEventLike {
+  error: string;
+}
+
+interface SpeechRecognitionInstance {
+  lang: string;
+  interimResults: boolean;
+  maxAlternatives: number;
+  continuous: boolean;
+  start: () => void;
+  stop: () => void;
+  onresult: ((event: SpeechRecognitionEventLike) => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEventLike) => void) | null;
+  onend: (() => void) | null;
+}
+
+type SpeechRecognitionCtor = new () => SpeechRecognitionInstance;
 
 /**
- * useInterview — orchestrates the interview state machine.
+ * useInterview — orchestrates the real voice interview state machine.
  *
- * Phase 1: Simulates voice states with setTimeout.
- * Phase 2: Replace simulation with:
- *   - WebSocket event handler from FastAPI
- *   - STT: MediaRecorder → audio stream → FastAPI
- *   - TTS: text from FastAPI → Web Speech API or ElevenLabs audio
- *
- * Future WebSocket hook would be:
- *   useEffect(() => {
- *     const ws = new WebSocket(`${WS_URL}/ws/sessions/${sessionId}`);
- *     ws.onmessage = ({ data }) => {
- *       const event = JSON.parse(data);
- *       handleInterviewEvent(event);
- *     };
- *     return () => ws.close();
- *   }, [sessionId]);
+ * Flow:
+ * SPEAKING (ElevenLabs streaming TTS)
+ *   ↓ (auto on audio end)
+ * LISTENING (Browser SpeechRecognition)
+ *   ↓ (candidate finishes speaking)
+ * TRANSCRIBING
+ *   ↓
+ * EVALUATING (LLM/Semantic concepts & evidence extraction)
+ *   ↓ (adaptive state updated visibly)
+ * SPEAKING (Next question via ElevenLabs)
  */
 export function useInterview() {
   const store = useInterviewStore();
 
-  const startSession = useCallback(async (sessionId: string, targetRoleId: string) => {
-    store.setSession(sessionId, targetRoleId, 10);
-    await loadNextQuestion(sessionId, 0);
-  }, []);
+  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
+  const listenStartRef = useRef<number>(0);
+  const isListeningRef = useRef<boolean>(false);
 
-  const loadNextQuestion = useCallback(async (sessionId: string, index: number) => {
-    store.setVoiceState('idle');
-    const question = await getNextQuestion(sessionId);
-    store.setQuestion(question, index);
-    // Simulate TTS speaking
-    store.setVoiceState('speaking');
-    await new Promise((r) => setTimeout(r, 2500));
-    store.setVoiceState('idle');
-  }, []);
-
+  // ── Begin listening via Web Speech API ────────────────────────────────────
   const startListening = useCallback(() => {
-    // Phase 2: navigator.mediaDevices.getUserMedia({ audio: true })
-    store.setVoiceState('listening');
-  }, []);
+    if (isListeningRef.current) return;
 
-  const stopListening = useCallback(async () => {
-    if (!store.sessionId || !store.currentQuestion) return;
-    store.setVoiceState('transcribing');
-    await new Promise((r) => setTimeout(r, 1500));
+    const SpeechRecognitionAPI =
+      (window as unknown as { SpeechRecognition?: SpeechRecognitionCtor; webkitSpeechRecognition?: SpeechRecognitionCtor })
+        .SpeechRecognition ??
+      (window as unknown as { webkitSpeechRecognition?: SpeechRecognitionCtor }).webkitSpeechRecognition;
 
-    const mockTranscript = 'The system uses a hash function to compute an index from the key, which maps to a bucket in memory. On average, each bucket has O(1) access time because lookups go directly to the computed index.';
-    store.setTranscript(mockTranscript);
-    store.setVoiceState('evaluating');
-    await new Promise((r) => setTimeout(r, 2000));
-
-    const attempt = await submitAnswer(store.sessionId, {
-      questionId: store.currentQuestion.id,
-      answerText: mockTranscript,
-      transcript: mockTranscript,
-    });
-    store.addAttempt(attempt);
-
-    if (store.questionIndex + 1 >= store.totalQuestions) {
-      store.completeInterview();
-    } else {
-      await loadNextQuestion(store.sessionId, store.questionIndex + 1);
+    if (!SpeechRecognitionAPI) {
+      console.warn('Web Speech API not supported in this browser. Please use Chrome/Edge for STT.');
+      store.setVoiceState('listening');
+      isListeningRef.current = true;
+      return;
     }
-  }, [store.sessionId, store.currentQuestion, store.questionIndex, store.totalQuestions]);
+
+    try {
+      const recognition = new SpeechRecognitionAPI();
+      recognition.lang = 'en-US';
+      recognition.interimResults = true;
+      recognition.maxAlternatives = 1;
+      recognition.continuous = true;
+
+      recognition.onresult = (event: SpeechRecognitionEventLike) => {
+        let text = '';
+        for (let i = 0; i < event.results.length; i++) {
+          text += event.results[i]?.[0]?.transcript ?? '';
+        }
+        if (text.trim()) {
+          store.setTranscript(text.trim());
+        }
+      };
+
+      recognition.onerror = (event: SpeechRecognitionErrorEventLike) => {
+        console.error('Speech recognition error:', event.error);
+        if (event.error === 'not-allowed') {
+          alert('Microphone access was denied. Please allow microphone permissions in your browser to respond verbally.');
+        }
+      };
+
+      recognition.onend = () => {
+        isListeningRef.current = false;
+      };
+
+      recognitionRef.current = recognition;
+      listenStartRef.current = Date.now();
+      recognition.start();
+      isListeningRef.current = true;
+      store.setVoiceState('listening');
+    } catch (err) {
+      console.warn('Could not start speech recognition:', err);
+      store.setVoiceState('listening');
+    }
+  }, [store]);
+
+  // ── Load the next question, play ElevenLabs audio, then auto-listen ───────
+  const loadNextQuestion = useCallback(
+    async (sessionId: string, index: number) => {
+      // Clear previous adaptation notice when moving to new question
+      store.setAdaptationNotice(null);
+      store.setVoiceState('idle');
+
+      const question = await getNextQuestion(sessionId);
+      store.setQuestion(question, index);
+
+      // Transition to SPEAKING state
+      store.setVoiceState('speaking');
+
+      try {
+        // Generates ElevenLabs audio from backend, with Web Speech fallback
+        await voiceService.speak(question.question);
+      } catch (err) {
+        console.warn('Speech playback error, continuing to listening:', err);
+      }
+
+      // Interviewer finished speaking — automatically transition to LISTENING
+      startListening();
+    },
+    [store, startListening]
+  );
+
+  // ── Start a session — transitions backend to 'active', loads first question ─
+  const startSession = useCallback(
+    async (sessionId: string, _targetRoleId: string) => {
+      if (DATA_MODE === 'api') {
+        try {
+          await startInterview(sessionId);
+        } catch {
+          // 409 means session already started — continue normally
+        }
+      }
+      await loadNextQuestion(sessionId, 0);
+    },
+    [loadNextQuestion]
+  );
+
+  // ── Stop listening and submit answer to backend ───────────────────────────
+  const stopListening = useCallback(async () => {
+    const currentSessionId = useInterviewStore.getState().sessionId;
+    const currentQuestion = useInterviewStore.getState().currentQuestion;
+    if (!currentSessionId || !currentQuestion) return;
+
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.stop();
+      } catch {
+        // ignore already stopped
+      }
+      recognitionRef.current = null;
+    }
+    isListeningRef.current = false;
+
+    // Small delay to ensure the last interim/final speech buffer flushed
+    store.setVoiceState('transcribing');
+    await new Promise<void>((r) => setTimeout(r, 400));
+
+    const finalTranscript = useInterviewStore.getState().transcript.trim();
+
+    // Guard: Do NOT submit an empty transcript!
+    if (!finalTranscript) {
+      console.warn('Cannot submit an empty transcript. Returning to listening state.');
+      store.setVoiceState('listening');
+      startListening();
+      return;
+    }
+
+    const durationMs = Date.now() - listenStartRef.current;
+    store.setVoiceState('evaluating');
+
+    try {
+      const result = await submitAnswer(currentSessionId, {
+        questionId: currentQuestion.id,
+        answerText: finalTranscript,
+        transcript: finalTranscript,
+        durationMs,
+      });
+
+      // Update attempt history
+      store.addAttempt(result.attempt);
+
+      // Real skill estimate updates
+      if (result.updatedSkillEstimates.length > 0) {
+        store.updateSkillEstimates(result.updatedSkillEstimates);
+      }
+
+      // Capture delta for visible adaptation banner
+      const prevDifficulty = useInterviewStore.getState().adaptiveState.currentDifficulty;
+      const prevEstimate = useInterviewStore.getState().adaptiveState.currentEstimate;
+      store.updateAdaptiveState(result.adaptiveState);
+
+      store.setAdaptationNotice({
+        competencyName: currentQuestion.competencyId,
+        previousDifficulty: prevDifficulty,
+        nextDifficulty: result.adaptiveState.currentDifficulty,
+        previousEstimate: prevEstimate,
+        newEstimate: result.adaptiveState.currentEstimate,
+        action: result.adaptiveState.lastAction ?? 'probe',
+      });
+
+      // Give candidate 1.8s to see the visible adaptation state before next question
+      await new Promise<void>((r) => setTimeout(r, 1800));
+
+      const currentIndex = useInterviewStore.getState().questionIndex;
+      const total = useInterviewStore.getState().totalQuestions;
+
+      if (currentIndex + 1 >= total) {
+        store.completeInterview();
+      } else {
+        await loadNextQuestion(currentSessionId, currentIndex + 1);
+      }
+    } catch (err) {
+      console.error('Answer submission error:', err);
+      // Let user retry
+      store.setVoiceState('listening');
+    }
+  }, [store, startListening, loadNextQuestion]);
 
   return {
     ...store,

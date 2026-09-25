@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import type { SkillEstimate } from '../../types/skills';
 import { formatScore, formatConfidence, trendSymbol } from '../../lib/utils';
 import { mockRoles } from '../../mock/roles';

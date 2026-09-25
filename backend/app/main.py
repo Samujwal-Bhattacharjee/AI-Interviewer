@@ -20,7 +20,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
 from app.database import Base, engine
-from app.routers import roles, sessions, users, reassess
+from app.routers import roles, sessions, users, reassess, voice
 from app.services.graphiti_service import graphiti_service
 from app.ws.session_ws import handle_session_ws
 
@@ -103,6 +103,7 @@ app.include_router(roles.router)
 app.include_router(sessions.router)
 app.include_router(users.router)
 app.include_router(reassess.router)
+app.include_router(voice.router)
 
 
 # WebSocket endpoint

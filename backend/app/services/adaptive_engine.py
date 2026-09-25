@@ -87,6 +87,31 @@ class AdaptiveEngine:
                 if fallback:
                     return fallback[0]
 
+        # Fallback 2: relax focus competencies to any active question not yet attempted
+        relaxed_query = (
+            select(Question)
+            .options(selectinload(Question.competency))
+            .where(
+                Question.is_active == True,  # noqa: E712
+                Question.id.not_in(attempted) if attempted else True,
+            )
+        )
+        result = await db.execute(relaxed_query.limit(5))
+        relaxed = result.scalars().all()
+        if relaxed:
+            return relaxed[0]
+
+        # Fallback 3: if all questions have been attempted, return any active question
+        any_query = (
+            select(Question)
+            .options(selectinload(Question.competency))
+            .where(Question.is_active == True)  # noqa: E712
+        )
+        result = await db.execute(any_query.limit(1))
+        any_q = result.scalars().all()
+        if any_q:
+            return any_q[0]
+
         return None
 
     @staticmethod

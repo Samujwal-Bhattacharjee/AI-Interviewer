@@ -5,7 +5,8 @@ import { LandingPage } from './features/landing/LandingPage';
 import { AssessmentPage } from './features/assessment/AssessmentPage';
 import { InterviewPage } from './features/interview/InterviewPage';
 import { SkillsPage } from './features/skills/SkillsPage';
-import { ReportPage, PlanPage, ReassessPage } from './features/shells/ShellPages';
+import { ReportPage } from './features/report/ReportPage';
+import { PlanPage, ReassessPage } from './features/shells/ShellPages';
 
 const queryClient = new QueryClient({
   defaultOptions: {

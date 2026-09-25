@@ -204,6 +204,10 @@ async def submit_answer(
         attempt_id=attempt.id,
         question_id=body.question_id,
         correctness=evaluation.correctness,
+        assessment=evaluation.assessment,
+        confidence=evaluation.confidence,
+        concepts_demonstrated=evaluation.concepts_demonstrated,
+        concepts_missing=evaluation.concepts_missing,
         evidence=[
             _evidence_to_schema(ev) for ev in evaluation.evidence
         ],

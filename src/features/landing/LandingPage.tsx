@@ -24,7 +24,6 @@ const mockSkillDisplay = [
 
 export function LandingPage() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const sectionInView = useInView(sectionRef, { once: true, margin: '-100px' });
   const skillsRef = useRef<HTMLDivElement>(null);
   const skillsInView = useInView(skillsRef, { once: true, margin: '-80px' });
 

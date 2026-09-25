@@ -5,6 +5,15 @@ import type { SkillEstimate } from '../types/skills';
 import { mockSkillEstimates } from '../mock/skills';
 import { mockAdaptiveState } from '../mock/assessment';
 
+export interface AdaptationNotice {
+  competencyName: string;
+  previousDifficulty: string;
+  nextDifficulty: string;
+  previousEstimate: number;
+  newEstimate: number;
+  action: string;
+}
+
 interface InterviewStore {
   // Session
   sessionId: string | null;
@@ -19,9 +28,10 @@ interface InterviewStore {
   transcript: string;
   attempts: QuestionAttempt[];
 
-  // Live skill state — updated on every skill.updated WebSocket event
+  // Live skill state — updated on every answer evaluation
   skillEstimates: SkillEstimate[];
   adaptiveState: AdaptiveState;
+  adaptationNotice: AdaptationNotice | null;
 
   // Actions
   setSession: (sessionId: string, targetRoleId: string, total: number) => void;
@@ -30,7 +40,9 @@ interface InterviewStore {
   setTranscript: (transcript: string) => void;
   addAttempt: (attempt: QuestionAttempt) => void;
   updateSkillEstimate: (estimate: SkillEstimate) => void;
+  updateSkillEstimates: (estimates: SkillEstimate[]) => void;
   updateAdaptiveState: (state: AdaptiveState) => void;
+  setAdaptationNotice: (notice: AdaptationNotice | null) => void;
   completeInterview: () => void;
   reset: () => void;
 }
@@ -47,6 +59,7 @@ const initialState = {
   attempts: [] as QuestionAttempt[],
   skillEstimates: mockSkillEstimates,
   adaptiveState: mockAdaptiveState,
+  adaptationNotice: null,
 };
 
 export const useInterviewStore = create<InterviewStore>((set) => ({
@@ -72,7 +85,17 @@ export const useInterviewStore = create<InterviewStore>((set) => ({
       ),
     })),
 
+  updateSkillEstimates: (estimates) =>
+    set((state) => {
+      const updatedMap = new Map(estimates.map((e) => [e.competencyId, e]));
+      return {
+        skillEstimates: state.skillEstimates.map((e) => updatedMap.get(e.competencyId) ?? e),
+      };
+    }),
+
   updateAdaptiveState: (adaptiveState) => set({ adaptiveState }),
+
+  setAdaptationNotice: (adaptationNotice) => set({ adaptationNotice }),
 
   completeInterview: () => set({ isComplete: true, voiceState: 'complete' }),
 

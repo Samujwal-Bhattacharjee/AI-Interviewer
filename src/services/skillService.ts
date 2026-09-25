@@ -22,22 +22,22 @@ import { delay } from '../lib/api';
 import { mockSkillEstimates, mockGapAnalysis, mockImprovementPlan } from '../mock/skills';
 import type { SkillEstimate, GapAnalysis, ImprovementPlan } from '../types/skills';
 
-export async function getSkillProfile(userId: string): Promise<SkillEstimate[]> {
+export async function getSkillProfile(_userId: string): Promise<SkillEstimate[]> {
   await delay(500);
   return mockSkillEstimates;
 }
 
-export async function getGapAnalysis(userId: string, roleId: string): Promise<GapAnalysis[]> {
+export async function getGapAnalysis(_userId: string, _roleId: string): Promise<GapAnalysis[]> {
   await delay(400);
   return mockGapAnalysis;
 }
 
-export async function getImprovementPlan(userId: string): Promise<ImprovementPlan> {
+export async function getImprovementPlan(_userId: string): Promise<ImprovementPlan> {
   await delay(600);
   return mockImprovementPlan;
 }
 
-export async function startReassessment(userId: string, competencyId: string): Promise<{ sessionId: string }> {
+export async function startReassessment(_userId: string, _competencyId: string): Promise<{ sessionId: string }> {
   await delay(800);
   return { sessionId: `session-reassess-${Date.now()}` };
 }

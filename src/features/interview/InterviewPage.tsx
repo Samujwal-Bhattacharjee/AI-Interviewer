@@ -28,6 +28,7 @@ export function InterviewPage() {
     transcript,
     adaptiveState,
     skillEstimates,
+    adaptationNotice,
     isComplete,
     startSession,
     startListening,
@@ -155,6 +156,41 @@ export function InterviewPage() {
 
         {/* ── CENTER ── */}
         <section className="interview-center" aria-label="Interview interaction area">
+          {/* Subtle visible system adaptation notification */}
+          <AnimatePresence>
+            {adaptationNotice && (
+              <motion.div
+                initial={{ opacity: 0, y: -10, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8, scale: 0.96 }}
+                transition={{ duration: 0.35 }}
+                style={{
+                  padding: 'var(--space-3) var(--space-6)',
+                  background: 'var(--c-surface)',
+                  border: '1px solid var(--c-accent)',
+                  borderRadius: '2px',
+                  marginBottom: 'var(--space-4)',
+                  textAlign: 'center',
+                  boxShadow: '0 4px 20px rgba(26,92,228,0.12)',
+                  maxWidth: '460px',
+                  width: '100%',
+                }}
+              >
+                <div className="sys-label" style={{ color: 'var(--c-accent)', marginBottom: '2px' }}>
+                  ANSWER ANALYZED
+                </div>
+                <div style={{ fontFamily: 'var(--f-mono)', fontSize: 'var(--text-xs)', fontWeight: 600 }}>
+                  {(competencyNameMap[adaptationNotice.competencyName] ?? adaptationNotice.competencyName).toUpperCase()}
+                </div>
+                <div style={{ fontSize: 'var(--text-xs)', color: 'var(--c-ink)', marginTop: '4px', fontFamily: 'var(--f-mono)' }}>
+                  ESTIMATE: {adaptationNotice.previousEstimate} → <span style={{ color: 'var(--c-accent)', fontWeight: 700 }}>{adaptationNotice.newEstimate}</span>
+                </div>
+                <div style={{ fontSize: '11px', color: 'var(--c-mid)', marginTop: '2px', fontFamily: 'var(--f-mono)' }}>
+                  DIFFICULTY: {adaptationNotice.previousDifficulty.toUpperCase()} → <span style={{ color: 'var(--c-ink)', fontWeight: 700 }}>{adaptationNotice.nextDifficulty.toUpperCase()}</span>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Question display */}
           <div className="question-area">
