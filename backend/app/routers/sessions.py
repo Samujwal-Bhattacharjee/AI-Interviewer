@@ -9,6 +9,8 @@ POST /api/sessions/{session_id}/answers
 GET  /api/sessions/{session_id}/current-state
 GET  /api/sessions/{session_id}/report
 """
+import logging
+from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -19,7 +21,7 @@ from app.models.session import AssessmentSession
 from app.models.answer import QuestionAttempt, AnswerEvidence
 from app.models.question import Question
 from app.models.skill import SkillEstimate, SkillHistory
-from app.models.role import RoleCompetency
+from app.models.role import Role, RoleCompetency
 from app.schemas.session import (
     AssessmentSessionSchema,
     CreateSessionRequest,
@@ -33,6 +35,9 @@ from app.services.adaptive_engine import AdaptiveEngine
 from app.services.answer_evaluator import AnswerEvaluator
 from app.services.skill_estimator import SkillEstimator
 from app.services.course_recommendation_service import course_recommendation_service
+from app.services.llm_service import llm_service
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/sessions", tags=["sessions"])
 
@@ -70,11 +75,15 @@ async def get_session(session_id: str, db: AsyncSession = Depends(get_db)) -> As
 async def start_session(session_id: str, db: AsyncSession = Depends(get_db)) -> StartSessionResponse:
     """Activates the session and returns the first question + adaptive state."""
     session = await _get_session_or_404(session_id, db)
-    if session.status != "pending":
-        raise HTTPException(status_code=409, detail="Session already started")
+    if session.status == "completed":
+        raise HTTPException(status_code=409, detail="Session already complete")
+    if session.status == "abandoned":
+        raise HTTPException(status_code=409, detail="Session was abandoned")
 
-    session.status = "active"
-    await db.flush()
+    if session.status == "pending":
+        session.status = "active"
+        session.started_at = datetime.utcnow()
+        await db.flush()
 
     first_question = await AdaptiveEngine.select_next_question(session, db)
     if not first_question:
@@ -90,8 +99,8 @@ async def start_session(session_id: str, db: AsyncSession = Depends(get_db)) -> 
 @router.post("/{session_id}/next-question", response_model=NextQuestionResponse)
 async def next_question(session_id: str, db: AsyncSession = Depends(get_db)) -> NextQuestionResponse:
     """
-    Selects the next adaptive question.
-    The backend owns all selection logic — frontend never decides.
+    Selects or dynamically generates the next adaptive question.
+    The backend owns all selection and adaptation logic.
     """
     session = await _get_session_or_404(session_id, db)
     if session.status == "completed":
@@ -113,18 +122,15 @@ async def submit_answer(
     db: AsyncSession = Depends(get_db),
 ) -> SubmitAnswerResponse:
     """
-    Submit a candidate answer.
-
-    Backend pipeline:
-    1. Store answer
-    2. Evaluate answer (LLM)
-    3. Extract evidence
-    4. Update skill estimate
-    5. Update confidence
-    6. Determine next difficulty
-    7. Update adaptive state
-    8. Return updated state
-    (Graphiti write happens async — Phase 2K)
+    Submits a candidate answer.
+    Pipeline:
+    1. Fetch question and role context
+    2. Evaluate answer via LLM (with semantic fallback)
+    3. Persist QuestionAttempt and AnswerEvidence
+    4. Update SkillEstimates in PostgreSQL
+    5. Update AdaptiveEngine difficulty state
+    6. Advance session turn counter (mark completed if finished)
+    7. Return real updated state
     """
     session = await _get_session_or_404(session_id, db)
     if session.status != "active":
@@ -140,12 +146,23 @@ async def submit_answer(
     if not question:
         raise HTTPException(status_code=404, detail="Question not found")
 
-    # Evaluate answer
+    # Get role context
+    role_res = await db.execute(select(Role).where(Role.id == session.target_role_id))
+    role = role_res.scalar_one_or_none()
+
+    comp_name = question.competency.name if question.competency else question.competency_id
+
+    # Evaluate answer via evaluator
     evaluator = AnswerEvaluator()
     evaluation = await evaluator.evaluate(
         transcript=body.transcript,
         expected_concepts=question.expected_concepts,
         competency_id=question.competency_id,
+        question=question.question,
+        competency_name=comp_name,
+        role_title=role.title if role else "Software Engineer",
+        role_level=role.level if role else "junior",
+        difficulty=session.adaptive_current_difficulty,
     )
 
     # Store attempt
@@ -163,7 +180,6 @@ async def submit_answer(
     await db.refresh(attempt)
 
     # Store evidence
-    evidence_models = []
     for ev in evaluation.evidence:
         evidence_model = AnswerEvidence(
             attempt_id=attempt.id,
@@ -173,7 +189,6 @@ async def submit_answer(
             confidence=ev.confidence,
         )
         db.add(evidence_model)
-        evidence_models.append(evidence_model)
 
     # Update skill estimate
     skill_estimator = SkillEstimator()
@@ -189,14 +204,14 @@ async def submit_answer(
     # Update adaptive state
     AdaptiveEngine.update_state(session, evaluation.correctness)
 
-    # Advance question index
+    # Advance question index & mark question attempted
     session.current_question_index += 1
     session.attempted_question_ids = [*session.attempted_question_ids, body.question_id]
+    session.current_question_id = None  # Ready for next question
 
     # Complete if done
     if session.current_question_index >= session.question_count:
         session.status = "completed"
-        from datetime import datetime
         session.completed_at = datetime.utcnow()
 
     await db.flush()
@@ -259,6 +274,10 @@ async def get_report(session_id: str, db: AsyncSession = Depends(get_db)) -> Ass
     )
     requirements = result.scalars().all()
 
+    # Get role object
+    role_res = await db.execute(select(Role).where(Role.id == session.target_role_id))
+    role = role_res.scalar_one_or_none()
+
     # Compute gaps
     from app.schemas.skill import GapAnalysisSchema
     gaps = []
@@ -284,6 +303,7 @@ async def get_report(session_id: str, db: AsyncSession = Depends(get_db)) -> Ass
             selectinload(QuestionAttempt.evidence),
             selectinload(QuestionAttempt.question),
         )
+        .order_by(QuestionAttempt.created_at)
     )
     attempts = result.scalars().all()
 
@@ -320,16 +340,61 @@ async def get_report(session_id: str, db: AsyncSession = Depends(get_db)) -> Ass
     paid_resources = [CourseResourceSchema(**r) for r in all_resources if r["price_type"] == "paid"]
     resources = ResourceRecommendationsSchema(free=free_resources, paid=paid_resources, source="curated")
 
+    # Generate summary & recommendations via LLM if available
+    summary = None
+    recommendations = None
+
+    if llm_service.is_available():
+        try:
+            role_title = role.title if role else "Software Engineer"
+            role_level = role.level if role else "junior"
+            skill_est_dicts = [
+                {
+                    "competency_id": e.competency_id,
+                    "score": e.score,
+                    "level": e.estimated_level,
+                    "confidence": e.confidence,
+                }
+                for e in estimates
+            ]
+            attempts_dicts = [
+                {
+                    "question": a.question.question if a.question else "",
+                    "transcript": a.transcript,
+                    "correctness": a.correctness,
+                    "demonstrated": [ev.concept for ev in a.evidence if ev.status == "demonstrated"],
+                    "missing": [ev.concept for ev in a.evidence if ev.status == "missing"],
+                }
+                for a in attempts
+            ]
+            llm_rep = await llm_service.generate_report(
+                role_title=role_title,
+                role_level=role_level,
+                overall_score=overall_score,
+                skill_estimates=skill_est_dicts,
+                gaps=gap_dicts,
+                attempts=attempts_dicts,
+            )
+            summary = llm_rep.summary
+            recommendations = llm_rep.recommendations
+        except Exception as e:
+            logger.warning(f"LLM report generation error: {e}")
+
+    if not summary:
+        summary = _generate_summary(gaps, estimates)
+    if not recommendations:
+        recommendations = _generate_recommendations(gaps)
+
     return AssessmentReportSchema(
         session_id=session_id,
         completed_at=session.completed_at or session.started_at,
         target_role_id=session.target_role_id,
         overall_score=overall_score,
-        summary=_generate_summary(gaps, estimates),
+        summary=summary,
         skill_estimates=[SkillEstimateSchema.model_validate(e) for e in estimates],
         gaps=gaps,
         evidence=evidence_items,
-        recommendations=_generate_recommendations(gaps),
+        recommendations=recommendations,
         resources=resources,
     )
 
@@ -383,23 +448,21 @@ def _evidence_to_schema(ev) -> "AnswerEvidenceSchema":
 
 
 def _generate_summary(gaps, estimates) -> str:
-    """Basic summary — Phase 2K will use LLM + Graphiti context."""
     if not gaps:
-        return "Assessment complete. Skill profile updated."
+        return "Assessment complete. Candidate demonstrated solid technical baseline across tested competencies."
     critical = [g for g in gaps if g.priority == "critical"]
     if critical:
         names = ", ".join(g.competency_name for g in critical)
-        return f"Assessment complete. Critical gaps identified in: {names}."
-    return "Assessment complete. Review gap analysis for improvement areas."
+        return f"Assessment complete. Candidate demonstrated fundamental technical comprehension, but critical development areas were identified in: {names}."
+    return "Assessment complete. Performance met baseline expectations across primary competencies with targeted areas for growth."
 
 
 def _generate_recommendations(gaps) -> list[str]:
-    """Basic recommendations — Phase 2K will use LLM + Graphiti context."""
     recs = []
     for gap in gaps:
         if gap.gap < 0:
             recs.append(
-                f"Practice {gap.competency_name} to close the {abs(gap.gap)}-point gap "
-                f"toward the {gap.target_score} target."
+                f"Practice targeted {gap.competency_name} exercises to close the {abs(gap.gap)}-point gap "
+                f"toward the target score of {gap.target_score}."
             )
-    return recs[:5]
+    return recs[:5] if recs else ["Continue regular practice across core architectural and design patterns."]

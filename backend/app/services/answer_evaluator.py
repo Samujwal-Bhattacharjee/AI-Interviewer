@@ -1,10 +1,6 @@
 """
 app/services/answer_evaluator.py — LLM-based answer evaluation service.
 
-Provider hierarchy:
-1. Groq (llama-3.3-70b-versatile) — primary, structured JSON response
-2. Semantic keyword matcher — fallback when Groq key absent or call fails
-
 Evaluates a candidate's transcript against expected concepts for a question.
 Returns structured evaluation:
   - correctness (0.0 - 1.0)
@@ -14,14 +10,11 @@ Returns structured evaluation:
   - concepts_missing (list[str])
   - evidence items (detailed per-concept coverage)
 """
-import json
 import logging
 from dataclasses import dataclass
 from typing import Optional
 
-import httpx
-
-from app.config import settings
+from app.services.llm_service import llm_service
 
 logger = logging.getLogger(__name__)
 
@@ -47,12 +40,7 @@ class EvaluationResult:
 class AnswerEvaluator:
     """
     Evaluates interview answers against expected concepts.
-    Uses Groq (llama-3.3-70b-versatile) when GROQ_API_KEY is configured.
-    Falls back to a semantic keyword matching engine.
-
-    Provider-agnostic contract:
-      - Only the .evaluate() public method is called externally.
-      - The LLM provider can be swapped by replacing _evaluate_with_llm().
+    Uses LLMService when configured, with keyword semantic fallback.
     """
 
     async def evaluate(
@@ -61,6 +49,11 @@ class AnswerEvaluator:
         expected_concepts: list[str],
         competency_id: str,
         context: Optional[str] = None,
+        question: Optional[str] = None,
+        competency_name: Optional[str] = None,
+        role_title: Optional[str] = None,
+        role_level: Optional[str] = None,
+        difficulty: Optional[str] = None,
     ) -> EvaluationResult:
         cleaned_transcript = (transcript or "").strip()
 
@@ -84,130 +77,41 @@ class AnswerEvaluator:
                 evidence=evidence,
             )
 
-        # 1. Try Groq LLM evaluation
-        if settings.groq_api_key:
+        # 1. Try LLM evaluation if service is available
+        if llm_service.is_available():
             try:
-                llm_result = await self._evaluate_with_groq(
-                    cleaned_transcript, expected_concepts, competency_id, context
+                llm_eval = await llm_service.evaluate_answer(
+                    question=question or "Interview question",
+                    expected_concepts=expected_concepts,
+                    competency_name=competency_name or competency_id,
+                    competency_id=competency_id,
+                    transcript=cleaned_transcript,
+                    role_title=role_title or "Software Engineer",
+                    role_level=role_level or "junior",
+                    difficulty=difficulty or "medium",
                 )
-                if llm_result:
-                    return llm_result
+                evidence = [
+                    EvidenceItem(
+                        concept=ev.concept,
+                        status=ev.status,
+                        explanation=ev.explanation,
+                        confidence=ev.confidence,
+                    )
+                    for ev in llm_eval.evidence
+                ]
+                return EvaluationResult(
+                    correctness=llm_eval.correctness,
+                    assessment=llm_eval.assessment,
+                    confidence=llm_eval.confidence,
+                    concepts_demonstrated=llm_eval.concepts_demonstrated,
+                    concepts_missing=llm_eval.concepts_missing,
+                    evidence=evidence,
+                )
             except Exception as e:
-                logger.warning(f"Groq evaluation failed, falling back to semantic matcher: {e}")
+                logger.warning(f"LLM evaluation failed, falling back to semantic matcher: {e}")
 
         # 2. Semantic evaluation fallback
         return self._evaluate_semantic(cleaned_transcript, expected_concepts, competency_id)
-
-    async def _evaluate_with_groq(
-        self,
-        transcript: str,
-        expected_concepts: list[str],
-        competency_id: str,
-        context: Optional[str] = None,
-    ) -> Optional[EvaluationResult]:
-        """
-        Calls Groq's OpenAI-compatible chat completions endpoint.
-        Uses llama-3.3-70b-versatile which reliably returns valid JSON.
-        Sends only the minimal context needed for evaluation.
-        """
-        context_block = f"\nRELEVANT PRIOR CONTEXT:\n{context}" if context else ""
-
-        prompt = f"""You are an expert technical interviewer evaluating a candidate's spoken answer.
-
-COMPETENCY: {competency_id}
-
-EXPECTED CONCEPTS:
-{json.dumps(expected_concepts)}
-
-CANDIDATE ANSWER:
-\"\"\"{transcript}\"\"\"{context_block}
-
-For each expected concept, decide:
-- "demonstrated": clearly explained, correctly applied, or sound reasoning shown
-- "partial": mentioned or hinted at but lacking depth
-- "missing": not addressed, incorrect, or contradicted
-
-Return ONLY a valid JSON object with this exact structure (no markdown, no explanation):
-{{
-  "correctness": <float 0.0-1.0>,
-  "confidence": <float 0.6-0.98>,
-  "evidence": [
-    {{
-      "concept": "<exact concept name from expected list>",
-      "status": "demonstrated" | "partial" | "missing",
-      "explanation": "<one sentence rationale>",
-      "confidence": <float 0.6-0.98>
-    }}
-  ]
-}}"""
-
-        async with httpx.AsyncClient(timeout=15.0) as client:
-            resp = await client.post(
-                "https://api.groq.com/openai/v1/chat/completions",
-                headers={
-                    "Authorization": f"Bearer {settings.groq_api_key}",
-                    "Content-Type": "application/json",
-                },
-                json={
-                    "model": settings.groq_model or "llama-3.3-70b-versatile",
-                    "messages": [{"role": "user", "content": prompt}],
-                    "temperature": 0.2,
-                    "max_tokens": 1024,
-                    "response_format": {"type": "json_object"},
-                },
-            )
-
-        if resp.status_code != 200:
-            logger.error(f"Groq API error {resp.status_code}: {resp.text[:200]}")
-            return None
-
-        data = resp.json()
-        content = data["choices"][0]["message"]["content"]
-
-        try:
-            parsed = json.loads(content)
-        except json.JSONDecodeError as e:
-            logger.error(f"Groq returned invalid JSON: {e} — content: {content[:200]}")
-            return None
-
-        evidence_items = []
-        demonstrated = []
-        missing = []
-
-        for item in parsed.get("evidence", []):
-            status = item.get("status", "missing")
-            c_name = item.get("concept", "")
-            evidence_items.append(
-                EvidenceItem(
-                    concept=c_name,
-                    status=status,
-                    explanation=item.get("explanation", ""),
-                    confidence=float(item.get("confidence", 0.85)),
-                )
-            )
-            if status in ("demonstrated", "partial"):
-                demonstrated.append(c_name)
-            if status == "missing":
-                missing.append(c_name)
-
-        correctness = float(parsed.get("correctness", 0.5))
-        overall_assessment = (
-            "demonstrated" if correctness >= 0.7 else "partial" if correctness >= 0.35 else "missing"
-        )
-
-        logger.info(
-            f"Groq evaluated {competency_id}: correctness={correctness:.2f}, "
-            f"assessment={overall_assessment}, demonstrated={len(demonstrated)}, missing={len(missing)}"
-        )
-
-        return EvaluationResult(
-            correctness=correctness,
-            assessment=overall_assessment,
-            confidence=float(parsed.get("confidence", 0.88)),
-            concepts_demonstrated=demonstrated,
-            concepts_missing=missing,
-            evidence=evidence_items,
-        )
 
     def _evaluate_semantic(
         self,
@@ -217,7 +121,7 @@ Return ONLY a valid JSON object with this exact structure (no markdown, no expla
     ) -> EvaluationResult:
         """
         Keyword-expansion semantic fallback.
-        Used when no Groq key is available or Groq call fails.
+        Used when no LLM key is configured or call fails.
         """
         transcript_lower = transcript.lower()
         evidence: list[EvidenceItem] = []
@@ -227,8 +131,12 @@ Return ONLY a valid JSON object with this exact structure (no markdown, no expla
 
         # Synonym and concept keyword expansions
         expansions = {
+            "hashing": ["hash", "index", "bucket", "key", "mapping"],
+            "bucket mapping": ["bucket", "array", "index", "slot", "table"],
             "hash function": ["hash", "index", "bucket", "key", "mapping"],
             "collision handling": ["collision", "chain", "chaining", "probe", "probing", "open addressing", "linked list"],
+            "average complexity": ["o(1)", "constant", "average", "time complexity", "speed"],
+            "worst-case complexity": ["o(n)", "worst case", "all collide", "single bucket", "degrade"],
             "time complexity": ["o(1)", "constant", "time", "complexity", "worst case", "lookup", "speed"],
             "load factor": ["load factor", "resize", "rehashing", "threshold", "capacity", "expand"],
             "b-tree": ["b-tree", "b+tree", "tree", "binary", "structure", "disk", "node"],
@@ -240,15 +148,29 @@ Return ONLY a valid JSON object with this exact structure (no markdown, no expla
             "reference counting": ["reference count", "ref count", "reference", "counter", "pointers"],
             "garbage collection": ["garbage collector", "generational", "gc", "cycle", "cyclic", "threshold"],
             "gil": ["gil", "global interpreter lock", "thread", "concurrency", "lock", "cpu"],
+            "gil definition": ["gil", "global interpreter lock", "mutex", "cpython"],
+            "thread safety": ["thread safe", "thread safety", "data race", "synchronization"],
+            "cpu-bound limitation": ["cpu", "cpu bound", "single core", "parallel execution"],
+            "multiprocessing": ["multiprocessing", "processes", "separate memory", "subprocesses"],
+            "async io": ["async", "asyncio", "event loop", "await", "coroutines"],
             "decorators": ["decorator", "higher-order", "wraps", "closure", "wrapper", "function"],
             "debugging": ["isolate", "reproduce", "binary search", "log", "trace", "profiler"],
             "cache locality": ["cache", "locality", "contiguous", "cpu cache", "l1", "sequential"],
             "system design": ["scalable", "load balancer", "microservice", "database", "cache", "queue"],
             "api design": ["rest", "endpoint", "request", "response", "http", "json", "status code"],
             "concurrency": ["thread", "async", "lock", "race condition", "synchronize", "parallel"],
+            "race conditions": ["race condition", "shared state", "concurrency", "threads", "race", "timing"],
+            "shared state": ["shared state", "shared memory", "global variable", "shared resource"],
+            "locking mechanisms": ["lock", "mutex", "semaphore", "rwlock", "spinlock", "atomic"],
             "memory management": ["heap", "stack", "allocation", "deallocation", "pointer", "memory"],
             "data structures": ["array", "list", "tree", "graph", "hash", "queue", "stack"],
             "algorithms": ["sort", "search", "recursion", "dynamic programming", "greedy", "complexity"],
+            "dfs traversal order": ["depth first", "dfs", "deepest", "branch", "backtrack"],
+            "bfs traversal order": ["breadth first", "bfs", "level", "queue", "layer"],
+            "stack vs queue": ["stack", "queue", "fifo", "lifo", "recursion"],
+            "shortest path": ["shortest path", "fewest edges", "unweighted", "distance"],
+            "reproduce the issue": ["reproduce", "reproduction", "steps", "replicate", "reliable"],
+            "isolate the condition": ["isolate", "narrow down", "environment", "test case"],
         }
 
         for concept in expected_concepts:
