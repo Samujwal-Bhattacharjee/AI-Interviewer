@@ -22,3 +22,19 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment files — NEVER commit secrets
+.env
+.env.local
+.env.production
+backend/.env
+
+# Python backend
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/**/*.pyc
+backend/**/*.pyo
+backend/.pytest_cache/
+backend/alembic/versions/*.py
+backend/.pgdata/
