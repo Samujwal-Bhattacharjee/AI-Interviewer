@@ -1,41 +1,41 @@
 # Graph Report - aiinterview  (2026-09-25)
 
 ## Corpus Check
-- 91 files · ~40,405 words
+- 93 files · ~59,492 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 715 nodes · 1330 edges · 40 communities (35 shown, 5 thin omitted)
+- 706 nodes · 1315 edges · 41 communities (36 shown, 5 thin omitted)
 - Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 53 edges (avg confidence: 0.94)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `97589091`
+- Built from commit: `ef8b5a3f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - Base
-- models/__init__.py
+- database.py
 - dependencies
-- WSEvent
-- GraphitiService
+- main.py
+- reassess.py
 - plugins
 - ReportPage.tsx
 - compilerOptions
-- main.py
+- roles.py
 - compilerOptions
 - API Contract — Phase 2
-- SkillEstimate
+- AssessmentPage.tsx
 - Data Lineage — Phase 2
-- interviewService.ts
+- useInterview.ts
 - Data Flow Map — Phase 2 Audit
 - start_db.py
 - Backend — AI Interviewer FastAPI
 - React + TypeScript + Vite
 - rules/graphify.md
 - App.tsx
-- services/__init__.py
+- GraphitiService
 - workflows/graphify.md
 - tsconfig.json
 - sessions.py
@@ -43,15 +43,15 @@
 - users.py
 - SkillHistory
 - Current Architecture — ADAPTIVE
-- Question
+- SkillsPage.tsx
 - types/assessment.ts
-- VoiceOrb.tsx
+- SkillEstimate
 - assessmentService.ts
 - Settings
-- types/skills.ts
+- roleService.ts
 - FrontendVoiceService
-- AssessmentPage.tsx
-- AdaptiveStatePanel.tsx
+- setup.ts
+- InterviewPage.tsx
 
 ## God Nodes (most connected - your core abstractions)
 1. `Base` - 24 edges
@@ -80,43 +80,43 @@
 ## Import Cycles
 - None detected.
 
-## Communities (40 total, 5 thin omitted)
+## Communities (41 total, 5 thin omitted)
 
 ### Community 0 - "Base"
 Cohesion: 0.16
-Nodes (14): app/config.py — Application configuration loaded from environment variables.…, Base, app/database.py — Async SQLAlchemy engine and session factory. All DB…, Competency, app/models/role.py — Role, Competency, and RoleCompetency ORM models.…, Join table: maps a Role to a Competency with target level and importance., Role, RoleCompetency (+6 more)
+Nodes (15): Base, app/models/__init__.py — Exports all ORM models so Alembic can discover them., Question, app/models/question.py — Question ORM model. PostgreSQL is the canonical source…, Competency, app/models/role.py — Role, Competency, and RoleCompetency ORM models.…, Join table: maps a Role to a Competency with target level and importance., Role (+7 more)
 
-### Community 1 - "models/__init__.py"
-Cohesion: 0.21
-Nodes (9): AnswerEvidence, QuestionAttempt, app/models/answer.py — QuestionAttempt and AnswerEvidence ORM models. Every…, Individual concept coverage item from LLM evaluation. Records whether a…, app/models/__init__.py — Exports all ORM models so Alembic can discover them., AssessmentSession, app/models/session.py — AssessmentSession ORM model. One session = one complete…, backend/scripts/verify_persistence.py — Verifies database persistence of… (+1 more)
+### Community 1 - "database.py"
+Cohesion: 0.15
+Nodes (11): app/config.py — Application configuration loaded from environment variables.…, app/database.py — Async SQLAlchemy engine and session factory. All DB…, AnswerEvidence, QuestionAttempt, app/models/answer.py — QuestionAttempt and AnswerEvidence ORM models. Every…, Individual concept coverage item from LLM evaluation. Records whether a…, AssessmentSession, app/models/session.py — AssessmentSession ORM model. One session = one complete… (+3 more)
 
 ### Community 2 - "dependencies"
 Cohesion: 0.05
 Nodes (43): axios, framer-motion, lucide-react, oxlint, dependencies, axios, framer-motion, lucide-react (+35 more)
 
-### Community 3 - "WSEvent"
-Cohesion: 0.13
-Nodes (17): websocket, Real-time interview event stream. Handles: audio state, transcription,…, websocket_session(), BaseModel, app/schemas/ws.py — WebSocket event schemas., WSEvent, ConnectionManager, _handle_client_event() (+9 more)
+### Community 3 - "main.py"
+Cohesion: 0.08
+Nodes (27): _format_db_error_banner(), health(), lifespan(), get, websocket, app/main.py — FastAPI application entrypoint. Registers: - CORS middleware…, Real-time interview event stream. Handles: audio state, transcription,…, Formats a concise, actionable error banner when PostgreSQL is unreachable. (+19 more)
 
-### Community 4 - "GraphitiService"
-Cohesion: 0.10
-Nodes (11): Any, GraphitiService, Records the initiation of an assessment session into the candidate's temporal…, Records candidate answer evidence for a specific concept tested by a question.…, Records a competency score transition in the user's temporal skill narrative.…, Records candidate progress on recommended improvement activities., Searches candidate contextual memory for relevant history, weaknesses, or prior…, Clean service abstraction for Graphiti temporal knowledge graph operations.… (+3 more)
+### Community 4 - "reassess.py"
+Cohesion: 0.21
+Nodes (11): get_db(), AsyncSession, FastAPI dependency: yields an async DB session., AsyncSession, BaseModel, post, app/routers/reassess.py — Targeted reassessment endpoint. POST /api/reassess, Creates a targeted reassessment session focused only on weak competencies. Does… (+3 more)
 
 ### Community 5 - "plugins"
 Cohesion: 0.22
 Nodes (8): plugins, rules, react/only-export-components, react/rules-of-hooks, $schema, oxc, typescript, warn
 
 ### Community 6 - "ReportPage.tsx"
-Cohesion: 0.14
-Nodes (18): react, competencyNameMap, LiveEstimatePanel(), competencyNameMap, InterviewPage(), competencyNameMap, ReportPage(), competencyNameMap (+10 more)
+Cohesion: 0.21
+Nodes (9): competencyNameMap, LiveEstimatePanel(), LiveEstimatePanelProps, competencyNameMap, ReportPage(), formatConfidence(), formatScore(), trendSymbol() (+1 more)
 
 ### Community 7 - "compilerOptions"
 Cohesion: 0.08
 Nodes (25): DOM, DOM.Iterable, src, vite/client, compilerOptions, allowArbitraryExtensions, allowImportingTsExtensions, erasableSyntaxOnly (+17 more)
 
-### Community 8 - "main.py"
-Cohesion: 0.06
-Nodes (41): get_db(), AsyncSession, FastAPI dependency: yields an async DB session., _format_db_error_banner(), health(), lifespan(), get, app/main.py — FastAPI application entrypoint. Registers: - CORS middleware… (+33 more)
+### Community 8 - "roles.py"
+Cohesion: 0.22
+Nodes (18): get_blueprint(), get_role(), get_roles(), AsyncSession, get, app/routers/roles.py — Role and competency endpoints. GET /api/roles GET…, Returns all available target roles with their competency models., Returns a single role with full competency model. (+10 more)
 
 ### Community 9 - "compilerOptions"
 Cohesion: 0.10
@@ -126,17 +126,17 @@ Nodes (19): node, vite.config.ts, compilerOptions, allowImportingTsExtensions, e
 Cohesion: 0.06
 Nodes (31): API Contract — Phase 2, ASSESSMENT SESSIONS, Base URLs, Error Response Shape, Frontend Service Interface Contracts, GET /api/roles, GET /api/roles/{role_id}, GET /api/roles/{role_id}/blueprint (+23 more)
 
-### Community 11 - "SkillEstimate"
-Cohesion: 0.22
-Nodes (13): SkillEstimate, get_gaps(), get_skill(), get_skill_history(), get_skills(), get_stats(), AsyncSession, get (+5 more)
+### Community 11 - "AssessmentPage.tsx"
+Cohesion: 0.33
+Nodes (6): AssessmentPage(), DEFAULT_COMPETENCIES, LEVELS, ROLES_BY_SECTOR, SECTORS_LIST, useCreateSession()
 
 ### Community 12 - "Data Lineage — Phase 2"
 Cohesion: 0.11
 Nodes (18): ADAPTIVE SEARCH REGION (MED to HARD), COMPETENCY NAME (DEBUGGING), Data Lineage — Phase 2, DEBUGGING CONFIDENCE, DEBUGGING GAP (-28), DEBUGGING SCORE, EVIDENCE ITEMS, IMPROVEMENT PLAN TASKS (+10 more)
 
-### Community 13 - "interviewService.ts"
-Cohesion: 0.16
-Nodes (17): SpeechRecognitionCtor, SpeechRecognitionErrorEventLike, SpeechRecognitionEventLike, SpeechRecognitionInstance, useInterview(), API_BASE_URL, apiClient, DATA_MODE (+9 more)
+### Community 13 - "useInterview.ts"
+Cohesion: 0.24
+Nodes (9): SpeechRecognitionCtor, SpeechRecognitionErrorEventLike, SpeechRecognitionEventLike, SpeechRecognitionInstance, API_BASE_URL, apiClient, DATA_MODE, WS_BASE_URL (+1 more)
 
 ### Community 14 - "Data Flow Map — Phase 2 Audit"
 Cohesion: 0.18
@@ -155,16 +155,16 @@ Cohesion: 0.50
 Nodes (3): Expanding the Oxlint configuration, React Compiler, React + TypeScript + Vite
 
 ### Community 19 - "App.tsx"
-Cohesion: 0.12
-Nodes (14): App(), queryClient, AdaptivePathDiagram(), Edge, edges, Node, nodes, toSVG() (+6 more)
+Cohesion: 0.16
+Nodes (9): react, App(), queryClient, AtmosphericBackground(), NavBar(), LandingPage(), PlanPage(), ReassessPage() (+1 more)
 
-### Community 20 - "services/__init__.py"
-Cohesion: 0.15
-Nodes (13): AnswerEvaluator, EvaluationResult, EvidenceItem, app/services/answer_evaluator.py — LLM-based answer evaluation service.…, Calls Groq's OpenAI-compatible chat completions endpoint. Uses…, Keyword-expansion semantic fallback. Used when no Groq key is available or Groq…, Evaluates interview answers against expected concepts. Uses Groq…, CourseRecommendationService (+5 more)
+### Community 20 - "GraphitiService"
+Cohesion: 0.06
+Nodes (26): Any, AnswerEvaluator, EvaluationResult, EvidenceItem, app/services/answer_evaluator.py — LLM-based answer evaluation service.…, Calls Groq's OpenAI-compatible chat completions endpoint. Uses…, Keyword-expansion semantic fallback. Used when no Groq key is available or Groq…, Evaluates interview answers against expected concepts. Uses Groq… (+18 more)
 
 ### Community 26 - "sessions.py"
 Cohesion: 0.08
-Nodes (58): create_session(), _evidence_to_schema(), _generate_recommendations(), _generate_summary(), get_current_state(), get_report(), get_session(), _get_session_or_404() (+50 more)
+Nodes (59): create_session(), _evidence_to_schema(), _generate_recommendations(), _generate_summary(), get_current_state(), get_report(), get_session(), _get_session_or_404() (+51 more)
 
 ### Community 27 - "voice.py"
 Cohesion: 0.09
@@ -182,53 +182,53 @@ Nodes (11): app/models/skill.py — SkillEstimate and SkillHistory ORM models. S
 Cohesion: 0.18
 Nodes (10): Backend (`backend/.env`), Backend Pipeline (submit_answer), Current Architecture — ADAPTIVE, Frontend (`.env`), Key Files, Report Pipeline, Required Environment Variables, Status Matrix (+2 more)
 
-### Community 31 - "Question"
-Cohesion: 0.38
-Nodes (4): Question, app/models/question.py — Question ORM model. PostgreSQL is the canonical source…, AdaptiveEngine, app/services/adaptive_engine.py — Adaptive question selection engine. The…
+### Community 31 - "SkillsPage.tsx"
+Cohesion: 0.26
+Nodes (9): SystemFooter(), competencyNameMap, SkillsPage(), useGapAnalysis(), useImprovementPlan(), useSkillProfile(), getGapAnalysis(), getImprovementPlan() (+1 more)
 
 ### Community 32 - "types/assessment.ts"
-Cohesion: 0.11
-Nodes (25): LiveEstimatePanelProps, mockAdaptiveState, mockSession, mockInterviewState, mockQuestions, SubmitAnswerResult, AdaptationNotice, initialState (+17 more)
+Cohesion: 0.06
+Nodes (49): actionLabels, AdaptiveStatePanel(), AdaptiveStatePanelProps, difficultyOrder, difficultyPosition(), stateConfig, VoiceOrb(), VoiceOrbProps (+41 more)
 
-### Community 33 - "VoiceOrb.tsx"
-Cohesion: 0.29
-Nodes (4): stateConfig, VoiceOrb(), VoiceOrbProps, VoiceState
+### Community 33 - "SkillEstimate"
+Cohesion: 0.22
+Nodes (13): SkillEstimate, get_gaps(), get_skill(), get_skill_history(), get_skills(), get_stats(), AsyncSession, get (+5 more)
 
 ### Community 34 - "assessmentService.ts"
 Cohesion: 0.22
-Nodes (17): loadData(), useAssessmentBlueprint(), useCreateSession(), useRole(), useTargetRoles(), delay(), createSession(), getAdaptiveState() (+9 more)
+Nodes (16): loadData(), useAssessmentBlueprint(), useRole(), delay(), createSession(), getAdaptiveState(), getAssessmentReport(), getSession() (+8 more)
 
-### Community 36 - "types/skills.ts"
-Cohesion: 0.15
-Nodes (18): useGapAnalysis(), useImprovementPlan(), useSkillProfile(), mockGapAnalysis, mockImprovementPlan, mockSkillEstimates, getGapAnalysis(), getImprovementPlan() (+10 more)
+### Community 36 - "roleService.ts"
+Cohesion: 0.46
+Nodes (5): mockRoles, CompetencyRequirement, RoleBlueprint, RoleLevel, TargetRole
 
-### Community 38 - "AssessmentPage.tsx"
-Cohesion: 0.09
-Nodes (18): AssessmentPage(), DURATION_OPTIONS, LEVEL_OPTIONS, SCAN_LABELS, matchResumeFile(), IMPORTANT: No OCR is performed. Filename → profile matching only., RESUME_PROFILES, COMPETENCY_NAMES (+10 more)
+### Community 38 - "setup.ts"
+Cohesion: 0.12
+Nodes (13): IMPORTANT: No OCR is performed. Filename → profile matching only., RESUME_PROFILES, COMPETENCY_NAMES, SECTORS, AssessmentDuration, AssessmentSetup, QuestionSet, QuestionSource (+5 more)
 
-### Community 39 - "AdaptiveStatePanel.tsx"
-Cohesion: 0.40
-Nodes (5): actionLabels, AdaptiveStatePanel(), AdaptiveStatePanelProps, difficultyOrder, difficultyPosition()
+### Community 39 - "InterviewPage.tsx"
+Cohesion: 0.47
+Nodes (5): competencyNameMap, InterviewPage(), useInterview(), padIndex(), submitAnswer()
 
 ## Knowledge Gaps
-- **178 isolated node(s):** `$schema`, `typescript`, `oxc`, `react/rules-of-hooks`, `warn` (+173 more)
+- **177 isolated node(s):** `$schema`, `typescript`, `oxc`, `react/rules-of-hooks`, `warn` (+172 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `GraphitiService` connect `GraphitiService` to `main.py`, `services/__init__.py`?**
-  _High betweenness centrality (0.022) - this node is a cross-community bridge._
-- **Why does `react` connect `ReportPage.tsx` to `interviewService.ts`, `App.tsx`, `plugins`, `AssessmentPage.tsx`?**
-  _High betweenness centrality (0.014) - this node is a cross-community bridge._
-- **Why does `Base` connect `Base` to `models/__init__.py`, `main.py`, `SkillEstimate`, `users.py`, `SkillHistory`, `Question`?**
+- **Why does `Base` connect `Base` to `database.py`, `SkillEstimate`, `main.py`, `users.py`, `SkillHistory`?**
+  _High betweenness centrality (0.010) - this node is a cross-community bridge._
+- **Why does `RoleCompetency` connect `Base` to `roles.py`, `SkillEstimate`, `sessions.py`, `users.py`?**
   _High betweenness centrality (0.009) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `Base` (e.g. with `lifespan()` and `seed()`) actually correct?**
   _`Base` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 8 inferred relationships involving `AssessmentSession` (e.g. with `start_reassessment()` and `create_session()`) actually correct?**
   _`AssessmentSession` has 8 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `$schema`, `typescript`, `oxc` to the rest of the system?**
-  _178 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _177 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `database.py` be split into smaller, more focused modules?**
+  _Cohesion score 0.14736842105263157 - nodes in this community are weakly interconnected._
 - **Should `dependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.045454545454545456 - nodes in this community are weakly interconnected._

@@ -5,6 +5,7 @@ import { useInterviewStore } from '../../store/interviewStore';
 import { getAssessmentReport } from '../../services/assessmentService';
 import { getRoleById } from '../../services/roleService';
 import type { AssessmentReport, CourseResource } from '../../types/assessment';
+import type { TargetRole } from '../../types/roles';
 import { formatScore, formatConfidence, trendSymbol } from '../../lib/utils';
 import { SystemFooter } from '../../components/layout/SystemFooter';
 
@@ -62,15 +63,15 @@ export function ReportPage() {
 
   if (isLoading) {
     return (
-      <main className="page-shell" style={{ background: 'var(--c-paper)' }}>
-        <div className="container" style={{ paddingTop: 'var(--space-24)', textAlign: 'center' }}>
-          <div className="sys-label" style={{ letterSpacing: '0.2em', color: 'var(--c-accent)' }}>
-            ANALYZING ADAPTIVE TRAJECTORY
+      <main className="text-white min-h-screen relative flex items-center justify-center font-mono p-4">
+        <div className="glass-panel p-10 rounded-lg max-w-md w-full text-center border-t-2 border-t-cyan-400 shadow-2xl">
+          <div className="text-xs text-cyan-400 font-bold tracking-widest uppercase mb-3 animate-pulse">
+            [ANALYZING ADAPTIVE TRAJECTORY]
           </div>
-          <h1 style={{ marginTop: 'var(--space-4)', fontSize: 'var(--text-3xl)', fontWeight: 700 }}>
-            Compiling Assessment Report...
+          <h1 className="font-tech text-2xl font-bold text-white uppercase tracking-wider mb-2">
+            Compiling Report...
           </h1>
-          <p style={{ marginTop: 'var(--space-4)', color: 'var(--c-mid)' }}>
+          <p className="text-xs text-slate-300">
             Synthesizing evidence across competencies and computing knowledge gaps.
           </p>
         </div>
@@ -80,23 +81,23 @@ export function ReportPage() {
 
   if (error || (!report && !sessionId)) {
     return (
-      <main className="page-shell" style={{ background: 'var(--c-paper)' }}>
-        <div className="container" style={{ paddingTop: 'var(--space-20)', maxWidth: '640px', margin: '0 auto' }}>
-          <div className="sys-label" style={{ color: 'var(--c-warning)', marginBottom: 'var(--space-2)' }}>
-            Report Status
+      <main className="text-white min-h-screen relative flex items-center justify-center font-mono p-4">
+        <div className="glass-panel p-8 sm:p-10 rounded-lg max-w-xl w-full border-t-2 border-t-cyan-400 shadow-2xl">
+          <div className="text-xs text-cyan-400 font-bold tracking-widest uppercase mb-2">
+            [REPORT STATUS]
           </div>
-          <h1 style={{ fontSize: 'var(--text-2xl)', fontWeight: 700, marginBottom: 'var(--space-4)' }}>
+          <h1 className="font-tech text-2xl font-bold text-white uppercase tracking-wider mb-3">
             {error ? 'Unable to Retrieve Report' : 'No Completed Session Detected'}
           </h1>
-          <p style={{ color: 'var(--c-mid)', lineHeight: 1.6, marginBottom: 'var(--space-8)' }}>
+          <p className="text-xs text-slate-300 leading-relaxed mb-8">
             {error ??
               'To generate an adaptive skill report, complete an interview session. The backend will evaluate responses, trace evidence, and calculate gap metrics.'}
           </p>
-          <div style={{ display: 'flex', gap: 'var(--space-4)' }}>
-            <button className="btn btn-primary" onClick={() => navigate('/assess')}>
+          <div className="flex flex-wrap gap-4">
+            <button className="btn-brutal-primary px-6 py-3 text-xs" onClick={() => navigate('/assess')}>
               Start New Assessment →
             </button>
-            <button className="btn btn-secondary" onClick={() => navigate('/skills')}>
+            <button className="btn-brutal-secondary px-6 py-3 text-xs" onClick={() => navigate('/skills')}>
               View General Skills
             </button>
           </div>
@@ -109,51 +110,34 @@ export function ReportPage() {
   const isPassing = overallScore >= 70;
 
   return (
-    <main className="page-shell" style={{ background: 'var(--c-paper)', paddingBottom: 'var(--space-24)' }}>
-      {/* ── HEADER ── */}
-      <section className="page-header" style={{ borderBottom: '1px solid var(--c-rule)' }}>
-        <div className="container">
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-end',
-              flexWrap: 'wrap',
-              gap: 'var(--space-6)',
-              padding: 'var(--space-8) 0',
-            }}
-          >
+    <main className="text-white min-h-screen selection:bg-cyan-500 selection:text-black relative flex flex-col justify-between font-mono">
+      <div className="max-w-[1720px] mx-auto w-full px-4 lg:px-8 py-10 space-y-10">
+        {/* Header */}
+        <div className="glass-panel p-8 sm:p-10 rounded-lg border-t-2 border-t-cyan-400 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 blur-3xl pointer-events-none" />
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
             <div>
-              <div className="sys-label" style={{ color: 'var(--c-accent)', marginBottom: 'var(--space-2)' }}>
-                Assessment / Comprehensive Evaluation
+              <div className="text-xs uppercase tracking-widest text-cyan-400 mb-2 flex items-center space-x-2">
+                <span className="w-2 h-2 bg-cyan-400 shadow-[0_0_8px_#00f0ff] animate-pulse rounded-full" />
+                <span>ASSESSMENT // COMPREHENSIVE EVALUATION</span>
               </div>
-              <h1
-                style={{
-                  fontSize: 'clamp(32px, 4vw, 56px)',
-                  fontWeight: 700,
-                  letterSpacing: '-0.03em',
-                  color: 'var(--c-ink)',
-                  lineHeight: 1.1,
-                }}
-              >
+              <h1 className="font-headline text-4xl sm:text-6xl uppercase tracking-tighter text-white drop-shadow-[0_4px_16px_rgba(0,0,0,0.5)]">
                 EVALUATION<br />REPORT
               </h1>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)', alignItems: 'flex-end' }}>
-              <span className="sys-label">Target Role</span>
-              <span style={{ fontFamily: 'var(--f-mono)', fontSize: 'var(--text-md)', fontWeight: 600 }}>
+            <div className="flex flex-col md:items-end font-mono text-xs space-y-1.5 border-t md:border-t-0 md:border-l border-white/10 pt-4 md:pt-0 md:pl-6">
+              <span className="text-slate-400 uppercase tracking-widest text-[10px]">TARGET ROLE</span>
+              <span className="font-bold text-white text-sm tracking-wider">
                 {role?.title.toUpperCase() ?? report?.targetRoleId.toUpperCase()}
               </span>
-              <span className="sys-label" style={{ color: 'var(--c-mid)' }}>
-                Session ID: {report?.sessionId.toUpperCase()}
+              <span className="text-cyan-400 font-semibold">
+                SESSION ID: {report?.sessionId.toUpperCase()}
               </span>
             </div>
           </div>
         </div>
-      </section>
 
-      <div className="container" style={{ marginTop: 'var(--space-12)' }}>
         {/* ── TOP KPI ROW ── */}
         <div
           style={{

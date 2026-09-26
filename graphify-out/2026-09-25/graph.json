@@ -121,69 +121,56 @@
       "source_location": "L19"
     },
     {
-      "id": "backend_app_models_skill_skillestimate",
-      "label": "SkillEstimate",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "SkillEstimate",
-      "file_type": "code",
-      "norm_label": "skillestimate",
-      "source_file": "backend/app/models/skill.py",
-      "source_location": "L28"
-    },
-    {
-      "id": "backend_app_routers_reassess_reassessrequest",
-      "label": "ReassessRequest",
+      "id": "src_hooks_useinterview_speechrecognitionctor",
+      "label": "SpeechRecognitionCtor",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 13,
-      "community_name": "reassess.py",
+      "community_name": "useInterview.ts",
       "file_type": "code",
-      "norm_label": "reassessrequest",
-      "source_file": "backend/app/routers/reassess.py",
-      "source_location": "L17"
+      "norm_label": "speechrecognitionctor",
+      "source_file": "src/hooks/useInterview.ts",
+      "source_location": "L36"
     },
     {
-      "id": "backend_app_routers_reassess_reassessresponse",
-      "label": "ReassessResponse",
+      "id": "src_hooks_useinterview_speechrecognitionerroreventlike",
+      "label": "SpeechRecognitionErrorEventLike",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 13,
-      "community_name": "reassess.py",
+      "community_name": "useInterview.ts",
       "file_type": "code",
-      "norm_label": "reassessresponse",
-      "source_file": "backend/app/routers/reassess.py",
+      "norm_label": "speechrecognitionerroreventlike",
+      "source_file": "src/hooks/useInterview.ts",
+      "source_location": "L20"
+    },
+    {
+      "id": "src_hooks_useinterview_speechrecognitioneventlike",
+      "label": "SpeechRecognitionEventLike",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "useInterview.ts",
+      "file_type": "code",
+      "norm_label": "speechrecognitioneventlike",
+      "source_file": "src/hooks/useInterview.ts",
+      "source_location": "L8"
+    },
+    {
+      "id": "src_hooks_useinterview_speechrecognitioninstance",
+      "label": "SpeechRecognitionInstance",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "useInterview.ts",
+      "file_type": "code",
+      "norm_label": "speechrecognitioninstance",
+      "source_file": "src/hooks/useInterview.ts",
       "source_location": "L24"
-    },
-    {
-      "id": "src_components_charts_adaptivepathdiagram_edge",
-      "label": "Edge",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "react",
-      "file_type": "code",
-      "norm_label": "edge",
-      "source_file": "src/components/charts/AdaptivePathDiagram.tsx",
-      "source_location": "L13"
-    },
-    {
-      "id": "src_components_charts_adaptivepathdiagram_node",
-      "label": "Node",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "react",
-      "file_type": "code",
-      "norm_label": "node",
-      "source_file": "src/components/charts/AdaptivePathDiagram.tsx",
-      "source_location": "L4"
     },
     {
       "id": "backend_app_services_answer_evaluator_answerevaluator",
@@ -192,7 +179,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "services/__init__.py",
+      "community_name": "GraphitiService",
       "file_type": "code",
       "norm_label": "answerevaluator",
       "source_file": "backend/app/services/answer_evaluator.py",
@@ -205,7 +192,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "services/__init__.py",
+      "community_name": "GraphitiService",
       "file_type": "code",
       "norm_label": "evaluationresult",
       "source_file": "backend/app/services/answer_evaluator.py",
@@ -218,7 +205,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "services/__init__.py",
+      "community_name": "GraphitiService",
       "file_type": "code",
       "norm_label": "evidenceitem",
       "source_file": "backend/app/services/answer_evaluator.py",
@@ -231,11 +218,24 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "services/__init__.py",
+      "community_name": "GraphitiService",
       "file_type": "code",
       "norm_label": "courserecommendationservice",
       "source_file": "backend/app/services/course_recommendation_service.py",
       "source_location": "L258"
+    },
+    {
+      "id": "backend_app_services_graphiti_service_graphitiservice",
+      "label": "GraphitiService",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "code",
+      "norm_label": "graphitiservice",
+      "source_file": "backend/app/services/graphiti_service.py",
+      "source_location": "L29"
     },
     {
       "id": "backend_app_schemas_answer_adaptivestateschema",
@@ -446,19 +446,6 @@
       "source_location": "L41"
     },
     {
-      "id": "backend_app_schemas_skill_gapanalysisschema",
-      "label": "GapAnalysisSchema",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "sessions.py",
-      "file_type": "code",
-      "norm_label": "gapanalysisschema",
-      "source_file": "backend/app/schemas/skill.py",
-      "source_location": "L32"
-    },
-    {
       "id": "backend_app_services_adaptive_engine_adaptiveengine",
       "label": "AdaptiveEngine",
       "_callable": true,
@@ -524,17 +511,17 @@
       "source_location": "L21"
     },
     {
-      "id": "backend_app_models_plan_improvementtask",
-      "label": "ImprovementTask",
+      "id": "backend_app_models_skill_skillestimate",
+      "label": "SkillEstimate",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 28,
       "community_name": "users.py",
       "file_type": "code",
-      "norm_label": "improvementtask",
-      "source_file": "backend/app/models/plan.py",
-      "source_location": "L19"
+      "norm_label": "skillestimate",
+      "source_file": "backend/app/models/skill.py",
+      "source_location": "L28"
     },
     {
       "id": "backend_app_schemas_plan_improvementplanschema",
@@ -561,6 +548,19 @@
       "norm_label": "improvementtaskschema",
       "source_file": "backend/app/schemas/plan.py",
       "source_location": "L7"
+    },
+    {
+      "id": "backend_app_schemas_skill_gapanalysisschema",
+      "label": "GapAnalysisSchema",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "users.py",
+      "file_type": "code",
+      "norm_label": "gapanalysisschema",
+      "source_file": "backend/app/schemas/skill.py",
+      "source_location": "L32"
     },
     {
       "id": "backend_app_schemas_skill_skillhistorypointschema",
@@ -654,97 +654,6 @@
       "source_location": "L28"
     },
     {
-      "id": "src_components_interview_adaptivestatepanel_adaptivestatepanelprops",
-      "label": "AdaptiveStatePanelProps",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "adaptivestatepanelprops",
-      "source_file": "src/components/interview/AdaptiveStatePanel.tsx",
-      "source_location": "L4"
-    },
-    {
-      "id": "src_components_interview_liveestimatepanel_liveestimatepanelprops",
-      "label": "LiveEstimatePanelProps",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "liveestimatepanelprops",
-      "source_file": "src/components/interview/LiveEstimatePanel.tsx",
-      "source_location": "L6"
-    },
-    {
-      "id": "src_components_interview_voiceorb_voiceorbprops",
-      "label": "VoiceOrbProps",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "voiceorbprops",
-      "source_file": "src/components/interview/VoiceOrb.tsx",
-      "source_location": "L4"
-    },
-    {
-      "id": "src_hooks_useinterview_speechrecognitionctor",
-      "label": "SpeechRecognitionCtor",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "speechrecognitionctor",
-      "source_file": "src/hooks/useInterview.ts",
-      "source_location": "L36"
-    },
-    {
-      "id": "src_hooks_useinterview_speechrecognitionerroreventlike",
-      "label": "SpeechRecognitionErrorEventLike",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "speechrecognitionerroreventlike",
-      "source_file": "src/hooks/useInterview.ts",
-      "source_location": "L20"
-    },
-    {
-      "id": "src_hooks_useinterview_speechrecognitioneventlike",
-      "label": "SpeechRecognitionEventLike",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "speechrecognitioneventlike",
-      "source_file": "src/hooks/useInterview.ts",
-      "source_location": "L8"
-    },
-    {
-      "id": "src_hooks_useinterview_speechrecognitioninstance",
-      "label": "SpeechRecognitionInstance",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "speechrecognitioninstance",
-      "source_file": "src/hooks/useInterview.ts",
-      "source_location": "L24"
-    },
-    {
       "id": "src_services_interviewservice_backendattempt",
       "label": "BackendAttempt",
       "_callable": true,
@@ -834,32 +743,6 @@
       "norm_label": "answerevidence",
       "source_file": "src/types/assessment.ts",
       "source_location": "L18"
-    },
-    {
-      "id": "src_types_assessment_assessmentreport",
-      "label": "AssessmentReport",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "assessmentreport",
-      "source_file": "src/types/assessment.ts",
-      "source_location": "L95"
-    },
-    {
-      "id": "src_types_assessment_assessmentsession",
-      "label": "AssessmentSession",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "assessmentsession",
-      "source_file": "src/types/assessment.ts",
-      "source_location": "L37"
     },
     {
       "id": "src_types_assessment_assessmentstatus",
@@ -966,13 +849,26 @@
       "source_location": "L89"
     },
     {
+      "id": "src_components_interview_voiceorb_voiceorbprops",
+      "label": "VoiceOrbProps",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "VoiceOrb.tsx",
+      "file_type": "code",
+      "norm_label": "voiceorbprops",
+      "source_file": "src/components/interview/VoiceOrb.tsx",
+      "source_location": "L4"
+    },
+    {
       "id": "src_types_interview_interviewevent",
       "label": "InterviewEvent",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
+      "community": 33,
+      "community_name": "VoiceOrb.tsx",
       "file_type": "code",
       "norm_label": "interviewevent",
       "source_file": "src/types/interview.ts",
@@ -984,8 +880,8 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
+      "community": 33,
+      "community_name": "VoiceOrb.tsx",
       "file_type": "code",
       "norm_label": "liveinterviewstate",
       "source_file": "src/types/interview.ts",
@@ -997,142 +893,12 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
+      "community": 33,
+      "community_name": "VoiceOrb.tsx",
       "file_type": "code",
       "norm_label": "voicestate",
       "source_file": "src/types/interview.ts",
       "source_location": "L1"
-    },
-    {
-      "id": "src_types_roles_competency",
-      "label": "Competency",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "competency",
-      "source_file": "src/types/roles.ts",
-      "source_location": "L3"
-    },
-    {
-      "id": "src_types_skills_confidencelevel",
-      "label": "ConfidenceLevel",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "confidencelevel",
-      "source_file": "src/types/skills.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_types_skills_estimatedlevel",
-      "label": "EstimatedLevel",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "estimatedlevel",
-      "source_file": "src/types/skills.ts",
-      "source_location": "L3"
-    },
-    {
-      "id": "src_types_skills_gapanalysis",
-      "label": "GapAnalysis",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "gapanalysis",
-      "source_file": "src/types/skills.ts",
-      "source_location": "L26"
-    },
-    {
-      "id": "src_types_skills_historicaldatapoint",
-      "label": "HistoricalDataPoint",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "historicaldatapoint",
-      "source_file": "src/types/skills.ts",
-      "source_location": "L19"
-    },
-    {
-      "id": "src_types_skills_improvementplan",
-      "label": "ImprovementPlan",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "improvementplan",
-      "source_file": "src/types/skills.ts",
-      "source_location": "L47"
-    },
-    {
-      "id": "src_types_skills_improvementtask",
-      "label": "ImprovementTask",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "improvementtask",
-      "source_file": "src/types/skills.ts",
-      "source_location": "L35"
-    },
-    {
-      "id": "src_types_skills_skillestimate",
-      "label": "SkillEstimate",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "skillestimate",
-      "source_file": "src/types/skills.ts",
-      "source_location": "L5"
-    },
-    {
-      "id": "src_types_skills_trenddirection",
-      "label": "TrendDirection",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "trenddirection",
-      "source_file": "src/types/skills.ts",
-      "source_location": "L2"
-    },
-    {
-      "id": "src_types_skills_userprofile",
-      "label": "UserProfile",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "userprofile",
-      "source_file": "src/types/skills.ts",
-      "source_location": "L55"
     },
     {
       "id": "src_types_assessment_assessmentconfig",
@@ -1213,6 +979,136 @@
       "source_location": "L8"
     },
     {
+      "id": "src_components_interview_liveestimatepanel_liveestimatepanelprops",
+      "label": "LiveEstimatePanelProps",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "types/skills.ts",
+      "file_type": "code",
+      "norm_label": "liveestimatepanelprops",
+      "source_file": "src/components/interview/LiveEstimatePanel.tsx",
+      "source_location": "L6"
+    },
+    {
+      "id": "src_types_skills_confidencelevel",
+      "label": "ConfidenceLevel",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "types/skills.ts",
+      "file_type": "code",
+      "norm_label": "confidencelevel",
+      "source_file": "src/types/skills.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_types_skills_estimatedlevel",
+      "label": "EstimatedLevel",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "types/skills.ts",
+      "file_type": "code",
+      "norm_label": "estimatedlevel",
+      "source_file": "src/types/skills.ts",
+      "source_location": "L3"
+    },
+    {
+      "id": "src_types_skills_gapanalysis",
+      "label": "GapAnalysis",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "types/skills.ts",
+      "file_type": "code",
+      "norm_label": "gapanalysis",
+      "source_file": "src/types/skills.ts",
+      "source_location": "L26"
+    },
+    {
+      "id": "src_types_skills_historicaldatapoint",
+      "label": "HistoricalDataPoint",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "types/skills.ts",
+      "file_type": "code",
+      "norm_label": "historicaldatapoint",
+      "source_file": "src/types/skills.ts",
+      "source_location": "L19"
+    },
+    {
+      "id": "src_types_skills_improvementplan",
+      "label": "ImprovementPlan",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "types/skills.ts",
+      "file_type": "code",
+      "norm_label": "improvementplan",
+      "source_file": "src/types/skills.ts",
+      "source_location": "L47"
+    },
+    {
+      "id": "src_types_skills_improvementtask",
+      "label": "ImprovementTask",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "types/skills.ts",
+      "file_type": "code",
+      "norm_label": "improvementtask",
+      "source_file": "src/types/skills.ts",
+      "source_location": "L35"
+    },
+    {
+      "id": "src_types_skills_skillestimate",
+      "label": "SkillEstimate",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "types/skills.ts",
+      "file_type": "code",
+      "norm_label": "skillestimate",
+      "source_file": "src/types/skills.ts",
+      "source_location": "L5"
+    },
+    {
+      "id": "src_types_skills_trenddirection",
+      "label": "TrendDirection",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "types/skills.ts",
+      "file_type": "code",
+      "norm_label": "trenddirection",
+      "source_file": "src/types/skills.ts",
+      "source_location": "L2"
+    },
+    {
+      "id": "src_types_skills_userprofile",
+      "label": "UserProfile",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "types/skills.ts",
+      "file_type": "code",
+      "norm_label": "userprofile",
+      "source_file": "src/types/skills.ts",
+      "source_location": "L55"
+    },
+    {
       "id": "src_services_voiceservice_frontendvoiceservice",
       "label": "FrontendVoiceService",
       "_callable": true,
@@ -1239,17 +1135,199 @@
       "source_location": "L6"
     },
     {
-      "id": "backend_app_services_graphiti_service_graphitiservice",
-      "label": "GraphitiService",
+      "id": "src_types_setup_assessmentsetup",
+      "label": "AssessmentSetup",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "AssessmentPage.tsx",
+      "file_type": "code",
+      "norm_label": "assessmentsetup",
+      "source_file": "src/types/setup.ts",
+      "source_location": "L73"
+    },
+    {
+      "id": "src_types_setup_questionset",
+      "label": "QuestionSet",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "AssessmentPage.tsx",
+      "file_type": "code",
+      "norm_label": "questionset",
+      "source_file": "src/types/setup.ts",
+      "source_location": "L63"
+    },
+    {
+      "id": "src_types_setup_questionsource",
+      "label": "QuestionSource",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "AssessmentPage.tsx",
+      "file_type": "code",
+      "norm_label": "questionsource",
+      "source_file": "src/types/setup.ts",
+      "source_location": "L52"
+    },
+    {
+      "id": "src_types_setup_resumeprofile",
+      "label": "ResumeProfile",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "AssessmentPage.tsx",
+      "file_type": "code",
+      "norm_label": "resumeprofile",
+      "source_file": "src/types/setup.ts",
+      "source_location": "L32"
+    },
+    {
+      "id": "src_types_setup_scanstate",
+      "label": "ScanState",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "AssessmentPage.tsx",
+      "file_type": "code",
+      "norm_label": "scanstate",
+      "source_file": "src/types/setup.ts",
+      "source_location": "L85"
+    },
+    {
+      "id": "src_types_setup_sector",
+      "label": "Sector",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "AssessmentPage.tsx",
+      "file_type": "code",
+      "norm_label": "sector",
+      "source_file": "src/types/setup.ts",
+      "source_location": "L24"
+    },
+    {
+      "id": "src_types_setup_sectorrole",
+      "label": "SectorRole",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "AssessmentPage.tsx",
+      "file_type": "code",
+      "norm_label": "sectorrole",
+      "source_file": "src/types/setup.ts",
+      "source_location": "L13"
+    },
+    {
+      "id": "src_types_setup_setupquestion",
+      "label": "SetupQuestion",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "AssessmentPage.tsx",
+      "file_type": "code",
+      "norm_label": "setupquestion",
+      "source_file": "src/types/setup.ts",
+      "source_location": "L54"
+    },
+    {
+      "id": "src_components_interview_adaptivestatepanel_adaptivestatepanelprops",
+      "label": "AdaptiveStatePanelProps",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "AdaptiveStatePanel.tsx",
+      "file_type": "code",
+      "norm_label": "adaptivestatepanelprops",
+      "source_file": "src/components/interview/AdaptiveStatePanel.tsx",
+      "source_location": "L4"
+    },
+    {
+      "id": "backend_app_routers_reassess_reassessrequest",
+      "label": "ReassessRequest",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 4,
-      "community_name": "GraphitiService",
+      "community_name": "reassess.py",
       "file_type": "code",
-      "norm_label": "graphitiservice",
-      "source_file": "backend/app/services/graphiti_service.py",
-      "source_location": "L29"
+      "norm_label": "reassessrequest",
+      "source_file": "backend/app/routers/reassess.py",
+      "source_location": "L17"
+    },
+    {
+      "id": "backend_app_routers_reassess_reassessresponse",
+      "label": "ReassessResponse",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "reassess.py",
+      "file_type": "code",
+      "norm_label": "reassessresponse",
+      "source_file": "backend/app/routers/reassess.py",
+      "source_location": "L24"
+    },
+    {
+      "id": "src_types_assessment_assessmentsession",
+      "label": "AssessmentSession",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "mock/interview.ts",
+      "file_type": "code",
+      "norm_label": "assessmentsession",
+      "source_file": "src/types/assessment.ts",
+      "source_location": "L37"
+    },
+    {
+      "id": "backend_app_models_plan_improvementtask",
+      "label": "ImprovementTask",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 42,
+      "community_name": "models/plan.py",
+      "file_type": "code",
+      "norm_label": "improvementtask",
+      "source_file": "backend/app/models/plan.py",
+      "source_location": "L19"
+    },
+    {
+      "id": "src_types_assessment_assessmentreport",
+      "label": "AssessmentReport",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "ReportPage.tsx",
+      "file_type": "code",
+      "norm_label": "assessmentreport",
+      "source_file": "src/types/assessment.ts",
+      "source_location": "L95"
+    },
+    {
+      "id": "src_types_roles_competency",
+      "label": "Competency",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "ReportPage.tsx",
+      "file_type": "code",
+      "norm_label": "competency",
+      "source_file": "src/types/roles.ts",
+      "source_location": "L3"
     },
     {
       "id": "backend_app_schemas_role_competencyareaschema",
@@ -1449,100 +1527,160 @@
       "source_location": "L17"
     },
     {
-      "id": "backend_app_models_skill_skillestimate_repr",
-      "label": ".__repr__()",
+      "id": "src_components_charts_adaptivepathdiagram_adaptivepathdiagram",
+      "label": "AdaptivePathDiagram()",
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "SkillEstimate",
+      "community_name": "AssessmentPage",
       "file_type": "code",
-      "norm_label": ".__repr__()",
-      "source_file": "backend/app/models/skill.py",
-      "source_location": "L62"
+      "norm_label": "adaptivepathdiagram()",
+      "source_file": "src/components/charts/AdaptivePathDiagram.tsx",
+      "source_location": "L3"
     },
     {
-      "id": "backend_app_routers_users_get_gaps",
-      "label": "get_gaps()",
+      "id": "src_features_assessment_assessmentpage_assessmentpage",
+      "label": "AssessmentPage()",
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "SkillEstimate",
+      "community_name": "AssessmentPage",
       "file_type": "code",
-      "norm_label": "get_gaps()",
-      "source_file": "backend/app/routers/users.py",
-      "source_location": "L91"
+      "norm_label": "assessmentpage()",
+      "source_file": "src/features/assessment/AssessmentPage.tsx",
+      "source_location": "L72"
     },
     {
-      "id": "backend_app_routers_users_get_skill",
-      "label": "get_skill()",
+      "id": "src_features_assessment_assessmentpage_assessmentpage_handlebegin",
+      "label": "handleBegin()",
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "SkillEstimate",
+      "community_name": "AssessmentPage",
       "file_type": "code",
-      "norm_label": "get_skill()",
-      "source_file": "backend/app/routers/users.py",
-      "source_location": "L76"
+      "norm_label": "handlebegin()",
+      "source_file": "src/features/assessment/AssessmentPage.tsx",
+      "source_location": "L168"
     },
     {
-      "id": "backend_app_routers_users_get_skill_history",
-      "label": "get_skill_history()",
+      "id": "src_features_assessment_assessmentpage_assessmentpage_handledropzone",
+      "label": "handleDropZone()",
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "SkillEstimate",
+      "community_name": "AssessmentPage",
       "file_type": "code",
-      "norm_label": "get_skill_history()",
-      "source_file": "backend/app/routers/users.py",
-      "source_location": "L40"
+      "norm_label": "handledropzone()",
+      "source_file": "src/features/assessment/AssessmentPage.tsx",
+      "source_location": "L150"
     },
     {
-      "id": "backend_app_routers_users_get_skills",
-      "label": "get_skills()",
+      "id": "src_features_assessment_assessmentpage_assessmentpage_handlefilechange",
+      "label": "handleFileChange()",
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "SkillEstimate",
+      "community_name": "AssessmentPage",
       "file_type": "code",
-      "norm_label": "get_skills()",
-      "source_file": "backend/app/routers/users.py",
+      "norm_label": "handlefilechange()",
+      "source_file": "src/features/assessment/AssessmentPage.tsx",
+      "source_location": "L142"
+    },
+    {
+      "id": "src_features_assessment_assessmentpage_assessmentpage_togglefocus",
+      "label": "toggleFocus()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "AssessmentPage",
+      "file_type": "code",
+      "norm_label": "togglefocus()",
+      "source_file": "src/features/assessment/AssessmentPage.tsx",
+      "source_location": "L159"
+    },
+    {
+      "id": "src_features_landing_landingpage_landingpage",
+      "label": "LandingPage()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "AssessmentPage",
+      "file_type": "code",
+      "norm_label": "landingpage()",
+      "source_file": "src/features/landing/LandingPage.tsx",
+      "source_location": "L19"
+    },
+    {
+      "id": "src_hooks_useassessment_usecreatesession",
+      "label": "useCreateSession()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "AssessmentPage",
+      "file_type": "code",
+      "norm_label": "usecreatesession()",
+      "source_file": "src/hooks/useAssessment.ts",
       "source_location": "L30"
     },
     {
-      "id": "backend_app_routers_users_get_stats",
-      "label": "get_stats()",
+      "id": "src_hooks_useassessment_usetargetroles",
+      "label": "useTargetRoles()",
       "_callable": true,
       "_origin": "ast",
       "community": 11,
-      "community_name": "SkillEstimate",
+      "community_name": "AssessmentPage",
       "file_type": "code",
-      "norm_label": "get_stats()",
-      "source_file": "backend/app/routers/users.py",
-      "source_location": "L131"
+      "norm_label": "usetargetroles()",
+      "source_file": "src/hooks/useAssessment.ts",
+      "source_location": "L7"
     },
     {
-      "id": "backend_app_database_get_db",
-      "label": "get_db()",
+      "id": "src_hooks_useinterview_useinterview",
+      "label": "useInterview()",
       "_callable": true,
       "_origin": "ast",
       "community": 13,
-      "community_name": "reassess.py",
+      "community_name": "useInterview.ts",
       "file_type": "code",
-      "norm_label": "get_db()",
-      "source_file": "backend/app/database.py",
-      "source_location": "L27"
+      "norm_label": "useinterview()",
+      "source_file": "src/hooks/useInterview.ts",
+      "source_location": "L52"
     },
     {
-      "id": "backend_app_routers_reassess_start_reassessment",
-      "label": "start_reassessment()",
+      "id": "src_services_interviewservice_getnextquestion",
+      "label": "getNextQuestion()",
       "_callable": true,
       "_origin": "ast",
       "community": 13,
-      "community_name": "reassess.py",
+      "community_name": "useInterview.ts",
       "file_type": "code",
-      "norm_label": "start_reassessment()",
-      "source_file": "backend/app/routers/reassess.py",
-      "source_location": "L32"
+      "norm_label": "getnextquestion()",
+      "source_file": "src/services/interviewService.ts",
+      "source_location": "L70"
+    },
+    {
+      "id": "src_services_interviewservice_mapquestion",
+      "label": "mapQuestion()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "useInterview.ts",
+      "file_type": "code",
+      "norm_label": "mapquestion()",
+      "source_file": "src/services/interviewService.ts",
+      "source_location": "L58"
+    },
+    {
+      "id": "src_services_interviewservice_submitanswer",
+      "label": "submitAnswer()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "useInterview.ts",
+      "file_type": "code",
+      "norm_label": "submitanswer()",
+      "source_file": "src/services/interviewService.ts",
+      "source_location": "L83"
     },
     {
       "id": "backend_scripts_start_db_find_postgres_bin",
@@ -1617,40 +1755,88 @@
       "source_location": "L57"
     },
     {
-      "id": "src_components_charts_adaptivepathdiagram_adaptivepathdiagram",
-      "label": "AdaptivePathDiagram()",
+      "id": "src_app_app",
+      "label": "App()",
       "_callable": true,
       "_origin": "ast",
       "community": 19,
-      "community_name": "react",
+      "community_name": "App.tsx",
       "file_type": "code",
-      "norm_label": "adaptivepathdiagram()",
-      "source_file": "src/components/charts/AdaptivePathDiagram.tsx",
-      "source_location": "L49"
+      "norm_label": "app()",
+      "source_file": "src/App.tsx",
+      "source_location": "L21"
     },
     {
-      "id": "src_components_charts_adaptivepathdiagram_tosvg",
-      "label": "toSVG()",
+      "id": "src_components_layout_atmosphericbackground_atmosphericbackground",
+      "label": "AtmosphericBackground()",
       "_callable": true,
       "_origin": "ast",
       "community": 19,
-      "community_name": "react",
+      "community_name": "App.tsx",
       "file_type": "code",
-      "norm_label": "tosvg()",
-      "source_file": "src/components/charts/AdaptivePathDiagram.tsx",
-      "source_location": "L45"
+      "norm_label": "atmosphericbackground()",
+      "source_file": "src/components/layout/AtmosphericBackground.tsx",
+      "source_location": "L4"
     },
     {
-      "id": "src_features_landing_landingpage_landingpage",
-      "label": "LandingPage()",
+      "id": "src_components_layout_navbar_navbar",
+      "label": "NavBar()",
       "_callable": true,
       "_origin": "ast",
       "community": 19,
-      "community_name": "react",
+      "community_name": "App.tsx",
       "file_type": "code",
-      "norm_label": "landingpage()",
-      "source_file": "src/features/landing/LandingPage.tsx",
-      "source_location": "L25"
+      "norm_label": "navbar()",
+      "source_file": "src/components/layout/NavBar.tsx",
+      "source_location": "L4"
+    },
+    {
+      "id": "src_features_shells_shellpages_planpage",
+      "label": "PlanPage()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "App.tsx",
+      "file_type": "code",
+      "norm_label": "planpage()",
+      "source_file": "src/features/shells/ShellPages.tsx",
+      "source_location": "L46"
+    },
+    {
+      "id": "src_features_shells_shellpages_reassesspage",
+      "label": "ReassessPage()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "App.tsx",
+      "file_type": "code",
+      "norm_label": "reassesspage()",
+      "source_file": "src/features/shells/ShellPages.tsx",
+      "source_location": "L58"
+    },
+    {
+      "id": "src_features_shells_shellpages_reportpage",
+      "label": "ReportPage()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "App.tsx",
+      "file_type": "code",
+      "norm_label": "reportpage()",
+      "source_file": "src/features/shells/ShellPages.tsx",
+      "source_location": "L34"
+    },
+    {
+      "id": "src_features_shells_shellpages_shellpage",
+      "label": "ShellPage()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "App.tsx",
+      "file_type": "code",
+      "norm_label": "shellpage()",
+      "source_file": "src/features/shells/ShellPages.tsx",
+      "source_location": "L3"
     },
     {
       "id": "backend_app_services_answer_evaluator_answerevaluator_evaluate",
@@ -1658,7 +1844,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "services/__init__.py",
+      "community_name": "GraphitiService",
       "file_type": "code",
       "norm_label": ".evaluate()",
       "source_file": "backend/app/services/answer_evaluator.py",
@@ -1670,7 +1856,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "services/__init__.py",
+      "community_name": "GraphitiService",
       "file_type": "code",
       "norm_label": "._evaluate_semantic()",
       "source_file": "backend/app/services/answer_evaluator.py",
@@ -1682,7 +1868,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "services/__init__.py",
+      "community_name": "GraphitiService",
       "file_type": "code",
       "norm_label": "._evaluate_with_groq()",
       "source_file": "backend/app/services/answer_evaluator.py",
@@ -1694,7 +1880,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "services/__init__.py",
+      "community_name": "GraphitiService",
       "file_type": "code",
       "norm_label": ".get_recommendations()",
       "source_file": "backend/app/services/course_recommendation_service.py",
@@ -1706,11 +1892,131 @@
       "_callable": true,
       "_origin": "ast",
       "community": 20,
-      "community_name": "services/__init__.py",
+      "community_name": "GraphitiService",
       "file_type": "code",
       "norm_label": ".get_recommendations_for_gaps()",
       "source_file": "backend/app/services/course_recommendation_service.py",
       "source_location": "L312"
+    },
+    {
+      "id": "backend_app_services_graphiti_service_graphitiservice_add_answer_evidence",
+      "label": ".add_answer_evidence()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "code",
+      "norm_label": ".add_answer_evidence()",
+      "source_file": "backend/app/services/graphiti_service.py",
+      "source_location": "L143"
+    },
+    {
+      "id": "backend_app_services_graphiti_service_graphitiservice_add_assessment_context",
+      "label": ".add_assessment_context()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "code",
+      "norm_label": ".add_assessment_context()",
+      "source_file": "backend/app/services/graphiti_service.py",
+      "source_location": "L108"
+    },
+    {
+      "id": "backend_app_services_graphiti_service_graphitiservice_add_improvement_activity",
+      "label": ".add_improvement_activity()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "code",
+      "norm_label": ".add_improvement_activity()",
+      "source_file": "backend/app/services/graphiti_service.py",
+      "source_location": "L227"
+    },
+    {
+      "id": "backend_app_services_graphiti_service_graphitiservice_add_skill_update",
+      "label": ".add_skill_update()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "code",
+      "norm_label": ".add_skill_update()",
+      "source_file": "backend/app/services/graphiti_service.py",
+      "source_location": "L187"
+    },
+    {
+      "id": "backend_app_services_graphiti_service_graphitiservice_close",
+      "label": ".close()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "code",
+      "norm_label": ".close()",
+      "source_file": "backend/app/services/graphiti_service.py",
+      "source_location": "L95"
+    },
+    {
+      "id": "backend_app_services_graphiti_service_graphitiservice_init",
+      "label": ".__init__()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "code",
+      "norm_label": ".__init__()",
+      "source_file": "backend/app/services/graphiti_service.py",
+      "source_location": "L35"
+    },
+    {
+      "id": "backend_app_services_graphiti_service_graphitiservice_initialize",
+      "label": ".initialize()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "code",
+      "norm_label": ".initialize()",
+      "source_file": "backend/app/services/graphiti_service.py",
+      "source_location": "L45"
+    },
+    {
+      "id": "backend_app_services_graphiti_service_graphitiservice_is_available",
+      "label": ".is_available()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "code",
+      "norm_label": ".is_available()",
+      "source_file": "backend/app/services/graphiti_service.py",
+      "source_location": "L41"
+    },
+    {
+      "id": "backend_app_services_graphiti_service_graphitiservice_search_user_context",
+      "label": ".search_user_context()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "code",
+      "norm_label": ".search_user_context()",
+      "source_file": "backend/app/services/graphiti_service.py",
+      "source_location": "L259"
+    },
+    {
+      "id": "backend_scripts_test_endpoints_main",
+      "label": "main()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "code",
+      "norm_label": "main()",
+      "source_file": "backend/scripts/test_endpoints.py",
+      "source_location": "L15"
     },
     {
       "id": "backend_app_routers_sessions_create_session",
@@ -1989,7 +2295,7 @@
       "source_location": "L25"
     },
     {
-      "id": "backend_app_models_plan_improvementtask_repr",
+      "id": "backend_app_models_skill_skillestimate_repr",
       "label": ".__repr__()",
       "_callable": true,
       "_origin": "ast",
@@ -1997,8 +2303,20 @@
       "community_name": "users.py",
       "file_type": "code",
       "norm_label": ".__repr__()",
-      "source_file": "backend/app/models/plan.py",
-      "source_location": "L55"
+      "source_file": "backend/app/models/skill.py",
+      "source_location": "L62"
+    },
+    {
+      "id": "backend_app_routers_users_get_gaps",
+      "label": "get_gaps()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "users.py",
+      "file_type": "code",
+      "norm_label": "get_gaps()",
+      "source_file": "backend/app/routers/users.py",
+      "source_location": "L91"
     },
     {
       "id": "backend_app_routers_users_get_plan",
@@ -2011,6 +2329,54 @@
       "norm_label": "get_plan()",
       "source_file": "backend/app/routers/users.py",
       "source_location": "L170"
+    },
+    {
+      "id": "backend_app_routers_users_get_skill",
+      "label": "get_skill()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "users.py",
+      "file_type": "code",
+      "norm_label": "get_skill()",
+      "source_file": "backend/app/routers/users.py",
+      "source_location": "L76"
+    },
+    {
+      "id": "backend_app_routers_users_get_skill_history",
+      "label": "get_skill_history()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "users.py",
+      "file_type": "code",
+      "norm_label": "get_skill_history()",
+      "source_file": "backend/app/routers/users.py",
+      "source_location": "L40"
+    },
+    {
+      "id": "backend_app_routers_users_get_skills",
+      "label": "get_skills()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "users.py",
+      "file_type": "code",
+      "norm_label": "get_skills()",
+      "source_file": "backend/app/routers/users.py",
+      "source_location": "L30"
+    },
+    {
+      "id": "backend_app_routers_users_get_stats",
+      "label": "get_stats()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "users.py",
+      "file_type": "code",
+      "norm_label": "get_stats()",
+      "source_file": "backend/app/routers/users.py",
+      "source_location": "L131"
     },
     {
       "id": "backend_app_models_skill_skillhistory_repr",
@@ -2217,120 +2583,96 @@
       "source_location": "L28"
     },
     {
-      "id": "backend_scripts_test_endpoints_main",
-      "label": "main()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "main.py",
-      "file_type": "code",
-      "norm_label": "main()",
-      "source_file": "backend/scripts/test_endpoints.py",
-      "source_location": "L15"
-    },
-    {
-      "id": "src_app_app",
-      "label": "App()",
+      "id": "src_features_skills_skillspage_skillspage",
+      "label": "SkillsPage()",
       "_callable": true,
       "_origin": "ast",
       "community": 31,
-      "community_name": "App.tsx",
+      "community_name": "SkillsPage.tsx",
       "file_type": "code",
-      "norm_label": "app()",
-      "source_file": "src/App.tsx",
-      "source_location": "L20"
+      "norm_label": "skillspage()",
+      "source_file": "src/features/skills/SkillsPage.tsx",
+      "source_location": "L16"
     },
     {
-      "id": "src_components_layout_navbar_navbar",
-      "label": "NavBar()",
+      "id": "src_hooks_useskillprofile_usegapanalysis",
+      "label": "useGapAnalysis()",
       "_callable": true,
       "_origin": "ast",
       "community": 31,
-      "community_name": "App.tsx",
+      "community_name": "SkillsPage.tsx",
       "file_type": "code",
-      "norm_label": "navbar()",
-      "source_file": "src/components/layout/NavBar.tsx",
+      "norm_label": "usegapanalysis()",
+      "source_file": "src/hooks/useSkillProfile.ts",
+      "source_location": "L11"
+    },
+    {
+      "id": "src_hooks_useskillprofile_useimprovementplan",
+      "label": "useImprovementPlan()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "SkillsPage.tsx",
+      "file_type": "code",
+      "norm_label": "useimprovementplan()",
+      "source_file": "src/hooks/useSkillProfile.ts",
+      "source_location": "L18"
+    },
+    {
+      "id": "src_hooks_useskillprofile_useskillprofile",
+      "label": "useSkillProfile()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "SkillsPage.tsx",
+      "file_type": "code",
+      "norm_label": "useskillprofile()",
+      "source_file": "src/hooks/useSkillProfile.ts",
       "source_location": "L4"
     },
     {
-      "id": "src_features_shells_shellpages_planpage",
-      "label": "PlanPage()",
+      "id": "src_services_skillservice_getgapanalysis",
+      "label": "getGapAnalysis()",
       "_callable": true,
       "_origin": "ast",
       "community": 31,
-      "community_name": "App.tsx",
+      "community_name": "SkillsPage.tsx",
       "file_type": "code",
-      "norm_label": "planpage()",
-      "source_file": "src/features/shells/ShellPages.tsx",
-      "source_location": "L46"
+      "norm_label": "getgapanalysis()",
+      "source_file": "src/services/skillService.ts",
+      "source_location": "L30"
     },
     {
-      "id": "src_features_shells_shellpages_reassesspage",
-      "label": "ReassessPage()",
+      "id": "src_services_skillservice_getimprovementplan",
+      "label": "getImprovementPlan()",
       "_callable": true,
       "_origin": "ast",
       "community": 31,
-      "community_name": "App.tsx",
+      "community_name": "SkillsPage.tsx",
       "file_type": "code",
-      "norm_label": "reassesspage()",
-      "source_file": "src/features/shells/ShellPages.tsx",
-      "source_location": "L58"
+      "norm_label": "getimprovementplan()",
+      "source_file": "src/services/skillService.ts",
+      "source_location": "L35"
     },
     {
-      "id": "src_features_shells_shellpages_reportpage",
-      "label": "ReportPage()",
+      "id": "src_services_skillservice_getskillprofile",
+      "label": "getSkillProfile()",
       "_callable": true,
       "_origin": "ast",
       "community": 31,
-      "community_name": "App.tsx",
+      "community_name": "SkillsPage.tsx",
       "file_type": "code",
-      "norm_label": "reportpage()",
-      "source_file": "src/features/shells/ShellPages.tsx",
-      "source_location": "L34"
-    },
-    {
-      "id": "src_features_shells_shellpages_shellpage",
-      "label": "ShellPage()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "App.tsx",
-      "file_type": "code",
-      "norm_label": "shellpage()",
-      "source_file": "src/features/shells/ShellPages.tsx",
-      "source_location": "L3"
-    },
-    {
-      "id": "src_components_interview_adaptivestatepanel_adaptivestatepanel",
-      "label": "AdaptiveStatePanel()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "adaptivestatepanel()",
-      "source_file": "src/components/interview/AdaptiveStatePanel.tsx",
-      "source_location": "L24"
-    },
-    {
-      "id": "src_components_interview_adaptivestatepanel_difficultyposition",
-      "label": "difficultyPosition()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "difficultyposition()",
-      "source_file": "src/components/interview/AdaptiveStatePanel.tsx",
-      "source_location": "L20"
+      "norm_label": "getskillprofile()",
+      "source_file": "src/services/skillService.ts",
+      "source_location": "L25"
     },
     {
       "id": "src_components_interview_voiceorb_orbinner",
       "label": "OrbInner()",
       "_callable": true,
       "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
+      "community": 33,
+      "community_name": "VoiceOrb.tsx",
       "file_type": "code",
       "norm_label": "orbinner()",
       "source_file": "src/components/interview/VoiceOrb.tsx",
@@ -2341,216 +2683,12 @@
       "label": "WaveBar()",
       "_callable": true,
       "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
+      "community": 33,
+      "community_name": "VoiceOrb.tsx",
       "file_type": "code",
       "norm_label": "wavebar()",
       "source_file": "src/components/interview/VoiceOrb.tsx",
       "source_location": "L109"
-    },
-    {
-      "id": "src_lib_api_delay",
-      "label": "delay()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "delay()",
-      "source_file": "src/lib/api.ts",
-      "source_location": "L50"
-    },
-    {
-      "id": "src_services_assessmentservice_createsession",
-      "label": "createSession()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "createsession()",
-      "source_file": "src/services/assessmentService.ts",
-      "source_location": "L31"
-    },
-    {
-      "id": "src_services_assessmentservice_getadaptivestate",
-      "label": "getAdaptiveState()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "getadaptivestate()",
-      "source_file": "src/services/assessmentService.ts",
-      "source_location": "L81"
-    },
-    {
-      "id": "src_services_assessmentservice_getassessmentreport",
-      "label": "getAssessmentReport()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "getassessmentreport()",
-      "source_file": "src/services/assessmentService.ts",
-      "source_location": "L108"
-    },
-    {
-      "id": "src_services_assessmentservice_getsession",
-      "label": "getSession()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "getsession()",
-      "source_file": "src/services/assessmentService.ts",
-      "source_location": "L58"
-    },
-    {
-      "id": "src_services_assessmentservice_mapsession",
-      "label": "mapSession()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "mapsession()",
-      "source_file": "src/services/assessmentService.ts",
-      "source_location": "L16"
-    },
-    {
-      "id": "src_services_assessmentservice_startinterview",
-      "label": "startInterview()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "startinterview()",
-      "source_file": "src/services/assessmentService.ts",
-      "source_location": "L67"
-    },
-    {
-      "id": "src_services_interviewservice_completeinterview",
-      "label": "completeInterview()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "completeinterview()",
-      "source_file": "src/services/interviewService.ts",
-      "source_location": "L181"
-    },
-    {
-      "id": "src_services_interviewservice_getnextquestion",
-      "label": "getNextQuestion()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "getnextquestion()",
-      "source_file": "src/services/interviewService.ts",
-      "source_location": "L70"
-    },
-    {
-      "id": "src_services_interviewservice_mapquestion",
-      "label": "mapQuestion()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "mapquestion()",
-      "source_file": "src/services/interviewService.ts",
-      "source_location": "L58"
-    },
-    {
-      "id": "src_services_interviewservice_submitanswer",
-      "label": "submitAnswer()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "submitanswer()",
-      "source_file": "src/services/interviewService.ts",
-      "source_location": "L83"
-    },
-    {
-      "id": "src_services_skillservice_startreassessment",
-      "label": "startReassessment()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "startreassessment()",
-      "source_file": "src/services/skillService.ts",
-      "source_location": "L40"
-    },
-    {
-      "id": "src_components_interview_voiceorb_voiceorb",
-      "label": "VoiceOrb()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 33,
-      "community_name": "InterviewPage.tsx",
-      "file_type": "code",
-      "norm_label": "voiceorb()",
-      "source_file": "src/components/interview/VoiceOrb.tsx",
-      "source_location": "L19"
-    },
-    {
-      "id": "src_components_interview_voiceorb_voiceorb_handleclick",
-      "label": "handleClick()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 33,
-      "community_name": "InterviewPage.tsx",
-      "file_type": "code",
-      "norm_label": "handleclick()",
-      "source_file": "src/components/interview/VoiceOrb.tsx",
-      "source_location": "L23"
-    },
-    {
-      "id": "src_features_interview_interviewpage_interviewpage",
-      "label": "InterviewPage()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 33,
-      "community_name": "InterviewPage.tsx",
-      "file_type": "code",
-      "norm_label": "interviewpage()",
-      "source_file": "src/features/interview/InterviewPage.tsx",
-      "source_location": "L19"
-    },
-    {
-      "id": "src_hooks_useinterview_useinterview",
-      "label": "useInterview()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 33,
-      "community_name": "InterviewPage.tsx",
-      "file_type": "code",
-      "norm_label": "useinterview()",
-      "source_file": "src/hooks/useInterview.ts",
-      "source_location": "L52"
-    },
-    {
-      "id": "src_lib_utils_padindex",
-      "label": "padIndex()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 33,
-      "community_name": "InterviewPage.tsx",
-      "file_type": "code",
-      "norm_label": "padindex()",
-      "source_file": "src/lib/utils.ts",
-      "source_location": "L21"
     },
     {
       "id": "src_features_report_reportpage_reportpage_loaddata",
@@ -2562,7 +2700,7 @@
       "file_type": "code",
       "norm_label": "loaddata()",
       "source_file": "src/features/report/ReportPage.tsx",
-      "source_location": "L32"
+      "source_location": "L33"
     },
     {
       "id": "src_hooks_useassessment_useassessmentblueprint",
@@ -2587,18 +2725,6 @@
       "norm_label": "userole()",
       "source_file": "src/hooks/useAssessment.ts",
       "source_location": "L14"
-    },
-    {
-      "id": "src_hooks_useassessment_usetargetroles",
-      "label": "useTargetRoles()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "roleService.ts",
-      "file_type": "code",
-      "norm_label": "usetargetroles()",
-      "source_file": "src/hooks/useAssessment.ts",
-      "source_location": "L7"
     },
     {
       "id": "src_services_roleservice_getassessmentblueprint",
@@ -2685,90 +2811,6 @@
       "source_location": "L27"
     },
     {
-      "id": "src_features_skills_skillspage_skillspage",
-      "label": "SkillsPage()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 36,
-      "community_name": "SkillsPage.tsx",
-      "file_type": "code",
-      "norm_label": "skillspage()",
-      "source_file": "src/features/skills/SkillsPage.tsx",
-      "source_location": "L15"
-    },
-    {
-      "id": "src_hooks_useskillprofile_usegapanalysis",
-      "label": "useGapAnalysis()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 36,
-      "community_name": "SkillsPage.tsx",
-      "file_type": "code",
-      "norm_label": "usegapanalysis()",
-      "source_file": "src/hooks/useSkillProfile.ts",
-      "source_location": "L11"
-    },
-    {
-      "id": "src_hooks_useskillprofile_useimprovementplan",
-      "label": "useImprovementPlan()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 36,
-      "community_name": "SkillsPage.tsx",
-      "file_type": "code",
-      "norm_label": "useimprovementplan()",
-      "source_file": "src/hooks/useSkillProfile.ts",
-      "source_location": "L18"
-    },
-    {
-      "id": "src_hooks_useskillprofile_useskillprofile",
-      "label": "useSkillProfile()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 36,
-      "community_name": "SkillsPage.tsx",
-      "file_type": "code",
-      "norm_label": "useskillprofile()",
-      "source_file": "src/hooks/useSkillProfile.ts",
-      "source_location": "L4"
-    },
-    {
-      "id": "src_services_skillservice_getgapanalysis",
-      "label": "getGapAnalysis()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 36,
-      "community_name": "SkillsPage.tsx",
-      "file_type": "code",
-      "norm_label": "getgapanalysis()",
-      "source_file": "src/services/skillService.ts",
-      "source_location": "L30"
-    },
-    {
-      "id": "src_services_skillservice_getimprovementplan",
-      "label": "getImprovementPlan()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 36,
-      "community_name": "SkillsPage.tsx",
-      "file_type": "code",
-      "norm_label": "getimprovementplan()",
-      "source_file": "src/services/skillService.ts",
-      "source_location": "L35"
-    },
-    {
-      "id": "src_services_skillservice_getskillprofile",
-      "label": "getSkillProfile()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 36,
-      "community_name": "SkillsPage.tsx",
-      "file_type": "code",
-      "norm_label": "getskillprofile()",
-      "source_file": "src/services/skillService.ts",
-      "source_location": "L25"
-    },
-    {
       "id": "src_services_voiceservice_frontendvoiceservice_playaudioblob",
       "label": ".playAudioBlob()",
       "_callable": true,
@@ -2817,160 +2859,208 @@
       "source_location": "L110"
     },
     {
-      "id": "src_features_assessment_assessmentpage_assessmentpage",
-      "label": "AssessmentPage()",
+      "id": "src_mock_resumeprofiles_getresumeprofile",
+      "label": "getResumeProfile()",
       "_callable": true,
       "_origin": "ast",
       "community": 38,
       "community_name": "AssessmentPage.tsx",
       "file_type": "code",
-      "norm_label": "assessmentpage()",
-      "source_file": "src/features/assessment/AssessmentPage.tsx",
-      "source_location": "L22"
+      "norm_label": "getresumeprofile()",
+      "source_file": "src/mock/resumeProfiles.ts",
+      "source_location": "L74"
     },
     {
-      "id": "src_features_assessment_assessmentpage_assessmentpage_handlebegin",
-      "label": "handleBegin()",
+      "id": "src_mock_resumeprofiles_matchresumefile",
+      "label": "matchResumeFile()",
       "_callable": true,
       "_origin": "ast",
       "community": 38,
       "community_name": "AssessmentPage.tsx",
       "file_type": "code",
-      "norm_label": "handlebegin()",
-      "source_file": "src/features/assessment/AssessmentPage.tsx",
-      "source_location": "L48"
+      "norm_label": "matchresumefile()",
+      "source_file": "src/mock/resumeProfiles.ts",
+      "source_location": "L70"
     },
     {
-      "id": "src_features_assessment_assessmentpage_assessmentpage_togglefocus",
-      "label": "toggleFocus()",
+      "id": "src_mock_sectors_getsectorbyid",
+      "label": "getSectorById()",
       "_callable": true,
       "_origin": "ast",
       "community": 38,
       "community_name": "AssessmentPage.tsx",
       "file_type": "code",
-      "norm_label": "togglefocus()",
-      "source_file": "src/features/assessment/AssessmentPage.tsx",
-      "source_location": "L42"
+      "norm_label": "getsectorbyid()",
+      "source_file": "src/mock/sectors.ts",
+      "source_location": "L224"
     },
     {
-      "id": "src_hooks_useassessment_usecreatesession",
-      "label": "useCreateSession()",
+      "id": "src_components_interview_adaptivestatepanel_adaptivestatepanel",
+      "label": "AdaptiveStatePanel()",
       "_callable": true,
       "_origin": "ast",
-      "community": 38,
-      "community_name": "AssessmentPage.tsx",
+      "community": 39,
+      "community_name": "AdaptiveStatePanel.tsx",
       "file_type": "code",
-      "norm_label": "usecreatesession()",
-      "source_file": "src/hooks/useAssessment.ts",
-      "source_location": "L30"
+      "norm_label": "adaptivestatepanel()",
+      "source_file": "src/components/interview/AdaptiveStatePanel.tsx",
+      "source_location": "L24"
     },
     {
-      "id": "backend_app_services_graphiti_service_graphitiservice_add_answer_evidence",
-      "label": ".add_answer_evidence()",
+      "id": "src_components_interview_adaptivestatepanel_difficultyposition",
+      "label": "difficultyPosition()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "AdaptiveStatePanel.tsx",
+      "file_type": "code",
+      "norm_label": "difficultyposition()",
+      "source_file": "src/components/interview/AdaptiveStatePanel.tsx",
+      "source_location": "L20"
+    },
+    {
+      "id": "backend_app_database_get_db",
+      "label": "get_db()",
       "_callable": true,
       "_origin": "ast",
       "community": 4,
-      "community_name": "GraphitiService",
+      "community_name": "reassess.py",
       "file_type": "code",
-      "norm_label": ".add_answer_evidence()",
-      "source_file": "backend/app/services/graphiti_service.py",
-      "source_location": "L143"
+      "norm_label": "get_db()",
+      "source_file": "backend/app/database.py",
+      "source_location": "L27"
     },
     {
-      "id": "backend_app_services_graphiti_service_graphitiservice_add_assessment_context",
-      "label": ".add_assessment_context()",
+      "id": "backend_app_routers_reassess_start_reassessment",
+      "label": "start_reassessment()",
       "_callable": true,
       "_origin": "ast",
       "community": 4,
-      "community_name": "GraphitiService",
+      "community_name": "reassess.py",
       "file_type": "code",
-      "norm_label": ".add_assessment_context()",
-      "source_file": "backend/app/services/graphiti_service.py",
+      "norm_label": "start_reassessment()",
+      "source_file": "backend/app/routers/reassess.py",
+      "source_location": "L32"
+    },
+    {
+      "id": "src_lib_api_delay",
+      "label": "delay()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "assessmentService.ts",
+      "file_type": "code",
+      "norm_label": "delay()",
+      "source_file": "src/lib/api.ts",
+      "source_location": "L50"
+    },
+    {
+      "id": "src_services_assessmentservice_createsession",
+      "label": "createSession()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "assessmentService.ts",
+      "file_type": "code",
+      "norm_label": "createsession()",
+      "source_file": "src/services/assessmentService.ts",
+      "source_location": "L31"
+    },
+    {
+      "id": "src_services_assessmentservice_getadaptivestate",
+      "label": "getAdaptiveState()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "assessmentService.ts",
+      "file_type": "code",
+      "norm_label": "getadaptivestate()",
+      "source_file": "src/services/assessmentService.ts",
+      "source_location": "L81"
+    },
+    {
+      "id": "src_services_assessmentservice_getassessmentreport",
+      "label": "getAssessmentReport()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 40,
+      "community_name": "assessmentService.ts",
+      "file_type": "code",
+      "norm_label": "getassessmentreport()",
+      "source_file": "src/services/assessmentService.ts",
       "source_location": "L108"
     },
     {
-      "id": "backend_app_services_graphiti_service_graphitiservice_add_improvement_activity",
-      "label": ".add_improvement_activity()",
+      "id": "src_services_assessmentservice_getsession",
+      "label": "getSession()",
       "_callable": true,
       "_origin": "ast",
-      "community": 4,
-      "community_name": "GraphitiService",
+      "community": 40,
+      "community_name": "assessmentService.ts",
       "file_type": "code",
-      "norm_label": ".add_improvement_activity()",
-      "source_file": "backend/app/services/graphiti_service.py",
-      "source_location": "L227"
+      "norm_label": "getsession()",
+      "source_file": "src/services/assessmentService.ts",
+      "source_location": "L58"
     },
     {
-      "id": "backend_app_services_graphiti_service_graphitiservice_add_skill_update",
-      "label": ".add_skill_update()",
+      "id": "src_services_assessmentservice_mapsession",
+      "label": "mapSession()",
       "_callable": true,
       "_origin": "ast",
-      "community": 4,
-      "community_name": "GraphitiService",
+      "community": 40,
+      "community_name": "assessmentService.ts",
       "file_type": "code",
-      "norm_label": ".add_skill_update()",
-      "source_file": "backend/app/services/graphiti_service.py",
-      "source_location": "L187"
+      "norm_label": "mapsession()",
+      "source_file": "src/services/assessmentService.ts",
+      "source_location": "L16"
     },
     {
-      "id": "backend_app_services_graphiti_service_graphitiservice_close",
-      "label": ".close()",
+      "id": "src_services_assessmentservice_startinterview",
+      "label": "startInterview()",
       "_callable": true,
       "_origin": "ast",
-      "community": 4,
-      "community_name": "GraphitiService",
+      "community": 40,
+      "community_name": "assessmentService.ts",
       "file_type": "code",
-      "norm_label": ".close()",
-      "source_file": "backend/app/services/graphiti_service.py",
-      "source_location": "L95"
+      "norm_label": "startinterview()",
+      "source_file": "src/services/assessmentService.ts",
+      "source_location": "L67"
     },
     {
-      "id": "backend_app_services_graphiti_service_graphitiservice_init",
-      "label": ".__init__()",
+      "id": "src_services_interviewservice_completeinterview",
+      "label": "completeInterview()",
       "_callable": true,
       "_origin": "ast",
-      "community": 4,
-      "community_name": "GraphitiService",
+      "community": 40,
+      "community_name": "assessmentService.ts",
       "file_type": "code",
-      "norm_label": ".__init__()",
-      "source_file": "backend/app/services/graphiti_service.py",
-      "source_location": "L35"
+      "norm_label": "completeinterview()",
+      "source_file": "src/services/interviewService.ts",
+      "source_location": "L181"
     },
     {
-      "id": "backend_app_services_graphiti_service_graphitiservice_initialize",
-      "label": ".initialize()",
+      "id": "src_services_skillservice_startreassessment",
+      "label": "startReassessment()",
       "_callable": true,
       "_origin": "ast",
-      "community": 4,
-      "community_name": "GraphitiService",
+      "community": 40,
+      "community_name": "assessmentService.ts",
       "file_type": "code",
-      "norm_label": ".initialize()",
-      "source_file": "backend/app/services/graphiti_service.py",
-      "source_location": "L45"
+      "norm_label": "startreassessment()",
+      "source_file": "src/services/skillService.ts",
+      "source_location": "L40"
     },
     {
-      "id": "backend_app_services_graphiti_service_graphitiservice_is_available",
-      "label": ".is_available()",
+      "id": "backend_app_models_plan_improvementtask_repr",
+      "label": ".__repr__()",
       "_callable": true,
       "_origin": "ast",
-      "community": 4,
-      "community_name": "GraphitiService",
+      "community": 42,
+      "community_name": "models/plan.py",
       "file_type": "code",
-      "norm_label": ".is_available()",
-      "source_file": "backend/app/services/graphiti_service.py",
-      "source_location": "L41"
-    },
-    {
-      "id": "backend_app_services_graphiti_service_graphitiservice_search_user_context",
-      "label": ".search_user_context()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "GraphitiService",
-      "file_type": "code",
-      "norm_label": ".search_user_context()",
-      "source_file": "backend/app/services/graphiti_service.py",
-      "source_location": "L259"
+      "norm_label": ".__repr__()",
+      "source_file": "backend/app/models/plan.py",
+      "source_location": "L55"
     },
     {
       "id": "src_components_interview_liveestimatepanel_liveestimatepanel",
@@ -2985,6 +3075,54 @@
       "source_location": "L19"
     },
     {
+      "id": "src_components_interview_voiceorb_voiceorb",
+      "label": "VoiceOrb()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "ReportPage.tsx",
+      "file_type": "code",
+      "norm_label": "voiceorb()",
+      "source_file": "src/components/interview/VoiceOrb.tsx",
+      "source_location": "L19"
+    },
+    {
+      "id": "src_components_interview_voiceorb_voiceorb_handleclick",
+      "label": "handleClick()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "ReportPage.tsx",
+      "file_type": "code",
+      "norm_label": "handleclick()",
+      "source_file": "src/components/interview/VoiceOrb.tsx",
+      "source_location": "L23"
+    },
+    {
+      "id": "src_components_layout_systemfooter_systemfooter",
+      "label": "SystemFooter()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "ReportPage.tsx",
+      "file_type": "code",
+      "norm_label": "systemfooter()",
+      "source_file": "src/components/layout/SystemFooter.tsx",
+      "source_location": "L4"
+    },
+    {
+      "id": "src_features_interview_interviewpage_interviewpage",
+      "label": "InterviewPage()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "ReportPage.tsx",
+      "file_type": "code",
+      "norm_label": "interviewpage()",
+      "source_file": "src/features/interview/InterviewPage.tsx",
+      "source_location": "L20"
+    },
+    {
       "id": "src_features_report_reportpage_reportpage",
       "label": "ReportPage()",
       "_callable": true,
@@ -2994,7 +3132,7 @@
       "file_type": "code",
       "norm_label": "reportpage()",
       "source_file": "src/features/report/ReportPage.tsx",
-      "source_location": "L19"
+      "source_location": "L20"
     },
     {
       "id": "src_features_report_reportpage_resourcecard",
@@ -3006,7 +3144,7 @@
       "file_type": "code",
       "norm_label": "resourcecard()",
       "source_file": "src/features/report/ReportPage.tsx",
-      "source_location": "L633"
+      "source_location": "L635"
     },
     {
       "id": "src_lib_utils_cn",
@@ -3079,6 +3217,18 @@
       "norm_label": "gapcolor()",
       "source_file": "src/lib/utils.ts",
       "source_location": "L29"
+    },
+    {
+      "id": "src_lib_utils_padindex",
+      "label": "padIndex()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "ReportPage.tsx",
+      "file_type": "code",
+      "norm_label": "padindex()",
+      "source_file": "src/lib/utils.ts",
+      "source_location": "L21"
     },
     {
       "id": "src_lib_utils_trendsymbol",
@@ -3185,6 +3335,17 @@
       "source_location": "L1"
     },
     {
+      "id": "backend_app_services_adaptive_engine",
+      "label": "adaptive_engine.py",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Base",
+      "file_type": "code",
+      "norm_label": "adaptive_engine.py",
+      "source_file": "backend/app/services/adaptive_engine.py",
+      "source_location": "L1"
+    },
+    {
       "id": "backend_scripts_seed_db",
       "label": "seed_db.py",
       "_origin": "ast",
@@ -3262,6 +3423,17 @@
       "source_location": "L1"
     },
     {
+      "id": "backend_app_services_adaptive_engine_rationale_1",
+      "label": "app/services/adaptive_engine.py \u2014 Adaptive question selection engine. The\u2026",
+      "_origin": "ast",
+      "community": 0,
+      "community_name": "Base",
+      "file_type": "rationale",
+      "norm_label": "app/services/adaptive_engine.py \u2014 adaptive question selection engine. the...",
+      "source_file": "backend/app/services/adaptive_engine.py",
+      "source_location": "L1"
+    },
+    {
       "id": "backend_scripts_seed_db_rationale_1",
       "label": "backend/scripts/seed_db.py \u2014 Seeds the database with initial data. Run: python\u2026",
       "_origin": "ast",
@@ -3314,17 +3486,6 @@
       "file_type": "code",
       "norm_label": "models/session.py",
       "source_file": "backend/app/models/session.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_app_services_adaptive_engine",
-      "label": "adaptive_engine.py",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "database.py",
-      "file_type": "code",
-      "norm_label": "adaptive_engine.py",
-      "source_file": "backend/app/services/adaptive_engine.py",
       "source_location": "L1"
     },
     {
@@ -3391,17 +3552,6 @@
       "file_type": "rationale",
       "norm_label": "app/models/session.py \u2014 assessmentsession orm model. one session = one complete...",
       "source_file": "backend/app/models/session.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_app_services_adaptive_engine_rationale_1",
-      "label": "app/services/adaptive_engine.py \u2014 Adaptive question selection engine. The\u2026",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "database.py",
-      "file_type": "rationale",
-      "norm_label": "app/services/adaptive_engine.py \u2014 adaptive question selection engine. the...",
-      "source_file": "backend/app/services/adaptive_engine.py",
       "source_location": "L1"
     },
     {
@@ -3800,81 +3950,37 @@
       "source_location": "L539"
     },
     {
-      "id": "backend_app_routers_users_py_asyncsession",
-      "label": "AsyncSession",
+      "id": "src_components_charts_adaptivepathdiagram",
+      "label": "AdaptivePathDiagram.tsx",
       "_origin": "ast",
       "community": 11,
-      "community_name": "SkillEstimate",
+      "community_name": "AssessmentPage",
       "file_type": "code",
-      "norm_label": "asyncsession",
-      "source_file": "",
-      "source_location": ""
+      "norm_label": "adaptivepathdiagram.tsx",
+      "source_file": "src/components/charts/AdaptivePathDiagram.tsx",
+      "source_location": "L1"
     },
     {
-      "id": "backend_app_routers_users_py_get",
-      "label": "get",
+      "id": "src_features_landing_landingpage",
+      "label": "LandingPage.tsx",
       "_origin": "ast",
       "community": 11,
-      "community_name": "SkillEstimate",
+      "community_name": "AssessmentPage",
       "file_type": "code",
-      "norm_label": "get",
-      "source_file": "",
-      "source_location": ""
+      "norm_label": "landingpage.tsx",
+      "source_file": "src/features/landing/LandingPage.tsx",
+      "source_location": "L1"
     },
     {
-      "id": "backend_app_routers_users_rationale_132",
-      "label": "Returns user summary stats.",
+      "id": "src_features_landing_landingpage_processsteps",
+      "label": "processSteps",
       "_origin": "ast",
       "community": 11,
-      "community_name": "SkillEstimate",
-      "file_type": "rationale",
-      "norm_label": "returns user summary stats.",
-      "source_file": "backend/app/routers/users.py",
-      "source_location": "L132"
-    },
-    {
-      "id": "backend_app_routers_users_rationale_31",
-      "label": "Returns all current skill estimates for a user.",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "SkillEstimate",
-      "file_type": "rationale",
-      "norm_label": "returns all current skill estimates for a user.",
-      "source_file": "backend/app/routers/users.py",
-      "source_location": "L31"
-    },
-    {
-      "id": "backend_app_routers_users_rationale_41",
-      "label": "Returns skill estimates enriched with temporal history.",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "SkillEstimate",
-      "file_type": "rationale",
-      "norm_label": "returns skill estimates enriched with temporal history.",
-      "source_file": "backend/app/routers/users.py",
-      "source_location": "L41"
-    },
-    {
-      "id": "backend_app_routers_users_rationale_79",
-      "label": "Returns a single skill estimate.",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "SkillEstimate",
-      "file_type": "rationale",
-      "norm_label": "returns a single skill estimate.",
-      "source_file": "backend/app/routers/users.py",
-      "source_location": "L79"
-    },
-    {
-      "id": "backend_app_routers_users_rationale_96",
-      "label": "Returns gap analysis: user's current skills vs role requirements.",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "SkillEstimate",
-      "file_type": "rationale",
-      "norm_label": "returns gap analysis: user's current skills vs role requirements.",
-      "source_file": "backend/app/routers/users.py",
-      "source_location": "L96"
+      "community_name": "AssessmentPage",
+      "file_type": "code",
+      "norm_label": "processsteps",
+      "source_file": "src/features/landing/LandingPage.tsx",
+      "source_location": "L8"
     },
     {
       "id": "docs_data_lineage",
@@ -4105,92 +4211,92 @@
       "source_location": "L384"
     },
     {
-      "id": "backend_app_database_py_asyncsession",
-      "label": "AsyncSession",
+      "id": "src_hooks_useinterview",
+      "label": "useInterview.ts",
       "_origin": "ast",
       "community": 13,
-      "community_name": "reassess.py",
+      "community_name": "useInterview.ts",
       "file_type": "code",
-      "norm_label": "asyncsession",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "backend_app_routers_reassess",
-      "label": "reassess.py",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "reassess.py",
-      "file_type": "code",
-      "norm_label": "reassess.py",
-      "source_file": "backend/app/routers/reassess.py",
+      "norm_label": "useinterview.ts",
+      "source_file": "src/hooks/useInterview.ts",
       "source_location": "L1"
     },
     {
-      "id": "backend_app_routers_reassess_py_asyncsession",
-      "label": "AsyncSession",
+      "id": "src_lib_api",
+      "label": "api.ts",
       "_origin": "ast",
       "community": 13,
-      "community_name": "reassess.py",
+      "community_name": "useInterview.ts",
       "file_type": "code",
-      "norm_label": "asyncsession",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "backend_app_routers_reassess_py_basemodel",
-      "label": "BaseModel",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "reassess.py",
-      "file_type": "code",
-      "norm_label": "basemodel",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "backend_app_routers_reassess_py_post",
-      "label": "post",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "reassess.py",
-      "file_type": "code",
-      "norm_label": "post",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "backend_app_database_rationale_28",
-      "label": "FastAPI dependency: yields an async DB session.",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "reassess.py",
-      "file_type": "rationale",
-      "norm_label": "fastapi dependency: yields an async db session.",
-      "source_file": "backend/app/database.py",
-      "source_location": "L28"
-    },
-    {
-      "id": "backend_app_routers_reassess_rationale_1",
-      "label": "app/routers/reassess.py \u2014 Targeted reassessment endpoint. POST /api/reassess",
-      "_origin": "ast",
-      "community": 13,
-      "community_name": "reassess.py",
-      "file_type": "rationale",
-      "norm_label": "app/routers/reassess.py \u2014 targeted reassessment endpoint. post /api/reassess",
-      "source_file": "backend/app/routers/reassess.py",
+      "norm_label": "api.ts",
+      "source_file": "src/lib/api.ts",
       "source_location": "L1"
     },
     {
-      "id": "backend_app_routers_reassess_rationale_36",
-      "label": "Creates a targeted reassessment session focused only on weak competencies. Does\u2026",
+      "id": "src_lib_api_api_base_url",
+      "label": "API_BASE_URL",
       "_origin": "ast",
       "community": 13,
-      "community_name": "reassess.py",
-      "file_type": "rationale",
-      "norm_label": "creates a targeted reassessment session focused only on weak competencies. does...",
-      "source_file": "backend/app/routers/reassess.py",
-      "source_location": "L36"
+      "community_name": "useInterview.ts",
+      "file_type": "code",
+      "norm_label": "api_base_url",
+      "source_file": "src/lib/api.ts",
+      "source_location": "L22"
+    },
+    {
+      "id": "src_lib_api_apiclient",
+      "label": "apiClient",
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "useInterview.ts",
+      "file_type": "code",
+      "norm_label": "apiclient",
+      "source_file": "src/lib/api.ts",
+      "source_location": "L25"
+    },
+    {
+      "id": "src_lib_api_data_mode",
+      "label": "DATA_MODE",
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "useInterview.ts",
+      "file_type": "code",
+      "norm_label": "data_mode",
+      "source_file": "src/lib/api.ts",
+      "source_location": "L20"
+    },
+    {
+      "id": "src_lib_api_ws_base_url",
+      "label": "WS_BASE_URL",
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "useInterview.ts",
+      "file_type": "code",
+      "norm_label": "ws_base_url",
+      "source_file": "src/lib/api.ts",
+      "source_location": "L23"
+    },
+    {
+      "id": "src_services_voiceservice",
+      "label": "voiceService.ts",
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "useInterview.ts",
+      "file_type": "code",
+      "norm_label": "voiceservice.ts",
+      "source_file": "src/services/voiceService.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_services_voiceservice_voiceservice",
+      "label": "voiceService",
+      "_origin": "ast",
+      "community": 13,
+      "community_name": "useInterview.ts",
+      "file_type": "code",
+      "norm_label": "voiceservice",
+      "source_file": "src/services/voiceService.ts",
+      "source_location": "L121"
     },
     {
       "id": "docs_data_flow_map",
@@ -4565,81 +4671,81 @@
       "source_location": "L6"
     },
     {
-      "id": "src_components_charts_adaptivepathdiagram",
-      "label": "AdaptivePathDiagram.tsx",
+      "id": "src_app",
+      "label": "App.tsx",
       "_origin": "ast",
       "community": 19,
-      "community_name": "react",
+      "community_name": "App.tsx",
       "file_type": "code",
-      "norm_label": "adaptivepathdiagram.tsx",
-      "source_file": "src/components/charts/AdaptivePathDiagram.tsx",
+      "norm_label": "app.tsx",
+      "source_file": "src/App.tsx",
       "source_location": "L1"
     },
     {
-      "id": "src_components_charts_adaptivepathdiagram_edges",
-      "label": "edges",
+      "id": "src_app_queryclient",
+      "label": "queryClient",
       "_origin": "ast",
       "community": 19,
-      "community_name": "react",
+      "community_name": "App.tsx",
       "file_type": "code",
-      "norm_label": "edges",
-      "source_file": "src/components/charts/AdaptivePathDiagram.tsx",
-      "source_location": "L30"
+      "norm_label": "queryclient",
+      "source_file": "src/App.tsx",
+      "source_location": "L12"
     },
     {
-      "id": "src_components_charts_adaptivepathdiagram_nodes",
-      "label": "nodes",
+      "id": "src_components_layout_atmosphericbackground",
+      "label": "AtmosphericBackground.tsx",
       "_origin": "ast",
       "community": 19,
-      "community_name": "react",
+      "community_name": "App.tsx",
       "file_type": "code",
-      "norm_label": "nodes",
-      "source_file": "src/components/charts/AdaptivePathDiagram.tsx",
-      "source_location": "L19"
-    },
-    {
-      "id": "src_features_landing_landingpage",
-      "label": "LandingPage.tsx",
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "react",
-      "file_type": "code",
-      "norm_label": "landingpage.tsx",
-      "source_file": "src/features/landing/LandingPage.tsx",
+      "norm_label": "atmosphericbackground.tsx",
+      "source_file": "src/components/layout/AtmosphericBackground.tsx",
       "source_location": "L1"
     },
     {
-      "id": "src_features_landing_landingpage_mockskilldisplay",
-      "label": "mockSkillDisplay",
+      "id": "src_components_layout_navbar",
+      "label": "NavBar.tsx",
       "_origin": "ast",
       "community": 19,
-      "community_name": "react",
+      "community_name": "App.tsx",
       "file_type": "code",
-      "norm_label": "mockskilldisplay",
-      "source_file": "src/features/landing/LandingPage.tsx",
-      "source_location": "L17"
+      "norm_label": "navbar.tsx",
+      "source_file": "src/components/layout/NavBar.tsx",
+      "source_location": "L1"
     },
     {
-      "id": "src_features_landing_landingpage_processsteps",
-      "label": "processSteps",
+      "id": "src_features_shells_shellpages",
+      "label": "ShellPages.tsx",
       "_origin": "ast",
       "community": 19,
-      "community_name": "react",
+      "community_name": "App.tsx",
       "file_type": "code",
-      "norm_label": "processsteps",
-      "source_file": "src/features/landing/LandingPage.tsx",
-      "source_location": "L6"
+      "norm_label": "shellpages.tsx",
+      "source_file": "src/features/shells/ShellPages.tsx",
+      "source_location": "L1"
     },
     {
-      "id": "ref_react",
-      "label": "react",
+      "id": "src_main",
+      "label": "main.tsx",
       "_origin": "ast",
       "community": 19,
-      "community_name": "react",
-      "file_type": "concept",
-      "norm_label": "react",
-      "source_file": ".oxlintrc.json",
-      "source_location": "L3"
+      "community_name": "App.tsx",
+      "file_type": "code",
+      "norm_label": "main.tsx",
+      "source_file": "src/main.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_store_interviewstore_useinterviewstore",
+      "label": "useInterviewStore",
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "App.tsx",
+      "file_type": "code",
+      "norm_label": "useinterviewstore",
+      "source_file": "src/store/interviewStore.ts",
+      "source_location": "L65"
     },
     {
       "id": "package",
@@ -5126,11 +5232,22 @@
       "source_location": "L21"
     },
     {
+      "id": "any",
+      "label": "Any",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "code",
+      "norm_label": "any",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "backend_app_services_answer_evaluator",
       "label": "answer_evaluator.py",
       "_origin": "ast",
       "community": 20,
-      "community_name": "services/__init__.py",
+      "community_name": "GraphitiService",
       "file_type": "code",
       "norm_label": "answer_evaluator.py",
       "source_file": "backend/app/services/answer_evaluator.py",
@@ -5141,10 +5258,21 @@
       "label": "course_recommendation_service.py",
       "_origin": "ast",
       "community": 20,
-      "community_name": "services/__init__.py",
+      "community_name": "GraphitiService",
       "file_type": "code",
       "norm_label": "course_recommendation_service.py",
       "source_file": "backend/app/services/course_recommendation_service.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_app_services_graphiti_service",
+      "label": "graphiti_service.py",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "code",
+      "norm_label": "graphiti_service.py",
+      "source_file": "backend/app/services/graphiti_service.py",
       "source_location": "L1"
     },
     {
@@ -5152,10 +5280,21 @@
       "label": "services/__init__.py",
       "_origin": "ast",
       "community": 20,
-      "community_name": "services/__init__.py",
+      "community_name": "GraphitiService",
       "file_type": "code",
       "norm_label": "services/__init__.py",
       "source_file": "backend/app/services/__init__.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_scripts_test_endpoints",
+      "label": "test_endpoints.py",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "code",
+      "norm_label": "test_endpoints.py",
+      "source_file": "backend/scripts/test_endpoints.py",
       "source_location": "L1"
     },
     {
@@ -5163,7 +5302,7 @@
       "label": "app/services/answer_evaluator.py \u2014 LLM-based answer evaluation service.\u2026",
       "_origin": "ast",
       "community": 20,
-      "community_name": "services/__init__.py",
+      "community_name": "GraphitiService",
       "file_type": "rationale",
       "norm_label": "app/services/answer_evaluator.py \u2014 llm-based answer evaluation service....",
       "source_file": "backend/app/services/answer_evaluator.py",
@@ -5174,7 +5313,7 @@
       "label": "Calls Groq's OpenAI-compatible chat completions endpoint. Uses\u2026",
       "_origin": "ast",
       "community": 20,
-      "community_name": "services/__init__.py",
+      "community_name": "GraphitiService",
       "file_type": "rationale",
       "norm_label": "calls groq's openai-compatible chat completions endpoint. uses...",
       "source_file": "backend/app/services/answer_evaluator.py",
@@ -5185,7 +5324,7 @@
       "label": "Keyword-expansion semantic fallback. Used when no Groq key is available or Groq\u2026",
       "_origin": "ast",
       "community": 20,
-      "community_name": "services/__init__.py",
+      "community_name": "GraphitiService",
       "file_type": "rationale",
       "norm_label": "keyword-expansion semantic fallback. used when no groq key is available or groq...",
       "source_file": "backend/app/services/answer_evaluator.py",
@@ -5196,7 +5335,7 @@
       "label": "Evaluates interview answers against expected concepts. Uses Groq\u2026",
       "_origin": "ast",
       "community": 20,
-      "community_name": "services/__init__.py",
+      "community_name": "GraphitiService",
       "file_type": "rationale",
       "norm_label": "evaluates interview answers against expected concepts. uses groq...",
       "source_file": "backend/app/services/answer_evaluator.py",
@@ -5207,7 +5346,7 @@
       "label": "app/services/course_recommendation_service.py \u2014 Curated learning resource\u2026",
       "_origin": "ast",
       "community": 20,
-      "community_name": "services/__init__.py",
+      "community_name": "GraphitiService",
       "file_type": "rationale",
       "norm_label": "app/services/course_recommendation_service.py \u2014 curated learning resource...",
       "source_file": "backend/app/services/course_recommendation_service.py",
@@ -5218,7 +5357,7 @@
       "label": "Returns curated learning resources for a given competency gap. MVP: Uses a\u2026",
       "_origin": "ast",
       "community": 20,
-      "community_name": "services/__init__.py",
+      "community_name": "GraphitiService",
       "file_type": "rationale",
       "norm_label": "returns curated learning resources for a given competency gap. mvp: uses a...",
       "source_file": "backend/app/services/course_recommendation_service.py",
@@ -5229,7 +5368,7 @@
       "label": "Returns {\"free\": [...], \"paid\": [...]} resource lists for a competency. Ordered\u2026",
       "_origin": "ast",
       "community": 20,
-      "community_name": "services/__init__.py",
+      "community_name": "GraphitiService",
       "file_type": "rationale",
       "norm_label": "returns {\"free\": [...], \"paid\": [...]} resource lists for a competency. ordered...",
       "source_file": "backend/app/services/course_recommendation_service.py",
@@ -5240,21 +5379,142 @@
       "label": "Returns a flat list of recommendations for multiple competency gaps.\u2026",
       "_origin": "ast",
       "community": 20,
-      "community_name": "services/__init__.py",
+      "community_name": "GraphitiService",
       "file_type": "rationale",
       "norm_label": "returns a flat list of recommendations for multiple competency gaps....",
       "source_file": "backend/app/services/course_recommendation_service.py",
       "source_location": "L317"
     },
     {
+      "id": "backend_app_services_graphiti_service_rationale_1",
+      "label": "app/services/graphiti_service.py \u2014 Service abstraction for Graphiti + Neo4j.\u2026",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "rationale",
+      "norm_label": "app/services/graphiti_service.py \u2014 service abstraction for graphiti + neo4j....",
+      "source_file": "backend/app/services/graphiti_service.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_app_services_graphiti_service_rationale_117",
+      "label": "Records the initiation of an assessment session into the candidate's temporal\u2026",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "rationale",
+      "norm_label": "records the initiation of an assessment session into the candidate's temporal...",
+      "source_file": "backend/app/services/graphiti_service.py",
+      "source_location": "L117"
+    },
+    {
+      "id": "backend_app_services_graphiti_service_rationale_154",
+      "label": "Records candidate answer evidence for a specific concept tested by a question.\u2026",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "rationale",
+      "norm_label": "records candidate answer evidence for a specific concept tested by a question....",
+      "source_file": "backend/app/services/graphiti_service.py",
+      "source_location": "L154"
+    },
+    {
+      "id": "backend_app_services_graphiti_service_rationale_197",
+      "label": "Records a competency score transition in the user's temporal skill narrative.\u2026",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "rationale",
+      "norm_label": "records a competency score transition in the user's temporal skill narrative....",
+      "source_file": "backend/app/services/graphiti_service.py",
+      "source_location": "L197"
+    },
+    {
+      "id": "backend_app_services_graphiti_service_rationale_234",
+      "label": "Records candidate progress on recommended improvement activities.",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "rationale",
+      "norm_label": "records candidate progress on recommended improvement activities.",
+      "source_file": "backend/app/services/graphiti_service.py",
+      "source_location": "L234"
+    },
+    {
+      "id": "backend_app_services_graphiti_service_rationale_265",
+      "label": "Searches candidate contextual memory for relevant history, weaknesses, or prior\u2026",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "rationale",
+      "norm_label": "searches candidate contextual memory for relevant history, weaknesses, or prior...",
+      "source_file": "backend/app/services/graphiti_service.py",
+      "source_location": "L265"
+    },
+    {
+      "id": "backend_app_services_graphiti_service_rationale_30",
+      "label": "Clean service abstraction for Graphiti temporal knowledge graph operations.\u2026",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "rationale",
+      "norm_label": "clean service abstraction for graphiti temporal knowledge graph operations....",
+      "source_file": "backend/app/services/graphiti_service.py",
+      "source_location": "L30"
+    },
+    {
+      "id": "backend_app_services_graphiti_service_rationale_42",
+      "label": "Returns True only if Graphiti is properly connected and ready.",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "rationale",
+      "norm_label": "returns true only if graphiti is properly connected and ready.",
+      "source_file": "backend/app/services/graphiti_service.py",
+      "source_location": "L42"
+    },
+    {
+      "id": "backend_app_services_graphiti_service_rationale_46",
+      "label": "Initializes Graphiti client if Neo4j and required credentials are configured.\u2026",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "rationale",
+      "norm_label": "initializes graphiti client if neo4j and required credentials are configured....",
+      "source_file": "backend/app/services/graphiti_service.py",
+      "source_location": "L46"
+    },
+    {
+      "id": "backend_app_services_graphiti_service_rationale_96",
+      "label": "Gracefully closes Neo4j driver connection if active.",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "rationale",
+      "norm_label": "gracefully closes neo4j driver connection if active.",
+      "source_file": "backend/app/services/graphiti_service.py",
+      "source_location": "L96"
+    },
+    {
       "id": "backend_app_services_init_rationale_1",
       "label": "app/services/__init__.py \u2014 Business logic and service abstractions.",
       "_origin": "ast",
       "community": 20,
-      "community_name": "services/__init__.py",
+      "community_name": "GraphitiService",
       "file_type": "rationale",
       "norm_label": "app/services/__init__.py \u2014 business logic and service abstractions.",
       "source_file": "backend/app/services/__init__.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_scripts_test_endpoints_rationale_1",
+      "label": "backend/scripts/test_endpoints.py \u2014 Comprehensive verification script for\u2026",
+      "_origin": "ast",
+      "community": 20,
+      "community_name": "GraphitiService",
+      "file_type": "rationale",
+      "norm_label": "backend/scripts/test_endpoints.py \u2014 comprehensive verification script for...",
+      "source_file": "backend/scripts/test_endpoints.py",
       "source_location": "L1"
     },
     {
@@ -5891,17 +6151,6 @@
       "source_location": "L81"
     },
     {
-      "id": "backend_app_models_plan",
-      "label": "models/plan.py",
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "users.py",
-      "file_type": "code",
-      "norm_label": "models/plan.py",
-      "source_file": "backend/app/models/plan.py",
-      "source_location": "L1"
-    },
-    {
       "id": "backend_app_routers_users",
       "label": "users.py",
       "_origin": "ast",
@@ -5911,6 +6160,28 @@
       "norm_label": "users.py",
       "source_file": "backend/app/routers/users.py",
       "source_location": "L1"
+    },
+    {
+      "id": "backend_app_routers_users_py_asyncsession",
+      "label": "AsyncSession",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "users.py",
+      "file_type": "code",
+      "norm_label": "asyncsession",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "backend_app_routers_users_py_get",
+      "label": "get",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "users.py",
+      "file_type": "code",
+      "norm_label": "get",
+      "source_file": "",
+      "source_location": ""
     },
     {
       "id": "backend_app_schemas_plan",
@@ -5957,17 +6228,6 @@
       "source_location": ""
     },
     {
-      "id": "backend_app_models_plan_rationale_1",
-      "label": "app/models/plan.py \u2014 ImprovementTask ORM model. Generated by the plan_generator\u2026",
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "users.py",
-      "file_type": "rationale",
-      "norm_label": "app/models/plan.py \u2014 improvementtask orm model. generated by the plan_generator...",
-      "source_file": "backend/app/models/plan.py",
-      "source_location": "L1"
-    },
-    {
       "id": "backend_app_routers_users_rationale_1",
       "label": "app/routers/users.py \u2014 User skill profile and stats endpoints. GET\u2026",
       "_origin": "ast",
@@ -5979,6 +6239,17 @@
       "source_location": "L1"
     },
     {
+      "id": "backend_app_routers_users_rationale_132",
+      "label": "Returns user summary stats.",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "users.py",
+      "file_type": "rationale",
+      "norm_label": "returns user summary stats.",
+      "source_file": "backend/app/routers/users.py",
+      "source_location": "L132"
+    },
+    {
       "id": "backend_app_routers_users_rationale_171",
       "label": "Returns the user's current improvement plan.",
       "_origin": "ast",
@@ -5988,6 +6259,50 @@
       "norm_label": "returns the user's current improvement plan.",
       "source_file": "backend/app/routers/users.py",
       "source_location": "L171"
+    },
+    {
+      "id": "backend_app_routers_users_rationale_31",
+      "label": "Returns all current skill estimates for a user.",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "users.py",
+      "file_type": "rationale",
+      "norm_label": "returns all current skill estimates for a user.",
+      "source_file": "backend/app/routers/users.py",
+      "source_location": "L31"
+    },
+    {
+      "id": "backend_app_routers_users_rationale_41",
+      "label": "Returns skill estimates enriched with temporal history.",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "users.py",
+      "file_type": "rationale",
+      "norm_label": "returns skill estimates enriched with temporal history.",
+      "source_file": "backend/app/routers/users.py",
+      "source_location": "L41"
+    },
+    {
+      "id": "backend_app_routers_users_rationale_79",
+      "label": "Returns a single skill estimate.",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "users.py",
+      "file_type": "rationale",
+      "norm_label": "returns a single skill estimate.",
+      "source_file": "backend/app/routers/users.py",
+      "source_location": "L79"
+    },
+    {
+      "id": "backend_app_routers_users_rationale_96",
+      "label": "Returns gap analysis: user's current skills vs role requirements.",
+      "_origin": "ast",
+      "community": 28,
+      "community_name": "users.py",
+      "file_type": "rationale",
+      "norm_label": "returns gap analysis: user's current skills vs role requirements.",
+      "source_file": "backend/app/routers/users.py",
+      "source_location": "L96"
     },
     {
       "id": "backend_app_schemas_plan_rationale_1",
@@ -6199,17 +6514,6 @@
       "source_location": ""
     },
     {
-      "id": "backend_app_services_graphiti_service",
-      "label": "graphiti_service.py",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "main.py",
-      "file_type": "code",
-      "norm_label": "graphiti_service.py",
-      "source_file": "backend/app/services/graphiti_service.py",
-      "source_location": "L1"
-    },
-    {
       "id": "backend_app_ws_session_ws",
       "label": "session_ws.py",
       "_origin": "ast",
@@ -6240,17 +6544,6 @@
       "file_type": "code",
       "norm_label": "test_e2e_interview.py",
       "source_file": "backend/scripts/test_e2e_interview.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_scripts_test_endpoints",
-      "label": "test_endpoints.py",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "main.py",
-      "file_type": "code",
-      "norm_label": "test_endpoints.py",
-      "source_file": "backend/scripts/test_endpoints.py",
       "source_location": "L1"
     },
     {
@@ -6328,17 +6621,6 @@
       "file_type": "rationale",
       "norm_label": "app/schemas/ws.py \u2014 websocket event schemas.",
       "source_file": "backend/app/schemas/ws.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_app_services_graphiti_service_rationale_1",
-      "label": "app/services/graphiti_service.py \u2014 Service abstraction for Graphiti + Neo4j.\u2026",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "main.py",
-      "file_type": "rationale",
-      "norm_label": "app/services/graphiti_service.py \u2014 service abstraction for graphiti + neo4j....",
-      "source_file": "backend/app/services/graphiti_service.py",
       "source_location": "L1"
     },
     {
@@ -6427,17 +6709,6 @@
       "file_type": "rationale",
       "norm_label": "backend/scripts/test_e2e_interview.py \u2014 end-to-end integration test of the...",
       "source_file": "backend/scripts/test_e2e_interview.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_scripts_test_endpoints_rationale_1",
-      "label": "backend/scripts/test_endpoints.py \u2014 Comprehensive verification script for\u2026",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "main.py",
-      "file_type": "rationale",
-      "norm_label": "backend/scripts/test_endpoints.py \u2014 comprehensive verification script for...",
-      "source_file": "backend/scripts/test_endpoints.py",
       "source_location": "L1"
     },
     {
@@ -6573,235 +6844,37 @@
       "source_location": "L105"
     },
     {
-      "id": "src_app",
-      "label": "App.tsx",
+      "id": "src_features_skills_skillspage",
+      "label": "SkillsPage.tsx",
       "_origin": "ast",
       "community": 31,
-      "community_name": "App.tsx",
+      "community_name": "SkillsPage.tsx",
       "file_type": "code",
-      "norm_label": "app.tsx",
-      "source_file": "src/App.tsx",
+      "norm_label": "skillspage.tsx",
+      "source_file": "src/features/skills/SkillsPage.tsx",
       "source_location": "L1"
     },
     {
-      "id": "src_app_queryclient",
-      "label": "queryClient",
+      "id": "src_features_skills_skillspage_competencynamemap",
+      "label": "competencyNameMap",
       "_origin": "ast",
       "community": 31,
-      "community_name": "App.tsx",
+      "community_name": "SkillsPage.tsx",
       "file_type": "code",
-      "norm_label": "queryclient",
-      "source_file": "src/App.tsx",
-      "source_location": "L11"
+      "norm_label": "competencynamemap",
+      "source_file": "src/features/skills/SkillsPage.tsx",
+      "source_location": "L8"
     },
     {
-      "id": "src_components_layout_navbar",
-      "label": "NavBar.tsx",
+      "id": "src_hooks_useskillprofile",
+      "label": "useSkillProfile.ts",
       "_origin": "ast",
       "community": 31,
-      "community_name": "App.tsx",
+      "community_name": "SkillsPage.tsx",
       "file_type": "code",
-      "norm_label": "navbar.tsx",
-      "source_file": "src/components/layout/NavBar.tsx",
+      "norm_label": "useskillprofile.ts",
+      "source_file": "src/hooks/useSkillProfile.ts",
       "source_location": "L1"
-    },
-    {
-      "id": "src_features_shells_shellpages",
-      "label": "ShellPages.tsx",
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "App.tsx",
-      "file_type": "code",
-      "norm_label": "shellpages.tsx",
-      "source_file": "src/features/shells/ShellPages.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_main",
-      "label": "main.tsx",
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "App.tsx",
-      "file_type": "code",
-      "norm_label": "main.tsx",
-      "source_file": "src/main.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_interview_adaptivestatepanel",
-      "label": "AdaptiveStatePanel.tsx",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "adaptivestatepanel.tsx",
-      "source_file": "src/components/interview/AdaptiveStatePanel.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_interview_adaptivestatepanel_actionlabels",
-      "label": "actionLabels",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "actionlabels",
-      "source_file": "src/components/interview/AdaptiveStatePanel.tsx",
-      "source_location": "L10"
-    },
-    {
-      "id": "src_components_interview_adaptivestatepanel_difficultyorder",
-      "label": "difficultyOrder",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "difficultyorder",
-      "source_file": "src/components/interview/AdaptiveStatePanel.tsx",
-      "source_location": "L18"
-    },
-    {
-      "id": "src_components_interview_voiceorb",
-      "label": "VoiceOrb.tsx",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "voiceorb.tsx",
-      "source_file": "src/components/interview/VoiceOrb.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_components_interview_voiceorb_stateconfig",
-      "label": "stateConfig",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "stateconfig",
-      "source_file": "src/components/interview/VoiceOrb.tsx",
-      "source_location": "L10"
-    },
-    {
-      "id": "src_hooks_useinterview",
-      "label": "useInterview.ts",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "useinterview.ts",
-      "source_file": "src/hooks/useInterview.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_lib_api",
-      "label": "api.ts",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "api.ts",
-      "source_file": "src/lib/api.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_lib_api_api_base_url",
-      "label": "API_BASE_URL",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "api_base_url",
-      "source_file": "src/lib/api.ts",
-      "source_location": "L22"
-    },
-    {
-      "id": "src_lib_api_apiclient",
-      "label": "apiClient",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "apiclient",
-      "source_file": "src/lib/api.ts",
-      "source_location": "L25"
-    },
-    {
-      "id": "src_lib_api_data_mode",
-      "label": "DATA_MODE",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "data_mode",
-      "source_file": "src/lib/api.ts",
-      "source_location": "L20"
-    },
-    {
-      "id": "src_lib_api_ws_base_url",
-      "label": "WS_BASE_URL",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "ws_base_url",
-      "source_file": "src/lib/api.ts",
-      "source_location": "L23"
-    },
-    {
-      "id": "src_mock_assessment",
-      "label": "mock/assessment.ts",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "mock/assessment.ts",
-      "source_file": "src/mock/assessment.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_mock_assessment_mockadaptivestate",
-      "label": "mockAdaptiveState",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "mockadaptivestate",
-      "source_file": "src/mock/assessment.ts",
-      "source_location": "L15"
-    },
-    {
-      "id": "src_mock_assessment_mocksession",
-      "label": "mockSession",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "mocksession",
-      "source_file": "src/mock/assessment.ts",
-      "source_location": "L3"
-    },
-    {
-      "id": "src_mock_interview",
-      "label": "mock/interview.ts",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "mock/interview.ts",
-      "source_file": "src/mock/interview.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_mock_interview_mockinterviewstate",
-      "label": "mockInterviewState",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "mockinterviewstate",
-      "source_file": "src/mock/interview.ts",
-      "source_location": "L6"
     },
     {
       "id": "src_mock_questions",
@@ -6826,61 +6899,6 @@
       "source_location": "L3"
     },
     {
-      "id": "src_mock_skills",
-      "label": "mock/skills.ts",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "mock/skills.ts",
-      "source_file": "src/mock/skills.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_mock_skills_mockgapanalysis",
-      "label": "mockGapAnalysis",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "mockgapanalysis",
-      "source_file": "src/mock/skills.ts",
-      "source_location": "L81"
-    },
-    {
-      "id": "src_mock_skills_mockimprovementplan",
-      "label": "mockImprovementPlan",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "mockimprovementplan",
-      "source_file": "src/mock/skills.ts",
-      "source_location": "L89"
-    },
-    {
-      "id": "src_mock_skills_mockskillestimates",
-      "label": "mockSkillEstimates",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "mockskillestimates",
-      "source_file": "src/mock/skills.ts",
-      "source_location": "L3"
-    },
-    {
-      "id": "src_services_assessmentservice",
-      "label": "assessmentService.ts",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "assessmentservice.ts",
-      "source_file": "src/services/assessmentService.ts",
-      "source_location": "L1"
-    },
-    {
       "id": "src_services_interviewservice",
       "label": "interviewService.ts",
       "_origin": "ast",
@@ -6890,39 +6908,6 @@
       "norm_label": "interviewservice.ts",
       "source_file": "src/services/interviewService.ts",
       "source_location": "L1"
-    },
-    {
-      "id": "src_services_skillservice",
-      "label": "skillService.ts",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "skillservice.ts",
-      "source_file": "src/services/skillService.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_services_voiceservice",
-      "label": "voiceService.ts",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "voiceservice.ts",
-      "source_file": "src/services/voiceService.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_services_voiceservice_voiceservice",
-      "label": "voiceService",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "voiceservice",
-      "source_file": "src/services/voiceService.ts",
-      "source_location": "L121"
     },
     {
       "id": "src_store_interviewstore",
@@ -6958,48 +6943,37 @@
       "source_location": "L1"
     },
     {
+      "id": "src_components_interview_voiceorb",
+      "label": "VoiceOrb.tsx",
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "VoiceOrb.tsx",
+      "file_type": "code",
+      "norm_label": "voiceorb.tsx",
+      "source_file": "src/components/interview/VoiceOrb.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_interview_voiceorb_stateconfig",
+      "label": "stateConfig",
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "VoiceOrb.tsx",
+      "file_type": "code",
+      "norm_label": "stateconfig",
+      "source_file": "src/components/interview/VoiceOrb.tsx",
+      "source_location": "L10"
+    },
+    {
       "id": "src_types_interview",
       "label": "types/interview.ts",
       "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
+      "community": 33,
+      "community_name": "VoiceOrb.tsx",
       "file_type": "code",
       "norm_label": "types/interview.ts",
       "source_file": "src/types/interview.ts",
       "source_location": "L1"
-    },
-    {
-      "id": "src_types_skills",
-      "label": "types/skills.ts",
-      "_origin": "ast",
-      "community": 32,
-      "community_name": "types/assessment.ts",
-      "file_type": "code",
-      "norm_label": "types/skills.ts",
-      "source_file": "src/types/skills.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_features_interview_interviewpage",
-      "label": "InterviewPage.tsx",
-      "_origin": "ast",
-      "community": 33,
-      "community_name": "InterviewPage.tsx",
-      "file_type": "code",
-      "norm_label": "interviewpage.tsx",
-      "source_file": "src/features/interview/InterviewPage.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_features_interview_interviewpage_competencynamemap",
-      "label": "competencyNameMap",
-      "_origin": "ast",
-      "community": 33,
-      "community_name": "InterviewPage.tsx",
-      "file_type": "code",
-      "norm_label": "competencynamemap",
-      "source_file": "src/features/interview/InterviewPage.tsx",
-      "source_location": "L11"
     },
     {
       "id": "src_hooks_useassessment",
@@ -7068,36 +7042,69 @@
       "source_location": ""
     },
     {
-      "id": "src_features_skills_skillspage",
-      "label": "SkillsPage.tsx",
+      "id": "src_mock_skills",
+      "label": "mock/skills.ts",
       "_origin": "ast",
       "community": 36,
-      "community_name": "SkillsPage.tsx",
+      "community_name": "types/skills.ts",
       "file_type": "code",
-      "norm_label": "skillspage.tsx",
-      "source_file": "src/features/skills/SkillsPage.tsx",
+      "norm_label": "mock/skills.ts",
+      "source_file": "src/mock/skills.ts",
       "source_location": "L1"
     },
     {
-      "id": "src_features_skills_skillspage_competencynamemap",
-      "label": "competencyNameMap",
+      "id": "src_mock_skills_mockgapanalysis",
+      "label": "mockGapAnalysis",
       "_origin": "ast",
       "community": 36,
-      "community_name": "SkillsPage.tsx",
+      "community_name": "types/skills.ts",
       "file_type": "code",
-      "norm_label": "competencynamemap",
-      "source_file": "src/features/skills/SkillsPage.tsx",
-      "source_location": "L7"
+      "norm_label": "mockgapanalysis",
+      "source_file": "src/mock/skills.ts",
+      "source_location": "L81"
     },
     {
-      "id": "src_hooks_useskillprofile",
-      "label": "useSkillProfile.ts",
+      "id": "src_mock_skills_mockimprovementplan",
+      "label": "mockImprovementPlan",
       "_origin": "ast",
       "community": 36,
-      "community_name": "SkillsPage.tsx",
+      "community_name": "types/skills.ts",
       "file_type": "code",
-      "norm_label": "useskillprofile.ts",
-      "source_file": "src/hooks/useSkillProfile.ts",
+      "norm_label": "mockimprovementplan",
+      "source_file": "src/mock/skills.ts",
+      "source_location": "L89"
+    },
+    {
+      "id": "src_mock_skills_mockskillestimates",
+      "label": "mockSkillEstimates",
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "types/skills.ts",
+      "file_type": "code",
+      "norm_label": "mockskillestimates",
+      "source_file": "src/mock/skills.ts",
+      "source_location": "L3"
+    },
+    {
+      "id": "src_services_skillservice",
+      "label": "skillService.ts",
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "types/skills.ts",
+      "file_type": "code",
+      "norm_label": "skillservice.ts",
+      "source_file": "src/services/skillService.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_types_skills",
+      "label": "types/skills.ts",
+      "_origin": "ast",
+      "community": 36,
+      "community_name": "types/skills.ts",
+      "file_type": "code",
+      "norm_label": "types/skills.ts",
+      "source_file": "src/types/skills.ts",
       "source_location": "L1"
     },
     {
@@ -7112,136 +7119,334 @@
       "source_location": "L1"
     },
     {
-      "id": "src_features_assessment_assessmentpage_durationoptions",
-      "label": "durationOptions",
+      "id": "src_features_assessment_assessmentpage_duration_options",
+      "label": "DURATION_OPTIONS",
       "_origin": "ast",
       "community": 38,
       "community_name": "AssessmentPage.tsx",
       "file_type": "code",
-      "norm_label": "durationoptions",
+      "norm_label": "duration_options",
       "source_file": "src/features/assessment/AssessmentPage.tsx",
-      "source_location": "L16"
+      "source_location": "L38"
     },
     {
-      "id": "src_features_assessment_assessmentpage_leveloptions",
-      "label": "levelOptions",
+      "id": "src_features_assessment_assessmentpage_level_options",
+      "label": "LEVEL_OPTIONS",
       "_origin": "ast",
       "community": 38,
       "community_name": "AssessmentPage.tsx",
       "file_type": "code",
-      "norm_label": "leveloptions",
+      "norm_label": "level_options",
       "source_file": "src/features/assessment/AssessmentPage.tsx",
-      "source_location": "L9"
+      "source_location": "L31"
     },
     {
-      "id": "any",
-      "label": "Any",
+      "id": "src_features_assessment_assessmentpage_sector_codes",
+      "label": "SECTOR_CODES",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "AssessmentPage.tsx",
+      "file_type": "code",
+      "norm_label": "sector_codes",
+      "source_file": "src/features/assessment/AssessmentPage.tsx",
+      "source_location": "L14"
+    },
+    {
+      "id": "src_features_assessment_assessmentpage_sector_short_titles",
+      "label": "SECTOR_SHORT_TITLES",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "AssessmentPage.tsx",
+      "file_type": "code",
+      "norm_label": "sector_short_titles",
+      "source_file": "src/features/assessment/AssessmentPage.tsx",
+      "source_location": "L22"
+    },
+    {
+      "id": "src_mock_resumeprofiles",
+      "label": "resumeProfiles.ts",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "AssessmentPage.tsx",
+      "file_type": "code",
+      "norm_label": "resumeprofiles.ts",
+      "source_file": "src/mock/resumeProfiles.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_mock_resumeprofiles_resume_profiles",
+      "label": "RESUME_PROFILES",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "AssessmentPage.tsx",
+      "file_type": "code",
+      "norm_label": "resume_profiles",
+      "source_file": "src/mock/resumeProfiles.ts",
+      "source_location": "L11"
+    },
+    {
+      "id": "src_mock_sectors",
+      "label": "sectors.ts",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "AssessmentPage.tsx",
+      "file_type": "code",
+      "norm_label": "sectors.ts",
+      "source_file": "src/mock/sectors.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_mock_sectors_competency_names",
+      "label": "COMPETENCY_NAMES",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "AssessmentPage.tsx",
+      "file_type": "code",
+      "norm_label": "competency_names",
+      "source_file": "src/mock/sectors.ts",
+      "source_location": "L216"
+    },
+    {
+      "id": "src_mock_sectors_sectors",
+      "label": "SECTORS",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "AssessmentPage.tsx",
+      "file_type": "code",
+      "norm_label": "sectors",
+      "source_file": "src/mock/sectors.ts",
+      "source_location": "L10"
+    },
+    {
+      "id": "src_types_setup",
+      "label": "setup.ts",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "AssessmentPage.tsx",
+      "file_type": "code",
+      "norm_label": "setup.ts",
+      "source_file": "src/types/setup.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_mock_resumeprofiles_rationale_4",
+      "label": "IMPORTANT: No OCR is performed. Filename \u2192 profile matching only.",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "AssessmentPage.tsx",
+      "file_type": "rationale",
+      "norm_label": "important: no ocr is performed. filename \u2192 profile matching only.",
+      "source_file": "src/mock/resumeProfiles.ts",
+      "source_location": "L4"
+    },
+    {
+      "id": "src_components_interview_adaptivestatepanel",
+      "label": "AdaptiveStatePanel.tsx",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "AdaptiveStatePanel.tsx",
+      "file_type": "code",
+      "norm_label": "adaptivestatepanel.tsx",
+      "source_file": "src/components/interview/AdaptiveStatePanel.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_components_interview_adaptivestatepanel_actionlabels",
+      "label": "actionLabels",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "AdaptiveStatePanel.tsx",
+      "file_type": "code",
+      "norm_label": "actionlabels",
+      "source_file": "src/components/interview/AdaptiveStatePanel.tsx",
+      "source_location": "L10"
+    },
+    {
+      "id": "src_components_interview_adaptivestatepanel_difficultyorder",
+      "label": "difficultyOrder",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "AdaptiveStatePanel.tsx",
+      "file_type": "code",
+      "norm_label": "difficultyorder",
+      "source_file": "src/components/interview/AdaptiveStatePanel.tsx",
+      "source_location": "L18"
+    },
+    {
+      "id": "backend_app_database_py_asyncsession",
+      "label": "AsyncSession",
       "_origin": "ast",
       "community": 4,
-      "community_name": "GraphitiService",
+      "community_name": "reassess.py",
       "file_type": "code",
-      "norm_label": "any",
+      "norm_label": "asyncsession",
       "source_file": "",
       "source_location": ""
     },
     {
-      "id": "backend_app_services_graphiti_service_rationale_117",
-      "label": "Records the initiation of an assessment session into the candidate's temporal\u2026",
+      "id": "backend_app_routers_reassess",
+      "label": "reassess.py",
       "_origin": "ast",
       "community": 4,
-      "community_name": "GraphitiService",
-      "file_type": "rationale",
-      "norm_label": "records the initiation of an assessment session into the candidate's temporal...",
-      "source_file": "backend/app/services/graphiti_service.py",
-      "source_location": "L117"
+      "community_name": "reassess.py",
+      "file_type": "code",
+      "norm_label": "reassess.py",
+      "source_file": "backend/app/routers/reassess.py",
+      "source_location": "L1"
     },
     {
-      "id": "backend_app_services_graphiti_service_rationale_154",
-      "label": "Records candidate answer evidence for a specific concept tested by a question.\u2026",
+      "id": "backend_app_routers_reassess_py_asyncsession",
+      "label": "AsyncSession",
       "_origin": "ast",
       "community": 4,
-      "community_name": "GraphitiService",
-      "file_type": "rationale",
-      "norm_label": "records candidate answer evidence for a specific concept tested by a question....",
-      "source_file": "backend/app/services/graphiti_service.py",
-      "source_location": "L154"
+      "community_name": "reassess.py",
+      "file_type": "code",
+      "norm_label": "asyncsession",
+      "source_file": "",
+      "source_location": ""
     },
     {
-      "id": "backend_app_services_graphiti_service_rationale_197",
-      "label": "Records a competency score transition in the user's temporal skill narrative.\u2026",
+      "id": "backend_app_routers_reassess_py_basemodel",
+      "label": "BaseModel",
       "_origin": "ast",
       "community": 4,
-      "community_name": "GraphitiService",
-      "file_type": "rationale",
-      "norm_label": "records a competency score transition in the user's temporal skill narrative....",
-      "source_file": "backend/app/services/graphiti_service.py",
-      "source_location": "L197"
+      "community_name": "reassess.py",
+      "file_type": "code",
+      "norm_label": "basemodel",
+      "source_file": "",
+      "source_location": ""
     },
     {
-      "id": "backend_app_services_graphiti_service_rationale_234",
-      "label": "Records candidate progress on recommended improvement activities.",
+      "id": "backend_app_routers_reassess_py_post",
+      "label": "post",
       "_origin": "ast",
       "community": 4,
-      "community_name": "GraphitiService",
-      "file_type": "rationale",
-      "norm_label": "records candidate progress on recommended improvement activities.",
-      "source_file": "backend/app/services/graphiti_service.py",
-      "source_location": "L234"
+      "community_name": "reassess.py",
+      "file_type": "code",
+      "norm_label": "post",
+      "source_file": "",
+      "source_location": ""
     },
     {
-      "id": "backend_app_services_graphiti_service_rationale_265",
-      "label": "Searches candidate contextual memory for relevant history, weaknesses, or prior\u2026",
+      "id": "backend_app_database_rationale_28",
+      "label": "FastAPI dependency: yields an async DB session.",
       "_origin": "ast",
       "community": 4,
-      "community_name": "GraphitiService",
+      "community_name": "reassess.py",
       "file_type": "rationale",
-      "norm_label": "searches candidate contextual memory for relevant history, weaknesses, or prior...",
-      "source_file": "backend/app/services/graphiti_service.py",
-      "source_location": "L265"
+      "norm_label": "fastapi dependency: yields an async db session.",
+      "source_file": "backend/app/database.py",
+      "source_location": "L28"
     },
     {
-      "id": "backend_app_services_graphiti_service_rationale_30",
-      "label": "Clean service abstraction for Graphiti temporal knowledge graph operations.\u2026",
+      "id": "backend_app_routers_reassess_rationale_1",
+      "label": "app/routers/reassess.py \u2014 Targeted reassessment endpoint. POST /api/reassess",
       "_origin": "ast",
       "community": 4,
-      "community_name": "GraphitiService",
+      "community_name": "reassess.py",
       "file_type": "rationale",
-      "norm_label": "clean service abstraction for graphiti temporal knowledge graph operations....",
-      "source_file": "backend/app/services/graphiti_service.py",
-      "source_location": "L30"
+      "norm_label": "app/routers/reassess.py \u2014 targeted reassessment endpoint. post /api/reassess",
+      "source_file": "backend/app/routers/reassess.py",
+      "source_location": "L1"
     },
     {
-      "id": "backend_app_services_graphiti_service_rationale_42",
-      "label": "Returns True only if Graphiti is properly connected and ready.",
+      "id": "backend_app_routers_reassess_rationale_36",
+      "label": "Creates a targeted reassessment session focused only on weak competencies. Does\u2026",
       "_origin": "ast",
       "community": 4,
-      "community_name": "GraphitiService",
+      "community_name": "reassess.py",
       "file_type": "rationale",
-      "norm_label": "returns true only if graphiti is properly connected and ready.",
-      "source_file": "backend/app/services/graphiti_service.py",
-      "source_location": "L42"
+      "norm_label": "creates a targeted reassessment session focused only on weak competencies. does...",
+      "source_file": "backend/app/routers/reassess.py",
+      "source_location": "L36"
     },
     {
-      "id": "backend_app_services_graphiti_service_rationale_46",
-      "label": "Initializes Graphiti client if Neo4j and required credentials are configured.\u2026",
+      "id": "src_services_assessmentservice",
+      "label": "assessmentService.ts",
       "_origin": "ast",
-      "community": 4,
-      "community_name": "GraphitiService",
-      "file_type": "rationale",
-      "norm_label": "initializes graphiti client if neo4j and required credentials are configured....",
-      "source_file": "backend/app/services/graphiti_service.py",
-      "source_location": "L46"
+      "community": 40,
+      "community_name": "assessmentService.ts",
+      "file_type": "code",
+      "norm_label": "assessmentservice.ts",
+      "source_file": "src/services/assessmentService.ts",
+      "source_location": "L1"
     },
     {
-      "id": "backend_app_services_graphiti_service_rationale_96",
-      "label": "Gracefully closes Neo4j driver connection if active.",
+      "id": "src_mock_assessment",
+      "label": "mock/assessment.ts",
       "_origin": "ast",
-      "community": 4,
-      "community_name": "GraphitiService",
+      "community": 41,
+      "community_name": "mock/interview.ts",
+      "file_type": "code",
+      "norm_label": "mock/assessment.ts",
+      "source_file": "src/mock/assessment.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_mock_assessment_mockadaptivestate",
+      "label": "mockAdaptiveState",
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "mock/interview.ts",
+      "file_type": "code",
+      "norm_label": "mockadaptivestate",
+      "source_file": "src/mock/assessment.ts",
+      "source_location": "L15"
+    },
+    {
+      "id": "src_mock_assessment_mocksession",
+      "label": "mockSession",
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "mock/interview.ts",
+      "file_type": "code",
+      "norm_label": "mocksession",
+      "source_file": "src/mock/assessment.ts",
+      "source_location": "L3"
+    },
+    {
+      "id": "src_mock_interview",
+      "label": "mock/interview.ts",
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "mock/interview.ts",
+      "file_type": "code",
+      "norm_label": "mock/interview.ts",
+      "source_file": "src/mock/interview.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_mock_interview_mockinterviewstate",
+      "label": "mockInterviewState",
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "mock/interview.ts",
+      "file_type": "code",
+      "norm_label": "mockinterviewstate",
+      "source_file": "src/mock/interview.ts",
+      "source_location": "L6"
+    },
+    {
+      "id": "backend_app_models_plan",
+      "label": "models/plan.py",
+      "_origin": "ast",
+      "community": 42,
+      "community_name": "models/plan.py",
+      "file_type": "code",
+      "norm_label": "models/plan.py",
+      "source_file": "backend/app/models/plan.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_app_models_plan_rationale_1",
+      "label": "app/models/plan.py \u2014 ImprovementTask ORM model. Generated by the plan_generator\u2026",
+      "_origin": "ast",
+      "community": 42,
+      "community_name": "models/plan.py",
       "file_type": "rationale",
-      "norm_label": "gracefully closes neo4j driver connection if active.",
-      "source_file": "backend/app/services/graphiti_service.py",
-      "source_location": "L96"
+      "norm_label": "app/models/plan.py \u2014 improvementtask orm model. generated by the plan_generator...",
+      "source_file": "backend/app/models/plan.py",
+      "source_location": "L1"
     },
     {
       "id": "oxlintrc",
@@ -7365,6 +7570,39 @@
       "source_location": "L11"
     },
     {
+      "id": "src_components_layout_systemfooter",
+      "label": "SystemFooter.tsx",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "ReportPage.tsx",
+      "file_type": "code",
+      "norm_label": "systemfooter.tsx",
+      "source_file": "src/components/layout/SystemFooter.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_features_interview_interviewpage",
+      "label": "InterviewPage.tsx",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "ReportPage.tsx",
+      "file_type": "code",
+      "norm_label": "interviewpage.tsx",
+      "source_file": "src/features/interview/InterviewPage.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_features_interview_interviewpage_competencynamemap",
+      "label": "competencyNameMap",
+      "_origin": "ast",
+      "community": 6,
+      "community_name": "ReportPage.tsx",
+      "file_type": "code",
+      "norm_label": "competencynamemap",
+      "source_file": "src/features/interview/InterviewPage.tsx",
+      "source_location": "L12"
+    },
+    {
       "id": "src_features_report_reportpage",
       "label": "ReportPage.tsx",
       "_origin": "ast",
@@ -7384,7 +7622,7 @@
       "file_type": "code",
       "norm_label": "competencynamemap",
       "source_file": "src/features/report/ReportPage.tsx",
-      "source_location": "L11"
+      "source_location": "L12"
     },
     {
       "id": "src_lib_utils",
@@ -7398,15 +7636,15 @@
       "source_location": "L1"
     },
     {
-      "id": "src_store_interviewstore_useinterviewstore",
-      "label": "useInterviewStore",
+      "id": "ref_react",
+      "label": "react",
       "_origin": "ast",
       "community": 6,
       "community_name": "ReportPage.tsx",
-      "file_type": "code",
-      "norm_label": "useinterviewstore",
-      "source_file": "src/store/interviewStore.ts",
-      "source_location": "L65"
+      "file_type": "concept",
+      "norm_label": "react",
+      "source_file": ".oxlintrc.json",
+      "source_location": "L3"
     },
     {
       "id": "tsconfig_app",
@@ -8926,18 +9164,6 @@
       "weight": 1.0
     },
     {
-      "source": "src_components_charts_adaptivepathdiagram_adaptivepathdiagram",
-      "target": "src_components_charts_adaptivepathdiagram_tosvg",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "src/components/charts/AdaptivePathDiagram.tsx",
-      "source_location": "L55",
-      "weight": 1.0
-    },
-    {
       "source": "src_components_interview_adaptivestatepanel_adaptivestatepanel",
       "target": "src_components_interview_adaptivestatepanel_difficultyposition",
       "relation": "calls",
@@ -8986,15 +9212,27 @@
       "weight": 1.0
     },
     {
+      "source": "src_components_layout_atmosphericbackground_atmosphericbackground",
+      "target": "src_store_interviewstore_useinterviewstore",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/components/layout/AtmosphericBackground.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
       "source": "src_features_assessment_assessmentpage_assessmentpage",
-      "target": "src_hooks_useassessment_usetargetroles",
+      "target": "src_mock_resumeprofiles_matchresumefile",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/features/assessment/AssessmentPage.tsx",
-      "source_location": "L25",
+      "source_location": "L133",
       "weight": 1.0
     },
     {
@@ -9006,7 +9244,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/features/assessment/AssessmentPage.tsx",
-      "source_location": "L26",
+      "source_location": "L75",
       "weight": 1.0
     },
     {
@@ -9018,7 +9256,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/features/assessment/AssessmentPage.tsx",
-      "source_location": "L27",
+      "source_location": "L76",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_assessment_assessmentpage_assessmentpage",
+      "target": "src_hooks_useassessment_usetargetroles",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/features/assessment/AssessmentPage.tsx",
+      "source_location": "L80",
       "weight": 1.0
     },
     {
@@ -9030,7 +9280,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/features/interview/InterviewPage.tsx",
-      "source_location": "L112",
+      "source_location": "L113",
       "weight": 1.0
     },
     {
@@ -9042,7 +9292,19 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/features/interview/InterviewPage.tsx",
-      "source_location": "L36",
+      "source_location": "L37",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_landing_landingpage_landingpage",
+      "target": "src_hooks_useassessment_usetargetroles",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "src/features/landing/LandingPage.tsx",
+      "source_location": "L25",
       "weight": 1.0
     },
     {
@@ -9054,7 +9316,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/features/report/ReportPage.tsx",
-      "source_location": "L21",
+      "source_location": "L22",
       "weight": 1.0
     },
     {
@@ -9066,7 +9328,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/features/report/ReportPage.tsx",
-      "source_location": "L339",
+      "source_location": "L340",
       "weight": 1.0
     },
     {
@@ -9078,7 +9340,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/features/report/ReportPage.tsx",
-      "source_location": "L346",
+      "source_location": "L347",
       "weight": 1.0
     },
     {
@@ -9090,7 +9352,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/features/report/ReportPage.tsx",
-      "source_location": "L388",
+      "source_location": "L389",
       "weight": 1.0
     },
     {
@@ -9102,7 +9364,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/features/report/ReportPage.tsx",
-      "source_location": "L37",
+      "source_location": "L38",
       "weight": 1.0
     },
     {
@@ -9114,7 +9376,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/features/report/ReportPage.tsx",
-      "source_location": "L40",
+      "source_location": "L41",
       "weight": 1.0
     },
     {
@@ -9126,7 +9388,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/features/skills/SkillsPage.tsx",
-      "source_location": "L16",
+      "source_location": "L17",
       "weight": 1.0
     },
     {
@@ -9138,7 +9400,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/features/skills/SkillsPage.tsx",
-      "source_location": "L17",
+      "source_location": "L18",
       "weight": 1.0
     },
     {
@@ -9150,7 +9412,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/features/skills/SkillsPage.tsx",
-      "source_location": "L179",
+      "source_location": "L180",
       "weight": 1.0
     },
     {
@@ -9162,7 +9424,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/features/skills/SkillsPage.tsx",
-      "source_location": "L181",
+      "source_location": "L182",
       "weight": 1.0
     },
     {
@@ -9570,7 +9832,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/features/assessment/AssessmentPage.tsx",
-      "source_location": "L42",
+      "source_location": "L159",
       "weight": 1.0
     },
     {
@@ -9582,7 +9844,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/features/report/ReportPage.tsx",
-      "source_location": "L32",
+      "source_location": "L33",
       "weight": 1.0
     },
     {
@@ -10219,6 +10481,30 @@
       "context": "field",
       "source_file": "src/types/assessment.ts",
       "source_location": "L99",
+      "weight": 1.0
+    },
+    {
+      "source": "src_types_setup_assessmentsetup",
+      "target": "src_types_roles_rolelevel",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "field",
+      "source_file": "src/types/setup.ts",
+      "source_location": "L76",
+      "weight": 1.0
+    },
+    {
+      "source": "src_types_setup_assessmentsetup",
+      "target": "src_types_assessment_assessmentduration",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "field",
+      "source_file": "src/types/setup.ts",
+      "source_location": "L80",
       "weight": 1.0
     },
     {
@@ -12071,7 +12357,31 @@
     },
     {
       "source": "src_app",
-      "target": "src_components_layout_navbar_navbar",
+      "target": "src_features_shells_shellpages_planpage",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/App.tsx",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "src_app",
+      "target": "src_features_shells_shellpages_reassesspage",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/App.tsx",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "src_app",
+      "target": "src_components_layout_atmosphericbackground_atmosphericbackground",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -12083,7 +12393,7 @@
     },
     {
       "source": "src_app",
-      "target": "src_features_landing_landingpage_landingpage",
+      "target": "src_components_layout_navbar_navbar",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -12095,7 +12405,7 @@
     },
     {
       "source": "src_app",
-      "target": "src_features_assessment_assessmentpage_assessmentpage",
+      "target": "src_features_landing_landingpage_landingpage",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -12107,7 +12417,7 @@
     },
     {
       "source": "src_app",
-      "target": "src_features_interview_interviewpage_interviewpage",
+      "target": "src_features_assessment_assessmentpage_assessmentpage",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -12119,7 +12429,7 @@
     },
     {
       "source": "src_app",
-      "target": "src_features_skills_skillspage_skillspage",
+      "target": "src_features_interview_interviewpage_interviewpage",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -12131,7 +12441,7 @@
     },
     {
       "source": "src_app",
-      "target": "src_features_report_reportpage_reportpage",
+      "target": "src_features_skills_skillspage_skillspage",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -12143,19 +12453,7 @@
     },
     {
       "source": "src_app",
-      "target": "src_features_shells_shellpages_planpage",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "src/App.tsx",
-      "source_location": "L9",
-      "weight": 1.0
-    },
-    {
-      "source": "src_app",
-      "target": "src_features_shells_shellpages_reassesspage",
+      "target": "src_features_report_reportpage_reportpage",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -12250,6 +12548,42 @@
       "weight": 1.0
     },
     {
+      "source": "src_components_layout_atmosphericbackground",
+      "target": "src_store_interviewstore_useinterviewstore",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/components/layout/AtmosphericBackground.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_assessment_assessmentpage",
+      "target": "src_mock_resumeprofiles_matchresumefile",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/features/assessment/AssessmentPage.tsx",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_assessment_assessmentpage",
+      "target": "src_components_layout_systemfooter_systemfooter",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/features/assessment/AssessmentPage.tsx",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
       "source": "src_features_assessment_assessmentpage",
       "target": "src_hooks_useassessment_usecreatesession",
       "relation": "imports",
@@ -12299,7 +12633,7 @@
     },
     {
       "source": "src_features_assessment_assessmentpage",
-      "target": "src_store_interviewstore_useinterviewstore",
+      "target": "src_types_setup_resumeprofile",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -12307,6 +12641,66 @@
       "context": "import",
       "source_file": "src/features/assessment/AssessmentPage.tsx",
       "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_assessment_assessmentpage",
+      "target": "src_types_setup_scanstate",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/features/assessment/AssessmentPage.tsx",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_assessment_assessmentpage",
+      "target": "src_store_interviewstore_useinterviewstore",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/features/assessment/AssessmentPage.tsx",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_assessment_assessmentpage",
+      "target": "src_mock_sectors_competency_names",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/features/assessment/AssessmentPage.tsx",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_assessment_assessmentpage",
+      "target": "src_mock_sectors_sectors",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/features/assessment/AssessmentPage.tsx",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_interview_interviewpage",
+      "target": "src_components_layout_systemfooter_systemfooter",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/features/interview/InterviewPage.tsx",
+      "source_location": "L10",
       "weight": 1.0
     },
     {
@@ -12391,6 +12785,42 @@
       "context": "import",
       "source_file": "src/features/landing/LandingPage.tsx",
       "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_landing_landingpage",
+      "target": "src_components_layout_systemfooter_systemfooter",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/features/landing/LandingPage.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_landing_landingpage",
+      "target": "src_hooks_useassessment_usetargetroles",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/features/landing/LandingPage.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_report_reportpage",
+      "target": "src_components_layout_systemfooter_systemfooter",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/features/report/ReportPage.tsx",
+      "source_location": "L10",
       "weight": 1.0
     },
     {
@@ -12559,6 +12989,18 @@
       "context": "import",
       "source_file": "src/features/skills/SkillsPage.tsx",
       "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_skills_skillspage",
+      "target": "src_components_layout_systemfooter_systemfooter",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/features/skills/SkillsPage.tsx",
+      "source_location": "L6",
       "weight": 1.0
     },
     {
@@ -12838,6 +13280,18 @@
       "weight": 1.0
     },
     {
+      "source": "src_mock_resumeprofiles",
+      "target": "src_types_setup_resumeprofile",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/mock/resumeProfiles.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
       "source": "src_mock_roles",
       "target": "src_types_roles_targetrole",
       "relation": "imports",
@@ -12847,6 +13301,18 @@
       "context": "import",
       "source_file": "src/mock/roles.ts",
       "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "src_mock_sectors",
+      "target": "src_types_setup_sector",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/mock/sectors.ts",
+      "source_location": "L8",
       "weight": 1.0
     },
     {
@@ -13411,6 +13877,30 @@
       "context": "import",
       "source_file": "src/types/assessment.ts",
       "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "src_types_setup",
+      "target": "src_types_assessment_assessmentduration",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/types/setup.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "src_types_setup",
+      "target": "src_types_roles_rolelevel",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/types/setup.ts",
+      "source_location": "L9",
       "weight": 1.0
     },
     {
@@ -14279,7 +14769,19 @@
     },
     {
       "source": "src_app",
-      "target": "src_components_layout_navbar",
+      "target": "src_features_shells_shellpages",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/App.tsx",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "src_app",
+      "target": "src_components_layout_atmosphericbackground",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14291,7 +14793,7 @@
     },
     {
       "source": "src_app",
-      "target": "src_features_landing_landingpage",
+      "target": "src_components_layout_navbar",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14303,7 +14805,7 @@
     },
     {
       "source": "src_app",
-      "target": "src_features_assessment_assessmentpage",
+      "target": "src_features_landing_landingpage",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14315,7 +14817,7 @@
     },
     {
       "source": "src_app",
-      "target": "src_features_interview_interviewpage",
+      "target": "src_features_assessment_assessmentpage",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14327,7 +14829,7 @@
     },
     {
       "source": "src_app",
-      "target": "src_features_skills_skillspage",
+      "target": "src_features_interview_interviewpage",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14339,7 +14841,7 @@
     },
     {
       "source": "src_app",
-      "target": "src_features_report_reportpage",
+      "target": "src_features_skills_skillspage",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14351,7 +14853,7 @@
     },
     {
       "source": "src_app",
-      "target": "src_features_shells_shellpages",
+      "target": "src_features_report_reportpage",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14359,18 +14861,6 @@
       "context": "import",
       "source_file": "src/App.tsx",
       "source_location": "L9",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_charts_adaptivepathdiagram",
-      "target": "ref_react",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "src/components/charts/AdaptivePathDiagram.tsx",
-      "source_location": "L1",
       "weight": 1.0
     },
     {
@@ -14434,6 +14924,42 @@
       "weight": 1.0
     },
     {
+      "source": "src_components_layout_atmosphericbackground",
+      "target": "src_store_interviewstore",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/components/layout/AtmosphericBackground.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "src_components_layout_navbar",
+      "target": "ref_react",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/components/layout/NavBar.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "src_components_layout_systemfooter",
+      "target": "ref_react",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/components/layout/SystemFooter.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
       "source": "src_features_assessment_assessmentpage",
       "target": "ref_react",
       "relation": "imports_from",
@@ -14443,6 +14969,30 @@
       "context": "import",
       "source_file": "src/features/assessment/AssessmentPage.tsx",
       "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_assessment_assessmentpage",
+      "target": "src_mock_resumeprofiles",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/features/assessment/AssessmentPage.tsx",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_assessment_assessmentpage",
+      "target": "src_components_layout_systemfooter",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/features/assessment/AssessmentPage.tsx",
+      "source_location": "L11",
       "weight": 1.0
     },
     {
@@ -14483,7 +15033,7 @@
     },
     {
       "source": "src_features_assessment_assessmentpage",
-      "target": "src_store_interviewstore",
+      "target": "src_types_setup",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -14491,6 +15041,30 @@
       "context": "import",
       "source_file": "src/features/assessment/AssessmentPage.tsx",
       "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_assessment_assessmentpage",
+      "target": "src_store_interviewstore",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/features/assessment/AssessmentPage.tsx",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_assessment_assessmentpage",
+      "target": "src_mock_sectors",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/features/assessment/AssessmentPage.tsx",
+      "source_location": "L9",
       "weight": 1.0
     },
     {
@@ -14503,6 +15077,18 @@
       "context": "import",
       "source_file": "src/features/interview/InterviewPage.tsx",
       "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_interview_interviewpage",
+      "target": "src_components_layout_systemfooter",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/features/interview/InterviewPage.tsx",
+      "source_location": "L10",
       "weight": 1.0
     },
     {
@@ -14602,6 +15188,30 @@
       "weight": 1.0
     },
     {
+      "source": "src_features_landing_landingpage",
+      "target": "src_components_layout_systemfooter",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/features/landing/LandingPage.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_landing_landingpage",
+      "target": "src_hooks_useassessment",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/features/landing/LandingPage.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
       "source": "src_features_report_reportpage",
       "target": "ref_react",
       "relation": "imports_from",
@@ -14611,6 +15221,18 @@
       "context": "import",
       "source_file": "src/features/report/ReportPage.tsx",
       "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_report_reportpage",
+      "target": "src_components_layout_systemfooter",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/features/report/ReportPage.tsx",
+      "source_location": "L10",
       "weight": 1.0
     },
     {
@@ -14719,6 +15341,18 @@
       "context": "import",
       "source_file": "src/features/skills/SkillsPage.tsx",
       "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_skills_skillspage",
+      "target": "src_components_layout_systemfooter",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/features/skills/SkillsPage.tsx",
+      "source_location": "L6",
       "weight": 1.0
     },
     {
@@ -14938,6 +15572,18 @@
       "weight": 1.0
     },
     {
+      "source": "src_mock_resumeprofiles",
+      "target": "src_types_setup",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/mock/resumeProfiles.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
       "source": "src_mock_roles",
       "target": "src_types_roles",
       "relation": "imports_from",
@@ -14947,6 +15593,18 @@
       "context": "import",
       "source_file": "src/mock/roles.ts",
       "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "src_mock_sectors",
+      "target": "src_types_setup",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/mock/sectors.ts",
+      "source_location": "L8",
       "weight": 1.0
     },
     {
@@ -15211,6 +15869,30 @@
       "context": "import",
       "source_file": "src/types/assessment.ts",
       "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "src_types_setup",
+      "target": "src_types_assessment",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/types/setup.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "src_types_setup",
+      "target": "src_types_roles",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/types/setup.ts",
+      "source_location": "L9",
       "weight": 1.0
     },
     {
@@ -18233,7 +18915,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/App.tsx",
-      "source_location": "L11",
+      "source_location": "L12",
       "weight": 1.0
     },
     {
@@ -18244,62 +18926,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/App.tsx",
-      "source_location": "L20",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_charts_adaptivepathdiagram",
-      "target": "src_components_charts_adaptivepathdiagram_edge",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/components/charts/AdaptivePathDiagram.tsx",
-      "source_location": "L13",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_charts_adaptivepathdiagram",
-      "target": "src_components_charts_adaptivepathdiagram_nodes",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/components/charts/AdaptivePathDiagram.tsx",
-      "source_location": "L19",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_charts_adaptivepathdiagram",
-      "target": "src_components_charts_adaptivepathdiagram_edges",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/components/charts/AdaptivePathDiagram.tsx",
-      "source_location": "L30",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_charts_adaptivepathdiagram",
-      "target": "src_components_charts_adaptivepathdiagram_node",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/components/charts/AdaptivePathDiagram.tsx",
-      "source_location": "L4",
-      "weight": 1.0
-    },
-    {
-      "source": "src_components_charts_adaptivepathdiagram",
-      "target": "src_components_charts_adaptivepathdiagram_tosvg",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/components/charts/AdaptivePathDiagram.tsx",
-      "source_location": "L45",
+      "source_location": "L21",
       "weight": 1.0
     },
     {
@@ -18310,7 +18937,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/charts/AdaptivePathDiagram.tsx",
-      "source_location": "L49",
+      "source_location": "L3",
       "weight": 1.0
     },
     {
@@ -18468,6 +19095,17 @@
       "weight": 1.0
     },
     {
+      "source": "src_components_layout_atmosphericbackground",
+      "target": "src_components_layout_atmosphericbackground_atmosphericbackground",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/components/layout/AtmosphericBackground.tsx",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
       "source": "src_components_layout_navbar",
       "target": "src_components_layout_navbar_navbar",
       "relation": "contains",
@@ -18479,19 +19117,30 @@
       "weight": 1.0
     },
     {
+      "source": "src_components_layout_systemfooter",
+      "target": "src_components_layout_systemfooter_systemfooter",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/components/layout/SystemFooter.tsx",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
       "source": "src_features_assessment_assessmentpage",
-      "target": "src_features_assessment_assessmentpage_durationoptions",
+      "target": "src_features_assessment_assessmentpage_sector_codes",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/features/assessment/AssessmentPage.tsx",
-      "source_location": "L16",
+      "source_location": "L14",
       "weight": 1.0
     },
     {
       "source": "src_features_assessment_assessmentpage",
-      "target": "src_features_assessment_assessmentpage_assessmentpage",
+      "target": "src_features_assessment_assessmentpage_sector_short_titles",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -18502,13 +19151,57 @@
     },
     {
       "source": "src_features_assessment_assessmentpage",
-      "target": "src_features_assessment_assessmentpage_leveloptions",
+      "target": "src_features_assessment_assessmentpage_level_options",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/features/assessment/AssessmentPage.tsx",
-      "source_location": "L9",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_assessment_assessmentpage",
+      "target": "src_features_assessment_assessmentpage_duration_options",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/assessment/AssessmentPage.tsx",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_assessment_assessmentpage",
+      "target": "src_features_assessment_assessmentpage_assessmentpage",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/assessment/AssessmentPage.tsx",
+      "source_location": "L72",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_assessment_assessmentpage_assessmentpage",
+      "target": "src_features_assessment_assessmentpage_assessmentpage_handlefilechange",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/assessment/AssessmentPage.tsx",
+      "source_location": "L142",
+      "weight": 1.0
+    },
+    {
+      "source": "src_features_assessment_assessmentpage_assessmentpage",
+      "target": "src_features_assessment_assessmentpage_assessmentpage_handledropzone",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/assessment/AssessmentPage.tsx",
+      "source_location": "L150",
       "weight": 1.0
     },
     {
@@ -18519,7 +19212,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/features/assessment/AssessmentPage.tsx",
-      "source_location": "L48",
+      "source_location": "L168",
       "weight": 1.0
     },
     {
@@ -18530,7 +19223,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/features/interview/InterviewPage.tsx",
-      "source_location": "L11",
+      "source_location": "L12",
       "weight": 1.0
     },
     {
@@ -18541,18 +19234,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/features/interview/InterviewPage.tsx",
-      "source_location": "L19",
-      "weight": 1.0
-    },
-    {
-      "source": "src_features_landing_landingpage",
-      "target": "src_features_landing_landingpage_mockskilldisplay",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/features/landing/LandingPage.tsx",
-      "source_location": "L17",
+      "source_location": "L20",
       "weight": 1.0
     },
     {
@@ -18563,7 +19245,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/features/landing/LandingPage.tsx",
-      "source_location": "L25",
+      "source_location": "L19",
       "weight": 1.0
     },
     {
@@ -18574,7 +19256,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/features/landing/LandingPage.tsx",
-      "source_location": "L6",
+      "source_location": "L8",
       "weight": 1.0
     },
     {
@@ -18585,7 +19267,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/features/report/ReportPage.tsx",
-      "source_location": "L11",
+      "source_location": "L12",
       "weight": 1.0
     },
     {
@@ -18596,7 +19278,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/features/report/ReportPage.tsx",
-      "source_location": "L19",
+      "source_location": "L20",
       "weight": 1.0
     },
     {
@@ -18607,7 +19289,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/features/report/ReportPage.tsx",
-      "source_location": "L633",
+      "source_location": "L635",
       "weight": 1.0
     },
     {
@@ -18662,7 +19344,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/features/skills/SkillsPage.tsx",
-      "source_location": "L15",
+      "source_location": "L16",
       "weight": 1.0
     },
     {
@@ -18673,7 +19355,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/features/skills/SkillsPage.tsx",
-      "source_location": "L7",
+      "source_location": "L8",
       "weight": 1.0
     },
     {
@@ -18996,6 +19678,39 @@
       "weight": 1.0
     },
     {
+      "source": "src_mock_resumeprofiles",
+      "target": "src_mock_resumeprofiles_resume_profiles",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/mock/resumeProfiles.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "src_mock_resumeprofiles",
+      "target": "src_mock_resumeprofiles_matchresumefile",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/mock/resumeProfiles.ts",
+      "source_location": "L70",
+      "weight": 1.0
+    },
+    {
+      "source": "src_mock_resumeprofiles",
+      "target": "src_mock_resumeprofiles_getresumeprofile",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/mock/resumeProfiles.ts",
+      "source_location": "L74",
+      "weight": 1.0
+    },
+    {
       "source": "src_mock_roles",
       "target": "src_mock_roles_mockroles",
       "relation": "contains",
@@ -19004,6 +19719,39 @@
       "confidence_score": 1.0,
       "source_file": "src/mock/roles.ts",
       "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "src_mock_sectors",
+      "target": "src_mock_sectors_sectors",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/mock/sectors.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "src_mock_sectors",
+      "target": "src_mock_sectors_competency_names",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/mock/sectors.ts",
+      "source_location": "L216",
+      "weight": 1.0
+    },
+    {
+      "source": "src_mock_sectors",
+      "target": "src_mock_sectors_getsectorbyid",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/mock/sectors.ts",
+      "source_location": "L224",
       "weight": 1.0
     },
     {
@@ -19576,6 +20324,94 @@
       "confidence_score": 1.0,
       "source_file": "src/types/roles.ts",
       "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "src_types_setup",
+      "target": "src_types_setup_sectorrole",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/types/setup.ts",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "src_types_setup",
+      "target": "src_types_setup_sector",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/types/setup.ts",
+      "source_location": "L24",
+      "weight": 1.0
+    },
+    {
+      "source": "src_types_setup",
+      "target": "src_types_setup_resumeprofile",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/types/setup.ts",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "src_types_setup",
+      "target": "src_types_setup_questionsource",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/types/setup.ts",
+      "source_location": "L52",
+      "weight": 1.0
+    },
+    {
+      "source": "src_types_setup",
+      "target": "src_types_setup_setupquestion",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/types/setup.ts",
+      "source_location": "L54",
+      "weight": 1.0
+    },
+    {
+      "source": "src_types_setup",
+      "target": "src_types_setup_questionset",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/types/setup.ts",
+      "source_location": "L63",
+      "weight": 1.0
+    },
+    {
+      "source": "src_types_setup",
+      "target": "src_types_setup_assessmentsetup",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/types/setup.ts",
+      "source_location": "L73",
+      "weight": 1.0
+    },
+    {
+      "source": "src_types_setup",
+      "target": "src_types_setup_scanstate",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/types/setup.ts",
+      "source_location": "L85",
       "weight": 1.0
     },
     {
@@ -22279,6 +23115,17 @@
       "weight": 1.0
     },
     {
+      "source": "src_mock_resumeprofiles_rationale_4",
+      "target": "src_mock_resumeprofiles",
+      "relation": "rationale_for",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/mock/resumeProfiles.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
       "source": "src_services_roleservice_gettargetroles",
       "target": "src_services_roleservice_maprole",
       "relation": "indirect_call",
@@ -22868,5 +23715,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "975890911f52c4f30ea53eb5643da517cbc49864"
+  "built_at_commit": "ef8b5a3f0fe734cf3cb374acf76dc5da75508b0d"
 }

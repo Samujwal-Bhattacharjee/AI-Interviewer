@@ -63,276 +63,233 @@ export function InterviewPage() {
     }
   }, [isComplete]);
 
-  const progress = totalQuestions > 0 ? ((questionIndex) / totalQuestions) * 100 : 0;
+  const progress = totalQuestions > 0 ? (questionIndex / totalQuestions) * 100 : 0;
 
   return (
-    <main className="page-shell" style={{ background: 'var(--c-paper)' }}>
-      {/* Progress bar */}
+    <main className="text-white min-h-screen selection:bg-cyan-500 selection:text-black relative flex flex-col justify-between">
+      {/* Top glowing progress bar */}
       <div
-        className="progress-strip"
-        style={{
-          position: 'fixed',
-          top: '56px',
-          left: 0,
-          right: 0,
-          zIndex: 90,
-        }}
+        className="fixed top-[52px] inset-x-0 h-1 bg-black/60 z-40 overflow-hidden"
         role="progressbar"
         aria-valuenow={questionIndex}
         aria-valuemin={0}
         aria-valuemax={totalQuestions}
-        aria-label={`Question ${questionIndex + 1} of ${totalQuestions}`}
       >
         <motion.div
-          className="progress-fill"
+          className="h-full bg-gradient-to-r from-blue-600 via-cyan-400 to-cyan-300 shadow-[0_0_12px_#00f0ff]"
           animate={{ width: `${progress}%` }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         />
       </div>
 
-      <div className="interview-layout">
-        {/* ── LEFT SIDEBAR ── */}
-        <aside className="interview-sidebar-left" aria-label="Session information">
-          <div className="session-block">
-            <span className="session-key">Session</span>
-            <span className="session-val">{sessionId ? sessionId.toUpperCase() : '—'}</span>
-          </div>
+      <div className="max-w-[1720px] mx-auto w-full px-4 lg:px-8 py-8 pt-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* ── LEFT SIDEBAR ── */}
+          <aside className="lg:col-span-3 space-y-6" aria-label="Session information">
+            <div className="glass-panel p-6 rounded-lg space-y-4 font-mono text-xs border-t-2 border-t-cyan-400/80">
+              <div className="border-b border-white/10 pb-3 flex items-center justify-between">
+                <span className="text-[10px] text-cyan-400 uppercase tracking-widest font-bold">
+                  ACTIVE SESSION
+                </span>
+                <span className="text-white font-bold tracking-wider">
+                  {sessionId ? sessionId.toUpperCase().slice(0, 12) : 'CALIBRATING'}
+                </span>
+              </div>
 
-          {role && (
-            <div className="session-block">
-              <span className="session-key">Target</span>
-              <span className="session-val" style={{ fontSize: 'var(--text-xs)', lineHeight: 1.4 }}>
-                {role.title.toUpperCase()}
-              </span>
-            </div>
-          )}
-
-          <div className="session-block">
-            <span className="session-key">Question</span>
-            <span className="session-val accent">
-              {padIndex(questionIndex + 1)} / {padIndex(totalQuestions)}
-            </span>
-          </div>
-
-          {currentCompetency && (
-            <div className="session-block">
-              <span className="session-key">Competency</span>
-              <span className="session-val accent">{currentCompetency.toUpperCase()}</span>
-            </div>
-          )}
-
-          {currentQuestion && (
-            <div className="session-block">
-              <span className="session-key">Difficulty</span>
-              <span
-                className={`session-val ${
-                  currentQuestion.difficulty === 'hard' || currentQuestion.difficulty === 'expert'
-                    ? 'hard'
-                    : currentQuestion.difficulty === 'medium'
-                    ? 'medium'
-                    : ''
-                }`}
-              >
-                {currentQuestion.difficulty.toUpperCase()}
-              </span>
-            </div>
-          )}
-
-          <div className="session-block">
-            <span className="session-key">Type</span>
-            <span className="session-val" style={{ color: 'var(--c-mid)', fontSize: 'var(--text-xs)' }}>
-              {currentQuestion?.questionType?.toUpperCase() ?? '—'}
-            </span>
-          </div>
-
-          {/* Adaptive state */}
-          <div style={{ marginTop: 'auto' }}>
-            <AdaptiveStatePanel
-              state={adaptiveState}
-              competencyName={currentCompetency ?? undefined}
-              questionIndex={questionIndex}
-            />
-          </div>
-        </aside>
-
-        {/* ── CENTER ── */}
-        <section className="interview-center" aria-label="Interview interaction area">
-          {/* Subtle visible system adaptation notification */}
-          <AnimatePresence>
-            {adaptationNotice && (
-              <motion.div
-                initial={{ opacity: 0, y: -10, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -8, scale: 0.96 }}
-                transition={{ duration: 0.35 }}
-                style={{
-                  padding: 'var(--space-3) var(--space-6)',
-                  background: 'var(--c-surface)',
-                  border: '1px solid var(--c-accent)',
-                  borderRadius: '2px',
-                  marginBottom: 'var(--space-4)',
-                  textAlign: 'center',
-                  boxShadow: '0 4px 20px rgba(26,92,228,0.12)',
-                  maxWidth: '460px',
-                  width: '100%',
-                }}
-              >
-                <div className="sys-label" style={{ color: 'var(--c-accent)', marginBottom: '2px' }}>
-                  ANSWER ANALYZED
+              {role && (
+                <div className="border-l-2 border-cyan-400 pl-3">
+                  <div className="text-[10px] text-slate-400 uppercase tracking-widest">TARGET ROLE</div>
+                  <div className="font-bold text-white tracking-wider text-sm mt-0.5">
+                    {role.title.toUpperCase()}
+                  </div>
                 </div>
-                <div style={{ fontFamily: 'var(--f-mono)', fontSize: 'var(--text-xs)', fontWeight: 600 }}>
-                  {(competencyNameMap[adaptationNotice.competencyName] ?? adaptationNotice.competencyName).toUpperCase()}
-                </div>
-                <div style={{ fontSize: 'var(--text-xs)', color: 'var(--c-ink)', marginTop: '4px', fontFamily: 'var(--f-mono)' }}>
-                  ESTIMATE: {adaptationNotice.previousEstimate} → <span style={{ color: 'var(--c-accent)', fontWeight: 700 }}>{adaptationNotice.newEstimate}</span>
-                </div>
-                <div style={{ fontSize: '11px', color: 'var(--c-mid)', marginTop: '2px', fontFamily: 'var(--f-mono)' }}>
-                  DIFFICULTY: {adaptationNotice.previousDifficulty.toUpperCase()} → <span style={{ color: 'var(--c-ink)', fontWeight: 700 }}>{adaptationNotice.nextDifficulty.toUpperCase()}</span>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              )}
 
-          {/* Question display */}
-          <div className="question-area">
-            <AnimatePresence mode="wait">
-              {currentQuestion ? (
-                <motion.div
-                  key={currentQuestion.id}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -16 }}
-                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--space-6)' }}
-                >
-                  {/* Question badges */}
-                  <div className="question-meta-row">
-                    <span className="question-badge">
-                      Q {padIndex(questionIndex + 1)}
-                    </span>
+              <div className="border-l-2 border-slate-700 pl-3">
+                <div className="text-[10px] text-slate-400 uppercase tracking-widest">QUESTION PROGRESS</div>
+                <div className="font-headline text-lg text-cyan-300 mt-0.5">
+                  {padIndex(questionIndex + 1)} <span className="text-slate-500 font-mono text-xs">/ {padIndex(totalQuestions)}</span>
+                </div>
+              </div>
+
+              {currentCompetency && (
+                <div className="border-l-2 border-cyan-400 pl-3">
+                  <div className="text-[10px] text-slate-400 uppercase tracking-widest">COMPETENCY</div>
+                  <div className="font-bold text-white text-sm mt-0.5">{currentCompetency.toUpperCase()}</div>
+                </div>
+              )}
+
+              {currentQuestion && (
+                <div className="border-l-2 border-slate-700 pl-3">
+                  <div className="text-[10px] text-slate-400 uppercase tracking-widest">DIFFICULTY LEVEL</div>
+                  <div className="mt-0.5 flex items-center space-x-2">
                     <span
-                      className={`question-badge ${
+                      className={`px-2 py-0.5 text-[10px] font-bold uppercase rounded ${
                         currentQuestion.difficulty === 'hard' || currentQuestion.difficulty === 'expert'
-                          ? 'hard'
+                          ? 'bg-amber-500/20 text-amber-300 border border-amber-400/40 shadow-[0_0_8px_rgba(245,158,11,0.3)]'
                           : currentQuestion.difficulty === 'medium'
-                          ? 'medium'
-                          : ''
+                          ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/40'
+                          : 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/40'
                       }`}
                     >
                       {currentQuestion.difficulty.toUpperCase()}
                     </span>
-                    {currentCompetency && (
-                      <span className="question-badge accent">{currentCompetency.toUpperCase()}</span>
-                    )}
+                    <span className="text-slate-400 text-[10px]">{currentQuestion.questionType?.toUpperCase()}</span>
                   </div>
+                </div>
+              )}
+            </div>
 
-                  {/* Question text */}
-                  <p className="question-text" aria-live="polite">
-                    {currentQuestion.question}
-                  </p>
+            {/* Adaptive state panel */}
+            <div className="glass-panel p-6 rounded-lg font-mono">
+              <AdaptiveStatePanel
+                state={adaptiveState}
+                competencyName={currentCompetency ?? undefined}
+                questionIndex={questionIndex}
+              />
+            </div>
+          </aside>
 
-                  {/* Expected concepts (shown after evaluation) */}
-                  <AnimatePresence>
-                    {voiceState === 'evaluating' && (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        style={{ textAlign: 'left', width: '100%', maxWidth: '500px' }}
-                      >
-                        <div className="sys-label" style={{ marginBottom: 'var(--space-3)' }}>
-                          Evaluating Coverage
-                        </div>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-2)' }}>
-                          {currentQuestion.expectedConcepts.map((concept, i) => (
-                            <motion.span
-                              key={concept}
-                              initial={{ opacity: 0, scale: 0.8 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              transition={{ delay: i * 0.08 }}
-                              style={{
-                                fontFamily: 'var(--f-mono)',
-                                fontSize: '10px',
-                                letterSpacing: '0.08em',
-                                padding: '3px 8px',
-                                border: '1px solid var(--c-rule)',
-                                color: 'var(--c-mid)',
-                              }}
-                            >
-                              {concept}
-                            </motion.span>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              ) : (
+          {/* ── CENTER INTERACTION AREA ── */}
+          <section className="lg:col-span-6 flex flex-col items-center space-y-6" aria-label="Interview interaction area">
+            {/* Adaptation notice banner */}
+            <AnimatePresence>
+              {adaptationNotice && (
                 <motion.div
-                  key="loading"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  style={{ textAlign: 'center' }}
+                  initial={{ opacity: 0, y: -10, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -8, scale: 0.96 }}
+                  transition={{ duration: 0.35 }}
+                  className="glass-card p-4 rounded-lg w-full text-center border-l-4 border-l-cyan-400 font-mono shadow-glow-cyan-sm"
                 >
-                  <div
-                    style={{
-                      fontFamily: 'var(--f-mono)',
-                      fontSize: 'var(--text-xs)',
-                      letterSpacing: '0.2em',
-                      color: 'var(--c-mid)',
-                    }}
-                    aria-live="polite"
-                  >
-                    {isComplete ? 'ASSESSMENT COMPLETE' : 'PREPARING ASSESSMENT...'}
+                  <div className="text-[10px] text-cyan-400 uppercase tracking-widest font-bold">
+                    [IRT ADAPTATION RECORDED]
+                  </div>
+                  <div className="text-sm font-bold text-white mt-1">
+                    {(competencyNameMap[adaptationNotice.competencyName] ?? adaptationNotice.competencyName).toUpperCase()}
+                  </div>
+                  <div className="text-xs text-slate-300 mt-1">
+                    ESTIMATE: {adaptationNotice.previousEstimate} →{' '}
+                    <span className="text-cyan-400 font-bold">{adaptationNotice.newEstimate}</span>
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
-          </div>
 
-          {/* Voice orb */}
-          <VoiceOrb
-            state={voiceState}
-            onStartListening={startListening}
-            onStopListening={stopListening}
-          />
+            {/* Question card */}
+            <div className="glass-panel p-8 sm:p-10 rounded-lg w-full relative overflow-hidden border-t-2 border-t-cyan-400 shadow-2xl">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 blur-2xl pointer-events-none" />
+              <AnimatePresence mode="wait">
+                {currentQuestion ? (
+                  <motion.div
+                    key={currentQuestion.id}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -16 }}
+                    transition={{ duration: 0.45 }}
+                    className="space-y-6"
+                  >
+                    <div className="flex items-center justify-between border-b border-white/10 pb-4 font-mono text-xs">
+                      <div className="flex items-center space-x-2">
+                        <span className="px-2 py-0.5 rounded bg-cyan-400 text-black font-bold uppercase shadow-glow-cyan-sm">
+                          Q {padIndex(questionIndex + 1)}
+                        </span>
+                        <span className="text-cyan-300 font-semibold uppercase">
+                          [{currentCompetency?.toUpperCase()}]
+                        </span>
+                      </div>
+                      <span className="text-slate-400 uppercase tracking-wider text-[11px]">
+                        24KHZ PCM LIVE
+                      </span>
+                    </div>
 
-          {/* Transcript preview */}
-          <AnimatePresence>
-            {transcript && voiceState !== 'idle' && (
-              <motion.div
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 0.5, y: 0 }}
-                exit={{ opacity: 0 }}
-                style={{
-                  maxWidth: '540px',
-                  width: '100%',
-                  padding: 'var(--space-4)',
-                  borderTop: '1px solid var(--c-rule)',
-                }}
-              >
-                <div className="sys-label" style={{ marginBottom: 'var(--space-2)' }}>Transcript</div>
-                <p
-                  style={{
-                    fontSize: 'var(--text-sm)',
-                    color: 'var(--c-mid)',
-                    lineHeight: 1.6,
-                    fontStyle: 'italic',
-                  }}
-                  aria-live="polite"
+                    <p className="font-body text-xl sm:text-2xl text-white font-medium leading-relaxed tracking-tight" aria-live="polite">
+                      {currentQuestion.question}
+                    </p>
+
+                    {/* Expected concepts when evaluating */}
+                    <AnimatePresence>
+                      {voiceState === 'evaluating' && (
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className="pt-4 border-t border-white/10"
+                        >
+                          <div className="text-[10px] font-mono text-cyan-400 uppercase tracking-widest mb-2 font-bold">
+                            EVALUATING COVERAGE &amp; TECHNICAL REASONING
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {currentQuestion.expectedConcepts.map((concept, i) => (
+                              <motion.span
+                                key={concept}
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: i * 0.08 }}
+                                className="px-2.5 py-1 rounded bg-black/60 border border-cyan-400/40 text-cyan-200 font-mono text-xs"
+                              >
+                                {concept}
+                              </motion.span>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="loading"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-center py-12"
+                  >
+                    <div className="font-mono text-sm tracking-widest text-cyan-400 animate-pulse uppercase">
+                      {isComplete ? 'ASSESSMENT COMPLETE — GENERATING REPORT' : 'CALIBRATING IRT ENGINE...'}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* Voice interaction orb & controls */}
+            <div className="w-full flex flex-col items-center">
+              <VoiceOrb
+                state={voiceState}
+                onStartListening={startListening}
+                onStopListening={stopListening}
+              />
+            </div>
+
+            {/* Live phonetic transcript card */}
+            <AnimatePresence>
+              {transcript && voiceState !== 'idle' && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  className="glass-card-subtle p-5 rounded-lg w-full max-w-xl font-mono text-xs border border-white/15"
                 >
-                  "{transcript}"
-                </p>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </section>
+                  <div className="text-[10px] text-slate-400 uppercase tracking-widest mb-1.5 flex items-center space-x-1.5">
+                    <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-ping" />
+                    <span>LIVE TRANSCRIPT</span>
+                  </div>
+                  <p className="text-slate-200 font-sans text-sm italic leading-relaxed">
+                    "{transcript}"
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </section>
 
-        {/* ── RIGHT SIDEBAR ── */}
-        <aside className="interview-sidebar-right" aria-label="Live skill estimates">
-          <LiveEstimatePanel estimates={skillEstimates} roleId={targetRoleId ?? 'role-001'} />
-        </aside>
+          {/* ── RIGHT SIDEBAR: LIVE ESTIMATES ── */}
+          <aside className="lg:col-span-3 space-y-6" aria-label="Live skill estimates">
+            <div className="glass-panel p-6 rounded-lg font-mono">
+              <LiveEstimatePanel estimates={skillEstimates} roleId={targetRoleId ?? 'role-001'} />
+            </div>
+          </aside>
+        </div>
       </div>
+
       <SystemFooter />
     </main>
   );

@@ -6,286 +6,124 @@ export function NavBar() {
   const [utcTime, setUtcTime] = useState('');
 
   useEffect(() => {
-    const updateTime = () => {
+    const updateClock = () => {
       const now = new Date();
-      const hours = String(now.getUTCHours()).padStart(2, '0');
-      const minutes = String(now.getUTCMinutes()).padStart(2, '0');
-      const seconds = String(now.getUTCSeconds()).padStart(2, '0');
-      setUtcTime(`${hours}:${minutes}:${seconds} UTC`);
+      const h = String(now.getUTCHours()).padStart(2, '0');
+      const m = String(now.getUTCMinutes()).padStart(2, '0');
+      const s = String(now.getUTCSeconds()).padStart(2, '0');
+      setUtcTime(`${h}:${m}:${s} UTC`);
     };
 
-    updateTime();
-    const timer = setInterval(updateTime, 1000);
-    return () => clearInterval(timer);
+    updateClock();
+    const interval = setInterval(updateClock, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
     <header
-      style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 100,
-        background: '#FFFFFF',
-        borderBottom: '1px solid #000000',
-        height: '52px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0 24px',
-        fontFamily: 'var(--f-mono)',
-        fontSize: '11px',
-      }}
+      className="sticky top-0 z-50 w-full border-b border-white/10 bg-slate-950/75 backdrop-blur-2xl px-4 lg:px-8 py-2.5 transition-all"
+      data-purpose="primary-navigation"
     >
-      {/* Left: Brand + Telemetry Flag */}
-      <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-        <Link
-          to="/"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            textDecoration: 'none',
-            color: '#000000',
-            paddingRight: '20px',
-            borderRight: '1px solid #000000',
-            height: '100%',
-          }}
-        >
-          <span
-            style={{
-              fontFamily: 'var(--f-sans)',
-              fontWeight: 900,
-              fontSize: '15px',
-              letterSpacing: '0.04em',
-              color: '#000000',
-            }}
-          >
-            ADAPTIVE
-          </span>
-          <span
-            style={{
-              fontFamily: 'var(--f-mono)',
-              fontSize: '10px',
-              letterSpacing: '0.08em',
-              color: '#666666',
-              fontWeight: 500,
-            }}
-          >
-            [sys.v0.1]
-          </span>
-        </Link>
-
-        {/* Engine status indicator */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '0 20px',
-            color: '#555555',
-            letterSpacing: '0.12em',
-            fontSize: '10px',
-            height: '100%',
-            borderRight: '1px solid #E5E7EB',
-          }}
-        >
-          <span
-            style={{
-              display: 'inline-block',
-              width: '6px',
-              height: '6px',
-              borderRadius: '50%',
-              background: '#0047FF',
-              boxShadow: '0 0 8px rgba(0, 71, 255, 0.6)',
-              animation: 'pulseDot 2s infinite ease-in-out',
-            }}
-          />
-          <span>IN_IF // VOICE_ENGINE_ACTV</span>
-        </div>
-      </div>
-
-      {/* Center / Nav Items */}
-      <nav style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-        <NavLink
-          to="/assess"
-          style={({ isActive }) => ({
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            padding: '0 20px',
-            height: '100%',
-            textDecoration: 'none',
-            color: isActive ? '#0047FF' : '#000000',
-            fontWeight: 600,
-            letterSpacing: '0.14em',
-            borderRight: '1px solid #E5E7EB',
-            transition: 'color 0.15s ease',
-          })}
-        >
-          {({ isActive }) => (
-            <>
-              {isActive && (
-                <span
-                  style={{
-                    display: 'inline-block',
-                    width: '6px',
-                    height: '6px',
-                    background: '#0047FF',
-                  }}
-                />
-              )}
-              ASSESS
-            </>
-          )}
-        </NavLink>
-
-        <NavLink
-          to="/skills"
-          style={({ isActive }) => ({
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            padding: '0 20px',
-            height: '100%',
-            textDecoration: 'none',
-            color: isActive ? '#0047FF' : '#000000',
-            fontWeight: 600,
-            letterSpacing: '0.14em',
-            borderRight: '1px solid #E5E7EB',
-            transition: 'color 0.15s ease',
-          })}
-        >
-          {({ isActive }) => (
-            <>
-              {isActive && (
-                <span
-                  style={{
-                    display: 'inline-block',
-                    width: '6px',
-                    height: '6px',
-                    background: '#0047FF',
-                  }}
-                />
-              )}
-              PROFILE
-            </>
-          )}
-        </NavLink>
-
-        <NavLink
-          to="/report"
-          style={({ isActive }) => ({
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            padding: '0 20px',
-            height: '100%',
-            textDecoration: 'none',
-            color: isActive ? '#0047FF' : '#000000',
-            fontWeight: 600,
-            letterSpacing: '0.14em',
-            borderRight: '1px solid #E5E7EB',
-            transition: 'color 0.15s ease',
-          })}
-        >
-          {({ isActive }) => (
-            <>
-              {isActive && (
-                <span
-                  style={{
-                    display: 'inline-block',
-                    width: '6px',
-                    height: '6px',
-                    background: '#0047FF',
-                  }}
-                />
-              )}
-              REPORTS
-            </>
-          )}
-        </NavLink>
-
-        <Link
-          to="/skills"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            padding: '0 20px',
-            height: '100%',
-            textDecoration: 'none',
-            color: '#000000',
-            fontWeight: 600,
-            letterSpacing: '0.14em',
-            borderRight: '1px solid #000000',
-            transition: 'color 0.15s ease',
-          }}
-          onMouseOver={(e) => (e.currentTarget.style.color = '#0047FF')}
-          onMouseOut={(e) => (e.currentTarget.style.color = '#000000')}
-        >
-          TELEMETRY
-        </Link>
-      </nav>
-
-      {/* Right: Sync Status & Primary Action Button */}
-      <div style={{ display: 'flex', alignItems: 'center', height: '100%', gap: '16px' }}>
-        {/* UTC Clock & Sync Status */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-end',
-            gap: '1px',
-            paddingRight: '12px',
-          }}
-        >
-          <span style={{ fontSize: '9px', color: '#666666', letterSpacing: '0.14em' }}>
-            SYNC STATUS: <strong style={{ color: '#000000' }}>OK</strong>
-          </span>
-          <span style={{ fontSize: '10px', color: '#000000', fontWeight: 600, letterSpacing: '0.08em' }}>
-            {utcTime || '18:40:19 UTC'}
+      <div className="max-w-[1720px] mx-auto flex flex-wrap items-center justify-between gap-4">
+        {/* Brand & Engine Stamp */}
+        <div className="flex items-center space-x-4">
+          <Link to="/" className="flex items-center space-x-2 group">
+            <span className="font-display font-black text-xl tracking-tighter text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.4)] group-hover:text-cyan-300 transition-colors">
+              ADAPTIVE
+            </span>
+            <span className="inline-flex items-center px-1.5 py-0.5 rounded border border-cyan-400/30 bg-cyan-950/40 text-cyan-400 text-[10px] font-mono tracking-wider font-semibold shadow-glow-cyan-sm">
+              [SYS.V0.1]
+            </span>
+          </Link>
+          <span className="hidden md:inline-block text-slate-500 text-xs tracking-widest font-mono">
+            IR_3P // VOICE_ENGINE_ACTV
           </span>
         </div>
 
-        {/* Start Assessment Button */}
-        <button
-          onClick={() => navigate('/assess')}
-          style={{
-            background: '#000000',
-            color: '#FFFFFF',
-            border: '1px solid #000000',
-            borderRadius: 0,
-            padding: '8px 18px',
-            fontFamily: 'var(--f-mono)',
-            fontSize: '11px',
-            fontWeight: 700,
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            transition: 'all 0.15s ease',
-          }}
-          onMouseOver={(e) => {
-            e.currentTarget.style.background = '#FFFFFF';
-            e.currentTarget.style.color = '#000000';
-          }}
-          onMouseOut={(e) => {
-            e.currentTarget.style.background = '#000000';
-            e.currentTarget.style.color = '#FFFFFF';
-          }}
-        >
-          START ASSESSMENT ▾
-        </button>
-      </div>
+        {/* Navigation Tabs */}
+        <nav className="flex items-center space-x-1 sm:space-x-2 text-xs font-mono uppercase tracking-wider">
+          <NavLink
+            to="/assess"
+            className={({ isActive }) =>
+              isActive
+                ? 'flex items-center space-x-1.5 px-3 py-1.5 text-cyan-300 font-semibold bg-cyan-950/60 border border-cyan-400/40 rounded shadow-glow-cyan-sm transition'
+                : 'flex items-center space-x-1.5 px-3 py-1.5 text-slate-400 hover:text-white hover:bg-white/5 rounded transition'
+            }
+          >
+            {({ isActive }) => (
+              <>
+                {isActive && (
+                  <span className="inline-block w-2 h-2 bg-cyan-400 shadow-[0_0_8px_#00f0ff] animate-pulse rounded-full" />
+                )}
+                <span>ASSESS</span>
+              </>
+            )}
+          </NavLink>
 
-      <style>{`
-        @keyframes pulseDot {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.4; transform: scale(0.85); }
-        }
-      `}</style>
+          <NavLink
+            to="/skills"
+            className={({ isActive }) =>
+              isActive
+                ? 'flex items-center space-x-1.5 px-3 py-1.5 text-cyan-300 font-semibold bg-cyan-950/60 border border-cyan-400/40 rounded shadow-glow-cyan-sm transition'
+                : 'px-3 py-1.5 text-slate-400 hover:text-white hover:bg-white/5 rounded transition'
+            }
+          >
+            {({ isActive }) => (
+              <>
+                {isActive && (
+                  <span className="inline-block w-2 h-2 bg-cyan-400 shadow-[0_0_8px_#00f0ff] animate-pulse rounded-full" />
+                )}
+                <span>PROFILE</span>
+              </>
+            )}
+          </NavLink>
+
+          <NavLink
+            to="/report"
+            className={({ isActive }) =>
+              isActive
+                ? 'flex items-center space-x-1.5 px-3 py-1.5 text-cyan-300 font-semibold bg-cyan-950/60 border border-cyan-400/40 rounded shadow-glow-cyan-sm transition'
+                : 'px-3 py-1.5 text-slate-400 hover:text-white hover:bg-white/5 rounded transition'
+            }
+          >
+            {({ isActive }) => (
+              <>
+                {isActive && (
+                  <span className="inline-block w-2 h-2 bg-cyan-400 shadow-[0_0_8px_#00f0ff] animate-pulse rounded-full" />
+                )}
+                <span>REPORTS</span>
+              </>
+            )}
+          </NavLink>
+
+          <a
+            href="#telemetry"
+            className="px-3 py-1.5 text-slate-400 hover:text-white hover:bg-white/5 rounded transition"
+          >
+            TELEMETRY
+          </a>
+        </nav>
+
+        {/* Sync Status & Header CTA */}
+        <div className="flex items-center space-x-5 text-xs font-mono">
+          <div className="hidden xl:flex flex-col text-right leading-tight">
+            <span className="text-[10px] text-slate-400 uppercase tracking-widest">
+              SYNC STATUS: 01
+            </span>
+            <span className="text-cyan-400 font-semibold tracking-wider">
+              {utcTime || '16:45:18 UTC'}
+            </span>
+          </div>
+          <button
+            onClick={() => navigate('/assess')}
+            className="relative group overflow-hidden px-4 py-2 bg-white text-black font-tech font-bold text-xs uppercase tracking-wider rounded border border-white hover:bg-cyan-300 hover:border-cyan-300 hover:text-black transition duration-200 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-glow-cyan flex items-center space-x-2"
+            type="button"
+          >
+            <span>START ASSESSMENT</span>
+            <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+          </button>
+        </div>
+      </div>
     </header>
   );
 }

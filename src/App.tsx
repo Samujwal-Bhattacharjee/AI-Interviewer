@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AtmosphericBackground } from './components/layout/AtmosphericBackground';
 import { NavBar } from './components/layout/NavBar';
 import { LandingPage } from './features/landing/LandingPage';
 import { AssessmentPage } from './features/assessment/AssessmentPage';
@@ -21,6 +22,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
+        <AtmosphericBackground />
         <NavBar />
         <Routes>
           <Route path="/" element={<LandingPage />} />

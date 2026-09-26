@@ -1,1086 +1,648 @@
-import { useState, useCallback, useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useCreateSession, useTargetRoles } from '../../hooks/useAssessment';
+import { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useCreateSession } from '../../hooks/useAssessment';
 import type { AssessmentDuration } from '../../types/assessment';
 import type { RoleLevel } from '../../types/roles';
-import type { ScanState, ResumeProfile } from '../../types/setup';
 import { useInterviewStore } from '../../store/interviewStore';
-import { SECTORS, COMPETENCY_NAMES } from '../../mock/sectors';
-import { matchResumeFile } from '../../mock/resumeProfiles';
-import { SystemFooter } from '../../components/layout/SystemFooter';
 
-// ── Sector codes ─────────────────────────────────────────────────────────────
-const SECTOR_CODES: Record<string, string> = {
-  technology: 'SYS_TECH',
-  finance: 'SYS_FIN',
-  healthcare: 'SYS_HLTH',
-  marketing: 'SYS_MKTG',
-  design: 'SYS_DES',
-};
-
-const SECTOR_SHORT_TITLES: Record<string, string> = {
-  technology: 'TECHNOLOGY',
-  finance: 'FINANCE',
-  healthcare: 'HEALTHCARE',
-  marketing: 'MARKETING & SALES',
-  design: 'DESIGN & PRODUCT',
-};
-
-// ── Static options ───────────────────────────────────────────────────────────
-const LEVEL_OPTIONS: { value: RoleLevel; label: string; desc: string }[] = [
-  { value: 'beginner', label: 'BEGINNER', desc: 'FOUNDATIONAL' },
-  { value: 'junior', label: 'JUNIOR', desc: 'ENTRY-LEVEL PROFESSIONAL' },
-  { value: 'intermediate', label: 'INTERMEDIATE', desc: 'INDEPENDENT PRACTITIONER' },
-  { value: 'senior', label: 'SENIOR', desc: 'ADVANCED PRACTITIONER' },
+const SECTORS_LIST = [
+  { id: 'technology', name: 'TECHNOLOGY', rolesCount: '3 roles', code: 'SYS_TECH' },
+  { id: 'finance', name: 'FINANCE', rolesCount: '3 roles', code: 'SYS_FIN' },
+  { id: 'healthcare', name: 'HEALTHCARE', rolesCount: '3 roles', code: 'SYS_HLTH' },
+  { id: 'marketing', name: 'MARKETING & SALES', rolesCount: '3 roles', code: 'SYS_MKTG' },
+  { id: 'design', name: 'DESIGN & PRODUCT', rolesCount: '3 roles', code: 'SYS_DES' },
 ];
 
-const DURATION_OPTIONS: {
-  value: AssessmentDuration;
-  label: string;
-  countLabel: string;
-  detail: string;
-  fidelity: string;
-  count: number;
-}[] = [
-  {
-    value: 'quick',
-    label: 'QUICK',
-    countLabel: '~5 adaptive questions',
-    detail: 'Voice interview (~10 min)',
-    fidelity: 'RAPID TRIAGE',
-    count: 5,
-  },
-  {
-    value: 'standard',
-    label: 'STANDARD',
-    countLabel: '~10 adaptive questions',
-    detail: 'Voice interview (~20 min)',
-    fidelity: 'RECOMMENDED FIDELITY',
-    count: 10,
-  },
-  {
-    value: 'deep',
-    label: 'DEEP',
-    countLabel: '~18 adaptive questions',
-    detail: 'Voice interview (~35 min)',
-    fidelity: 'HIGH PRECISION IRT',
-    count: 18,
-  },
+const ROLES_BY_SECTOR: Record<string, Array<{ id: string; title: string; skills: string; num: string }>> = {
+  technology: [
+    { id: 'role-sw-engineer', title: 'SOFTWARE\nENGINEER', skills: 'Python · Java · SQL', num: '#01' },
+    { id: 'role-data-engineer', title: 'DATA\nENGINEER', skills: 'Python · SQL · Spark', num: '#02' },
+    { id: 'role-ml-engineer', title: 'ML\nENGINEER', skills: 'Python · PyTorch · Scikit-learn', num: '#03' },
+  ],
+  finance: [
+    { id: 'role-quant-analyst', title: 'QUANTITATIVE\nANALYST', skills: 'Python · C++ · Stochastic Calculus', num: '#01' },
+    { id: 'role-fin-engineer', title: 'FINANCIAL\nENGINEER', skills: 'Risk Models · R · SQL', num: '#02' },
+    { id: 'role-algo-trader', title: 'ALGO\nTRADER', skills: 'Low Latency · C++ · Linux', num: '#03' },
+  ],
+  healthcare: [
+    { id: 'role-bio-engineer', title: 'BIOMEDICAL\nENGINEER', skills: 'Signal Processing · MATLAB · Python', num: '#01' },
+    { id: 'role-health-informatics', title: 'HEALTH\nINFORMATICS', skills: 'FHIR · HL7 · SQL · Python', num: '#02' },
+    { id: 'role-clinical-data', title: 'CLINICAL DATA\nSCIENTIST', skills: 'Biostatistics · R · Survival Analysis', num: '#03' },
+  ],
+  marketing: [
+    { id: 'role-growth-engineer', title: 'GROWTH\nENGINEER', skills: 'A/B Testing · SQL · TypeScript', num: '#01' },
+    { id: 'role-martech-lead', title: 'MARKETING TECH\nLEAD', skills: 'Segment · GA4 · ETL · Python', num: '#02' },
+    { id: 'role-revops-architect', title: 'REVOPS\nARCHITECT', skills: 'Salesforce · Data Modeling · API', num: '#03' },
+  ],
+  design: [
+    { id: 'role-product-designer', title: 'PRODUCT\nDESIGNER', skills: 'Figma · Prototyping · Systems', num: '#01' },
+    { id: 'role-design-technologist', title: 'DESIGN\nTECHNOLOGIST', skills: 'React · WebGL · CSS Architecture', num: '#02' },
+    { id: 'role-ux-researcher', title: 'UX\nRESEARCHER', skills: 'Cognitive Walkthrough · Usability', num: '#03' },
+  ],
+};
+
+const LEVELS: Array<{ id: RoleLevel; label: string; desc: string }> = [
+  { id: 'beginner', label: 'BEGINNER', desc: 'FOUNDATIONAL' },
+  { id: 'junior', label: 'JUNIOR', desc: 'ENTRY-LEVEL PROFESSIONAL' },
+  { id: 'intermediate', label: 'INTERMEDIATE', desc: 'INDEPENDENT PRACTITIONER' },
+  { id: 'senior', label: 'SENIOR', desc: 'ADVANCED PRACTITIONER' },
+];
+
+const DEFAULT_COMPETENCIES = [
+  { id: 'comp-dsa', name: 'ALGORITHMS & DS', score: 72 },
+  { id: 'comp-python', name: 'PYTHON SYSTEMS', score: 78 },
+  { id: 'comp-debugging', name: 'DEBUGGING', score: 70 },
+  { id: 'comp-sql', name: 'DATABASES & SQL', score: 65 },
+  { id: 'comp-system-design', name: 'SYSTEM DESIGN', score: 68 },
 ];
 
 export function AssessmentPage() {
   const navigate = useNavigate();
-  const location = useLocation();
   const createSession = useCreateSession();
   const setSession = useInterviewStore((s) => s.setSession);
   const reset = useInterviewStore((s) => s.reset);
 
-  // Backend real roles
-  const { data: backendRoles } = useTargetRoles();
-
-  // Reassessment check
-  const locationState = location.state as { focusCompetencies?: string[]; isReassessment?: boolean } | null;
-  const initialFocusIds = locationState?.focusCompetencies ?? [];
-
-  // Default selections matching Screenshot 2
-  const [selectedSectorId, setSelectedSectorId] = useState<string>('technology');
-  const [selectedRoleId, setSelectedRoleId] = useState<string>('role-sw-engineer');
-  const [level, setLevel] = useState<RoleLevel>('junior');
-  const [duration, setDuration] = useState<AssessmentDuration>('standard');
-  const [focusIds, setFocusIds] = useState<string[]>(initialFocusIds);
-  const [isRequirementsOpen, setIsRequirementsOpen] = useState<boolean>(true);
-
-  // Resume state
-  const [scanState, setScanState] = useState<ScanState>('idle');
-  const [resumeProfile, setResumeProfile] = useState<ResumeProfile | null>(null);
+  const [selectedSector, setSelectedSector] = useState('technology');
+  const [selectedRole, setSelectedRole] = useState('role-sw-engineer');
+  const [selectedLevel, setSelectedLevel] = useState<RoleLevel>('junior');
+  const [selectedDepth, setSelectedDepth] = useState<AssessmentDuration>('standard');
   const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedCompetencies, setSelectedCompetencies] = useState<string[]>(
+    DEFAULT_COMPETENCIES.map((c) => c.name)
+  );
 
-  // Active sector and role
-  const selectedSector = SECTORS.find((s) => s.id === selectedSectorId) ?? SECTORS[0];
-  const selectedRole = selectedSector.roles.find((r) => r.id === selectedRoleId) ?? selectedSector.roles[0];
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  // Competency targets (from role or default calibrated)
-  const defaultTargets: Record<string, number> = {
-    'comp-dsa': 72,
-    'comp-python': 78,
-    'comp-debugging': 76,
-    'comp-sql': 65,
-    'comp-system-design': 68,
+  // Derive roles for sector
+  const currentRoles = ROLES_BY_SECTOR[selectedSector] || ROLES_BY_SECTOR.technology;
+  const activeRoleObj = currentRoles.find((r) => r.id === selectedRole) || currentRoles[0];
+
+  const handleSectorChange = (sectorId: string) => {
+    setSelectedSector(sectorId);
+    const newRoles = ROLES_BY_SECTOR[sectorId] || ROLES_BY_SECTOR.technology;
+    if (newRoles.length > 0) {
+      setSelectedRole(newRoles[0].id);
+    }
   };
 
-  const currentTargets = selectedRole.targetLevels ?? defaultTargets;
-  const activeCompetencies = selectedRole.competencyIds ?? [
-    'comp-dsa',
-    'comp-python',
-    'comp-debugging',
-    'comp-sql',
-    'comp-system-design',
-  ];
+  const toggleCompetency = (name: string) => {
+    setSelectedCompetencies((prev) =>
+      prev.includes(name) ? prev.filter((c) => c !== name) : [...prev, name]
+    );
+  };
 
-  // Resume scanning handler
-  const runFakeScan = useCallback(async (fileName: string) => {
-    setScanState('uploading');
-    await new Promise((r) => setTimeout(r, 250));
-    setScanState('scanning');
-    await new Promise((r) => setTimeout(r, 300));
-    setScanState('extracting');
-    await new Promise((r) => setTimeout(r, 250));
-    setScanState('matching');
-    await new Promise((r) => setTimeout(r, 250));
-
-    const profile = matchResumeFile(fileName);
-    if (profile) {
-      setScanState('ready');
-      setResumeProfile(profile);
-    } else {
-      setScanState('error');
-    }
-  }, []);
-
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
-    setUploadedFileName(file.name);
-    setResumeProfile(null);
-    runFakeScan(file.name);
-  }
-
-  function handleDropZone(e: React.DragEvent<HTMLDivElement>) {
-    e.preventDefault();
-    const file = e.dataTransfer.files?.[0];
-    if (!file) return;
-    setUploadedFileName(file.name);
-    setResumeProfile(null);
-    runFakeScan(file.name);
-  }
-
-  function toggleFocus(id: string) {
-    if (focusIds.includes(id)) {
-      setFocusIds(focusIds.filter((f) => f !== id));
-    } else {
-      setFocusIds([...focusIds, id]);
+    if (file) {
+      setUploadedFileName(file.name);
     }
-  }
+  };
 
-  // Launch interview with working backend
-  async function handleBegin() {
+  const handleLaunchAssessment = async () => {
     reset();
 
-    // Map selected role to backend role ID
-    const backendRoleId =
-      backendRoles?.find((r) => r.id === selectedRole.id)?.id ??
-      (selectedRoleId.includes('data')
-        ? 'role-002'
-        : selectedRoleId.includes('ml')
-        ? 'role-001'
-        : 'role-001');
+    const estimatedQuestions = selectedDepth === 'quick' ? 5 : selectedDepth === 'deep' ? 15 : 10;
 
     try {
       const session = await createSession.mutateAsync({
-        targetRoleId: backendRoleId,
-        level,
-        focusCompetencies: focusIds.length > 0 ? focusIds : activeCompetencies,
-        duration,
+        targetRoleId: selectedRole,
+        level: selectedLevel,
+        focusCompetencies: selectedCompetencies,
+        duration: selectedDepth,
       });
 
-      const count = DURATION_OPTIONS.find((d) => d.value === duration)?.count ?? 10;
-      setSession(session.id, backendRoleId, count);
+      setSession(session.id, selectedRole, estimatedQuestions);
       navigate('/interview');
     } catch {
-      // Fallback: local session in case backend network hiccups
-      const fallbackSessionId = `sess-${Date.now()}`;
-      setSession(fallbackSessionId, backendRoleId, 10);
+      // Fallback local mock session if backend is offline
+      const mockSessionId = 'sess_' + Math.random().toString(36).substring(2, 9);
+      setSession(mockSessionId, selectedRole, estimatedQuestions);
       navigate('/interview');
     }
-  }
+  };
 
-  const durationObj = DURATION_OPTIONS.find((d) => d.value === duration) ?? DURATION_OPTIONS[1];
+  const activeSectorObj = SECTORS_LIST.find((s) => s.id === selectedSector) || SECTORS_LIST[0];
 
   return (
-    <div style={{ background: '#FFFFFF', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* ── MAIN 2-COLUMN LAYOUT ── */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '320px 1fr',
-          minHeight: 'calc(100vh - 52px - 56px)',
-          borderBottom: '1px solid #000000',
-        }}
-      >
-        {/* ── LEFT SIDEBAR — ASSESSMENT CONFIGURATION ── */}
-        <aside
-          style={{
-            borderRight: '1px solid #000000',
-            padding: '32px 24px',
-            background: '#FFFFFF',
-            position: 'sticky',
-            top: '52px',
-            height: 'calc(100vh - 52px)',
-            overflowY: 'auto',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            fontFamily: 'var(--f-mono)',
-          }}
-        >
-          <div>
-            {/* Breadcrumb */}
-            <div style={{ color: '#0047FF', fontSize: '10px', letterSpacing: '0.14em', fontWeight: 600, marginBottom: '6px' }}>
-              ASSESSMENT / CONFIGURE
+    <div className="text-slate-100 font-mono antialiased relative min-h-screen selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden bg-transparent z-10">
+      {/* Hidden file input */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileUpload}
+        accept=".pdf,.doc,.docx"
+        className="hidden"
+      />
+
+      {/* Main Viewport Layout */}
+      <main className="max-w-[1720px] mx-auto px-4 lg:px-8 py-8 pb-32">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* BEGIN: Left Calibration Sidebar */}
+          <aside className="lg:col-span-3 space-y-6" data-purpose="target-summary-sidebar">
+            {/* Header Banner */}
+            <div className="glass-panel p-6 rounded-lg relative overflow-hidden border-t-2 border-t-cyan-400/80">
+              <div className="text-[11px] font-mono uppercase tracking-widest text-cyan-400 mb-1 flex items-center space-x-2">
+                <span>ASSESSMENT</span>
+                <span className="text-slate-600">/</span>
+                <span className="text-cyan-300">CONFIGURE</span>
+              </div>
+              <h1 className="font-display font-black text-2xl lg:text-3xl text-white tracking-tight uppercase leading-none drop-shadow-md">
+                NEW<br />ASSESSMENT
+              </h1>
+              <p className="mt-2 text-xs text-slate-400 font-mono tracking-wide border-t border-white/10 pt-2">
+                CALIBRATION PROTOCOL V3.8
+              </p>
             </div>
 
-            {/* Title */}
-            <h1
-              style={{
-                fontFamily: 'var(--f-sans)',
-                fontSize: '38px',
-                fontWeight: 900,
-                lineHeight: 0.94,
-                letterSpacing: '-0.03em',
-                color: '#000000',
-                margin: '0 0 10px 0',
-                textTransform: 'uppercase',
-              }}
-            >
-              NEW<br />ASSESSMENT
-            </h1>
-
-            <div style={{ fontSize: '9px', color: '#666666', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '20px' }}>
-              CALIBRATION PROTOCOL V3.8
-            </div>
-
-            <div style={{ height: '1px', background: '#000000', marginBottom: '24px' }} />
-
-            {/* Spec items */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-              {/* TARGET */}
-              <div>
-                <div style={{ fontSize: '8px', color: '#777777', letterSpacing: '0.14em' }}>TARGET</div>
-                <div style={{ fontSize: '12px', fontWeight: 700, color: '#000000', marginTop: '2px', letterSpacing: '0.04em' }}>
-                  {selectedRole.title.toUpperCase()}
+            {/* Telemetry Parameters Summary Card */}
+            <div className="glass-panel p-6 rounded-lg space-y-5 text-xs font-mono">
+              {/* Param: Target */}
+              <div className="border-l-2 border-cyan-400 pl-3">
+                <div className="text-[10px] text-slate-400 uppercase tracking-widest">TARGET</div>
+                <div className="font-bold text-white tracking-wider text-sm mt-0.5">
+                  {activeRoleObj.title.replace('\n', ' ')}
                 </div>
-                <div style={{ fontSize: '9px', color: '#666666', letterSpacing: '0.08em' }}>
-                  {selectedSector.label.toUpperCase()}
+                <div className="text-[10px] text-cyan-400 uppercase">{activeSectorObj.name}</div>
+              </div>
+
+              {/* Param: Profile */}
+              <div className="border-l-2 border-slate-700 pl-3">
+                <div className="text-[10px] text-slate-400 uppercase tracking-widest">PROFILE</div>
+                <div className="font-semibold text-slate-200 mt-0.5">
+                  {uploadedFileName ? uploadedFileName.toUpperCase() : 'NO RESUME'}
                 </div>
               </div>
 
-              {/* PROFILE */}
-              <div>
-                <div style={{ fontSize: '8px', color: '#777777', letterSpacing: '0.14em' }}>PROFILE</div>
-                <div style={{ fontSize: '12px', fontWeight: 700, color: '#000000', marginTop: '2px', letterSpacing: '0.04em' }}>
-                  {resumeProfile ? resumeProfile.candidateName.toUpperCase() : 'NO RESUME'}
+              {/* Param: Level */}
+              <div className="border-l-2 border-cyan-400 pl-3">
+                <div className="text-[10px] text-slate-400 uppercase tracking-widest">LEVEL</div>
+                <div className="font-bold text-white uppercase mt-0.5">{selectedLevel}</div>
+                <div className="text-[10px] text-slate-400">
+                  {LEVELS.find((l) => l.id === selectedLevel)?.desc}
                 </div>
               </div>
 
-              {/* LEVEL */}
-              <div>
-                <div style={{ fontSize: '8px', color: '#777777', letterSpacing: '0.14em' }}>LEVEL</div>
-                <div style={{ fontSize: '12px', fontWeight: 700, color: '#000000', marginTop: '2px', letterSpacing: '0.04em' }}>
-                  {level.toUpperCase()}
+              {/* Param: Focus */}
+              <div className="border-l-2 border-slate-700 pl-3">
+                <div className="text-[10px] text-slate-400 uppercase tracking-widest">FOCUS</div>
+                <div className="font-semibold text-slate-200 mt-0.5">
+                  {selectedCompetencies.length === DEFAULT_COMPETENCIES.length
+                    ? 'ALL COMPETENCIES'
+                    : `${selectedCompetencies.length} SELECTED`}
                 </div>
-                <div style={{ fontSize: '9px', color: '#666666', letterSpacing: '0.08em' }}>
-                  {LEVEL_OPTIONS.find((l) => l.value === level)?.desc}
-                </div>
+                <div className="text-[10px] text-cyan-400/80">({DEFAULT_COMPETENCIES.length} TRACKED)</div>
               </div>
 
-              {/* FOCUS */}
-              <div>
-                <div style={{ fontSize: '8px', color: '#777777', letterSpacing: '0.14em' }}>FOCUS</div>
-                <div style={{ fontSize: '12px', fontWeight: 700, color: '#000000', marginTop: '2px', letterSpacing: '0.04em' }}>
-                  {focusIds.length > 0 ? `${focusIds.length} SELECTED` : 'ALL COMPETENCIES'}
+              {/* Param: Interview Type */}
+              <div className="border-l-2 border-slate-700 pl-3">
+                <div className="text-[10px] text-slate-400 uppercase tracking-widest">INTERVIEW</div>
+                <div className="font-semibold text-slate-200 mt-0.5">
+                  {selectedDepth === 'quick' ? '~5' : selectedDepth === 'deep' ? '~15' : '~10'} ADAPTIVE QUESTIONS
                 </div>
-                <div style={{ fontSize: '9px', color: '#666666', letterSpacing: '0.08em' }}>
-                  ({activeCompetencies.length} TRACKED)
-                </div>
+                <div className="text-[10px] text-slate-400">ROLE-BASED · IRT ENGINE</div>
               </div>
 
-              {/* INTERVIEW */}
-              <div>
-                <div style={{ fontSize: '8px', color: '#777777', letterSpacing: '0.14em' }}>INTERVIEW</div>
-                <div style={{ fontSize: '12px', fontWeight: 700, color: '#000000', marginTop: '2px', letterSpacing: '0.04em' }}>
-                  {durationObj.countLabel.toUpperCase()}
-                </div>
-                <div style={{ fontSize: '9px', color: '#666666', letterSpacing: '0.08em' }}>
-                  ROLE-BASED • IRT ENGINE
-                </div>
+              {/* Param: Voice Engine */}
+              <div className="border-l-2 border-cyan-400 pl-3">
+                <div className="text-[10px] text-slate-400 uppercase tracking-widest">VOICE</div>
+                <div className="font-bold text-cyan-300 mt-0.5">LIVE SPOKEN INTERVIEW</div>
+                <div className="text-[10px] text-slate-400">24KHZ PCM BI-DIRECTIONAL</div>
               </div>
 
-              {/* VOICE */}
-              <div>
-                <div style={{ fontSize: '8px', color: '#777777', letterSpacing: '0.14em' }}>VOICE</div>
-                <div style={{ fontSize: '12px', fontWeight: 700, color: '#000000', marginTop: '2px', letterSpacing: '0.04em' }}>
-                  LIVE SPOKEN INTERVIEW
+              {/* Target Score Baseline */}
+              <div className="pt-4 border-t border-white/10">
+                <div className="flex items-center justify-between text-[11px] mb-1.5">
+                  <span className="text-slate-300 tracking-wider flex items-center space-x-1">
+                    <span>TARGET REQUIREMENTS</span>
+                    <span className="text-cyan-400 text-xs">▼</span>
+                  </span>
                 </div>
-                <div style={{ fontSize: '9px', color: '#666666', letterSpacing: '0.08em' }}>
-                  24KHZ PCM BI-DIRECTIONAL
+                <div className="flex items-center justify-between text-xs font-mono bg-black/40 px-3 py-2 rounded border border-white/5">
+                  <span className="text-slate-400">ALGORITHMS &amp; DS BASELINE</span>
+                  <span className="text-white font-bold tracking-widest">
+                    <span className="text-cyan-400">72</span> / 100
+                  </span>
                 </div>
               </div>
             </div>
 
-            {/* Collapsible Target Requirements */}
-            <div style={{ marginTop: '24px', borderTop: '1px solid #E5E7EB', paddingTop: '16px' }}>
-              <div
-                onClick={() => setIsRequirementsOpen(!isRequirementsOpen)}
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  cursor: 'pointer',
-                  fontSize: '9px',
-                  fontWeight: 700,
-                  letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
-                  color: '#000000',
-                  marginBottom: '10px',
-                }}
-              >
-                <span>TARGET REQUIREMENTS</span>
-                <span style={{ color: '#0047FF' }}>{isRequirementsOpen ? '▾' : '▸'}</span>
-              </div>
-
-              {isRequirementsOpen && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', color: '#555555' }}>
-                    <span>ALGORITHMS & DS BASELINE</span>
-                    <span style={{ fontWeight: 700, color: '#000000' }}>72 / 100</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', color: '#555555' }}>
-                    <span>PYTHON SYSTEMS BASELINE</span>
-                    <span style={{ fontWeight: 700, color: '#000000' }}>78 / 100</span>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Bottom Engine Note */}
-          <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: '16px', marginTop: '20px' }}>
-            <div style={{ fontSize: '8px', color: '#888888', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-              ADAPTIVE PSYCHOMETRIC TEST ENGINE
-            </div>
-            <div style={{ fontSize: '8px', color: '#888888', letterSpacing: '0.08em', marginTop: '2px' }}>
+            {/* Sidebar Engine Tag */}
+            <div className="text-[10px] font-mono text-slate-500 uppercase tracking-widest px-2 leading-relaxed">
+              ADAPTIVE PSYCHOMETRIC TEST ENGINE<br />
               CALIBRATION: IRT 3-PARAMETER LOGISTIC
             </div>
-          </div>
-        </aside>
+          </aside>
+          {/* END: Left Calibration Sidebar */}
 
-        {/* ── RIGHT MAIN CONFIGURATION FORM ── */}
-        <main style={{ padding: '36px 48px', overflowY: 'auto', paddingBottom: '100px' }}>
-          {/* ── 01 SECTOR ── */}
-          <section style={{ marginBottom: '36px' }}>
-            <div
-              style={{
-                fontFamily: 'var(--f-mono)',
-                fontSize: '11px',
-                fontWeight: 700,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: '#000000',
-                marginBottom: '16px',
-                display: 'flex',
-                alignItems: 'baseline',
-                gap: '8px',
-              }}
-            >
-              <span style={{ color: '#0047FF' }}>01</span>
-              <span>SECTOR</span>
-              <span style={{ color: '#666666', fontWeight: 400 }}>— SELECT PRIMARY DOMAIN DISCIPLINE</span>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px' }}>
-              {SECTORS.map((sector) => {
-                const isSelected = sector.id === selectedSectorId;
-                const code = SECTOR_CODES[sector.id] ?? 'SYS_DISC';
-
-                return (
-                  <button
-                    key={sector.id}
-                    onClick={() => {
-                      setSelectedSectorId(sector.id);
-                      setSelectedRoleId(sector.roles[0]?.id ?? '');
-                    }}
-                    style={{
-                      border: isSelected ? '2px solid #000000' : '1px solid #000000',
-                      background: '#FFFFFF',
-                      padding: '16px 14px',
-                      textAlign: 'left',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      height: '110px',
-                      transition: 'all 0.15s ease',
-                      borderRadius: 0,
-                    }}
-                  >
-                    <div>
-                      <div
-                        style={{
-                          fontFamily: 'var(--f-sans)',
-                          fontSize: '13px',
-                          fontWeight: 900,
-                          letterSpacing: '0.02em',
-                          color: '#000000',
-                          lineHeight: 1.15,
-                        }}
-                      >
-                        {SECTOR_SHORT_TITLES[sector.id] ?? sector.label.toUpperCase()}
-                      </div>
-                      <div style={{ fontFamily: 'var(--f-mono)', fontSize: '9px', color: '#666666', marginTop: '4px' }}>
-                        3 roles
-                      </div>
-                    </div>
-
-                    <div
-                      style={{
-                        fontFamily: 'var(--f-mono)',
-                        fontSize: '9px',
-                        fontWeight: 600,
-                        letterSpacing: '0.08em',
-                        color: isSelected ? '#0047FF' : '#777777',
-                      }}
-                    >
-                      {isSelected ? `[SELECTED] ${code}` : code}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </section>
-
-          {/* ── 02 TARGET ROLE ── */}
-          <section style={{ marginBottom: '36px' }}>
-            <div
-              style={{
-                fontFamily: 'var(--f-mono)',
-                fontSize: '11px',
-                fontWeight: 700,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: '#000000',
-                marginBottom: '16px',
-                display: 'flex',
-                alignItems: 'baseline',
-                gap: '8px',
-              }}
-            >
-              <span style={{ color: '#0047FF' }}>02</span>
-              <span>TARGET ROLE</span>
-              <span style={{ color: '#666666', fontWeight: 400 }}>
-                [{selectedSector.label.toUpperCase()}]
-              </span>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-              {selectedSector.roles.map((role, idx) => {
-                const isSelected = role.id === selectedRoleId;
-
-                return (
-                  <button
-                    key={role.id}
-                    onClick={() => setSelectedRoleId(role.id)}
-                    style={{
-                      border: isSelected ? '2px solid #000000' : '1px solid #000000',
-                      background: '#FFFFFF',
-                      padding: '20px 18px',
-                      textAlign: 'left',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      height: '140px',
-                      borderRadius: 0,
-                      position: 'relative',
-                    }}
-                  >
-                    <div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                        <div
-                          style={{
-                            fontFamily: 'var(--f-sans)',
-                            fontSize: '16px',
-                            fontWeight: 900,
-                            letterSpacing: '0.02em',
-                            color: '#000000',
-                            lineHeight: 1.1,
-                          }}
-                        >
-                          {role.title.toUpperCase()}
-                        </div>
-                        {isSelected && (
-                          <span
-                            style={{
-                              background: '#000000',
-                              color: '#FFFFFF',
-                              fontFamily: 'var(--f-mono)',
-                              fontSize: '8px',
-                              fontWeight: 700,
-                              padding: '2px 6px',
-                              letterSpacing: '0.1em',
-                            }}
-                          >
-                            ACTIVE
-                          </span>
-                        )}
-                      </div>
-
-                      <div
-                        style={{
-                          fontFamily: 'var(--f-mono)',
-                          fontSize: '10px',
-                          color: '#555555',
-                          marginTop: '8px',
-                        }}
-                      >
-                        {role.technologies.slice(0, 3).join(' • ')}
-                      </div>
-                    </div>
-
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        fontFamily: 'var(--f-mono)',
-                        fontSize: '9px',
-                        color: '#666666',
-                        borderTop: '1px solid #EEEEEE',
-                        paddingTop: '8px',
-                      }}
-                    >
-                      <span>CORE ROLE #0{idx + 1}</span>
-                      <span>5 METRICS</span>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </section>
-
-          {/* ── 03 RESUME PROFILE OPTIONAL ── */}
-          <section style={{ marginBottom: '36px' }}>
-            <div
-              style={{
-                fontFamily: 'var(--f-mono)',
-                fontSize: '11px',
-                fontWeight: 700,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: '#000000',
-                marginBottom: '16px',
-                display: 'flex',
-                alignItems: 'baseline',
-                gap: '8px',
-              }}
-            >
-              <span style={{ color: '#0047FF' }}>03</span>
-              <span>RESUME PROFILE</span>
-              <span style={{ color: '#666666', fontWeight: 400 }}>OPTIONAL</span>
-            </div>
-
-            <div
-              onDrop={handleDropZone}
-              onDragOver={(e) => e.preventDefault()}
-              style={{
-                border: '1px solid #000000',
-                padding: '36px 32px 24px',
-                background: '#FFFFFF',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                textAlign: 'center',
-              }}
-            >
-              <div style={{ fontFamily: 'var(--f-mono)', fontSize: '9px', color: '#666666', letterSpacing: '0.14em' }}>
-                RESUME / PROFILE
-              </div>
-
-              <div
-                style={{
-                  fontFamily: 'var(--f-sans)',
-                  fontSize: '28px',
-                  fontWeight: 900,
-                  color: '#000000',
-                  margin: '8px 0 4px',
-                  letterSpacing: '-0.02em',
-                }}
-              >
-                {uploadedFileName ? uploadedFileName.toUpperCase() : 'DROP PROFILE HERE'}
-              </div>
-
-              <div style={{ fontFamily: 'var(--f-mono)', fontSize: '10px', color: '#777777', marginBottom: '20px' }}>
-                PDF / DOC / DOCX
-              </div>
-
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".pdf,.doc,.docx"
-                onChange={handleFileChange}
-                style={{ display: 'none' }}
-              />
-
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                style={{
-                  border: '1px solid #000000',
-                  background: '#FFFFFF',
-                  color: '#000000',
-                  padding: '8px 24px',
-                  fontFamily: 'var(--f-mono)',
-                  fontSize: '11px',
-                  fontWeight: 700,
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  cursor: 'pointer',
-                  borderRadius: 0,
-                  marginBottom: '28px',
-                  transition: 'all 0.15s ease',
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.background = '#000000';
-                  e.currentTarget.style.color = '#FFFFFF';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.background = '#FFFFFF';
-                  e.currentTarget.style.color = '#000000';
-                }}
-              >
-                SELECT FILE
-              </button>
-
-              {/* Status / Matched profile info */}
-              {resumeProfile && (
-                <div
-                  style={{
-                    width: '100%',
-                    border: '1px solid #0047FF',
-                    background: 'rgba(0, 71, 255, 0.05)',
-                    padding: '12px 16px',
-                    fontFamily: 'var(--f-mono)',
-                    fontSize: '10px',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    marginBottom: '16px',
-                  }}
-                >
-                  <span style={{ color: '#0047FF', fontWeight: 700 }}>
-                    MATCHED CANDIDATE: {resumeProfile.candidateName.toUpperCase()}
-                  </span>
-                  <span style={{ color: '#333333' }}>{resumeProfile.profileTitle}</span>
+          {/* BEGIN: Main Multi-Step Config Form Area */}
+          <section className="lg:col-span-9 space-y-10" data-purpose="assessment-configuration-flow">
+            {/* 01 SECTOR SELECTOR */}
+            <article className="space-y-4" data-purpose="step-01-sector">
+              <div className="flex items-center justify-between border-b border-white/15 pb-2">
+                <div className="flex items-baseline space-x-2">
+                  <span className="text-cyan-400 font-bold text-sm tracking-wider">01</span>
+                  <h2 className="text-white font-tech font-bold text-sm uppercase tracking-widest">
+                    SECTOR <span className="text-slate-500 font-mono text-xs font-normal">— SELECT PRIMARY DOMAIN DISCIPLINE</span>
+                  </h2>
                 </div>
-              )}
-
-              {/* Bottom line */}
-              <div
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  borderTop: '1px solid #EEEEEE',
-                  paddingTop: '16px',
-                  fontFamily: 'var(--f-mono)',
-                  fontSize: '10px',
-                }}
-              >
-                <div style={{ color: '#777777' }}>
-                  NO RESUME? <span style={{ color: '#000000' }}>ROLE-ONLY ASSESSMENT WILL BE USED</span>
-                </div>
-                <button
-                  onClick={() => {
-                    setResumeProfile(null);
-                    setUploadedFileName(null);
-                  }}
-                  style={{
-                    color: '#000000',
-                    fontWeight: 600,
-                    letterSpacing: '0.08em',
-                    textDecoration: 'none',
-                    cursor: 'pointer',
-                  }}
-                >
-                  CONTINUE WITHOUT RESUME →
-                </button>
-              </div>
-            </div>
-          </section>
-
-          {/* ── 04 SENIORITY LEVEL ── */}
-          <section style={{ marginBottom: '36px' }}>
-            <div
-              style={{
-                fontFamily: 'var(--f-mono)',
-                fontSize: '11px',
-                fontWeight: 700,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: '#000000',
-                marginBottom: '16px',
-                display: 'flex',
-                alignItems: 'baseline',
-                gap: '8px',
-              }}
-            >
-              <span style={{ color: '#0047FF' }}>04</span>
-              <span>SENIORITY LEVEL</span>
-            </div>
-
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)',
-                border: '1px solid #000000',
-              }}
-            >
-              {LEVEL_OPTIONS.map((lvl, idx) => {
-                const isSelected = lvl.value === level;
-
-                return (
-                  <button
-                    key={lvl.value}
-                    onClick={() => setLevel(lvl.value)}
-                    style={{
-                      borderRight: idx < 3 ? '1px solid #000000' : 'none',
-                      background: isSelected ? '#000000' : '#FFFFFF',
-                      color: isSelected ? '#FFFFFF' : '#000000',
-                      padding: '18px 16px',
-                      textAlign: 'center',
-                      cursor: 'pointer',
-                      borderRadius: 0,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '4px',
-                      alignItems: 'center',
-                      transition: 'all 0.15s ease',
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontFamily: 'var(--f-sans)',
-                        fontSize: '13px',
-                        fontWeight: 900,
-                        letterSpacing: '0.04em',
-                      }}
-                    >
-                      {lvl.label}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: 'var(--f-mono)',
-                        fontSize: '8px',
-                        letterSpacing: '0.08em',
-                        color: isSelected ? '#0047FF' : '#777777',
-                        fontWeight: 600,
-                      }}
-                    >
-                      {lvl.desc}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </section>
-
-          {/* ── 05 FOCUS COMPETENCIES ── */}
-          <section style={{ marginBottom: '36px' }}>
-            <div
-              style={{
-                fontFamily: 'var(--f-mono)',
-                fontSize: '11px',
-                fontWeight: 700,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: '#000000',
-                marginBottom: '16px',
-                display: 'flex',
-                alignItems: 'baseline',
-                gap: '8px',
-              }}
-            >
-              <span style={{ color: '#0047FF' }}>05</span>
-              <span>FOCUS COMPETENCIES</span>
-            </div>
-
-            {/* Pill tags */}
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '12px' }}>
-              {activeCompetencies.map((id) => {
-                const name = COMPETENCY_NAMES[id] ?? id.replace('comp-', '').toUpperCase();
-                const isSelected = focusIds.includes(id);
-
-                return (
-                  <button
-                    key={id}
-                    onClick={() => toggleFocus(id)}
-                    style={{
-                      background: '#000000',
-                      color: '#FFFFFF',
-                      border: '1px solid #000000',
-                      padding: '6px 14px',
-                      fontFamily: 'var(--f-mono)',
-                      fontSize: '10px',
-                      fontWeight: 700,
-                      letterSpacing: '0.1em',
-                      textTransform: 'uppercase',
-                      cursor: 'pointer',
-                      borderRadius: 0,
-                    }}
-                  >
-                    {name}
-                  </button>
-                );
-              })}
-            </div>
-
-            <div style={{ fontFamily: 'var(--f-mono)', fontSize: '9px', color: '#666666', marginBottom: '16px' }}>
-              ALL COMPETENCIES INCLUDED BY DEFAULT
-            </div>
-
-            {/* Competency Model Box */}
-            <div
-              style={{
-                border: '1px solid #000000',
-                padding: '24px 20px',
-                background: '#FFFFFF',
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: '20px',
-                  fontFamily: 'var(--f-mono)',
-                  fontSize: '10px',
-                  letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
-                }}
-              >
-                <span style={{ fontWeight: 700, color: '#000000' }}>
-                  COMPETENCY MODEL — {selectedRole.title.toUpperCase()}
-                </span>
-                <span style={{ color: '#0047FF', fontWeight: 700 }}>
-                  IRT CALIBRATED THRESHOLDS
-                </span>
               </div>
 
-              {/* 5 Bars */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                {activeCompetencies.map((id) => {
-                  const name = COMPETENCY_NAMES[id] ?? id.replace('comp-', '').toUpperCase();
-                  const target = currentTargets[id] ?? 70;
-
+              {/* Sector Cards Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                {SECTORS_LIST.map((sector) => {
+                  const isSelected = selectedSector === sector.id;
                   return (
-                    <div key={id}>
+                    <button
+                      key={sector.id}
+                      type="button"
+                      onClick={() => handleSectorChange(sector.id)}
+                      className={`${
+                        isSelected ? 'glass-card-active' : 'glass-card-interactive'
+                      } p-4 rounded-lg text-left relative group transition`}
+                    >
+                      {isSelected && (
+                        <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-cyan-400 rounded-full shadow-[0_0_8px_#00f0ff]" />
+                      )}
                       <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          fontFamily: 'var(--f-mono)',
-                          fontSize: '9px',
-                          fontWeight: 700,
-                          letterSpacing: '0.08em',
-                          textTransform: 'uppercase',
-                          marginBottom: '4px',
-                        }}
+                        className={`font-tech font-bold text-sm uppercase tracking-wide ${
+                          isSelected ? 'text-white' : 'text-slate-200 group-hover:text-white'
+                        }`}
                       >
-                        <span style={{ color: '#000000' }}>{name}</span>
-                        <span style={{ color: '#000000' }}>{target}</span>
+                        {sector.name}
                       </div>
-
+                      <div className="text-[11px] text-slate-400 font-mono mt-1">{sector.rolesCount}</div>
                       <div
-                        style={{
-                          height: '10px',
-                          background: '#EAEAEA',
-                          border: '1px solid #000000',
-                          overflow: 'hidden',
-                        }}
+                        className={`mt-4 pt-2 border-t ${
+                          isSelected ? 'border-cyan-500/20 text-cyan-400 font-semibold' : 'border-white/10 text-slate-500'
+                        } text-[10px] font-mono uppercase tracking-wider`}
                       >
-                        <motion.div
-                          initial={{ width: 0 }}
-                          animate={{ width: `${target}%` }}
-                          transition={{ duration: 0.8, ease: 'easeOut' }}
-                          style={{ height: '100%', background: '#0047FF' }}
-                        />
+                        {isSelected ? `[SELECTED]${sector.code}` : sector.code}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </article>
+
+            {/* 02 TARGET ROLE */}
+            <article className="space-y-4" data-purpose="step-02-target-role">
+              <div className="flex items-center justify-between border-b border-white/15 pb-2">
+                <div className="flex items-baseline space-x-2">
+                  <span className="text-cyan-400 font-bold text-sm tracking-wider">02</span>
+                  <h2 className="text-white font-tech font-bold text-sm uppercase tracking-widest">
+                    TARGET ROLE <span className="text-cyan-400/80 font-mono text-xs">[{activeSectorObj.name}]</span>
+                  </h2>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {currentRoles.map((role) => {
+                  const isActive = selectedRole === role.id;
+                  return (
+                    <div
+                      key={role.id}
+                      onClick={() => setSelectedRole(role.id)}
+                      className={`${
+                        isActive ? 'glass-card-active' : 'glass-card-interactive'
+                      } p-5 rounded-lg relative flex flex-col justify-between cursor-pointer group`}
+                    >
+                      <div>
+                        <div className="flex items-start justify-between">
+                          <h3
+                            className={`font-tech font-bold text-lg uppercase tracking-wider leading-tight ${
+                              isActive ? 'text-white' : 'text-slate-200 group-hover:text-white'
+                            }`}
+                          >
+                            {role.title.split('\n').map((line, idx) => (
+                              <span key={idx}>
+                                {line}
+                                <br />
+                              </span>
+                            ))}
+                          </h3>
+                          {isActive && (
+                            <span className="px-2 py-0.5 rounded bg-cyan-400 text-black text-[10px] font-mono font-bold uppercase tracking-wider shadow-glow-cyan-sm">
+                              ACTIVE
+                            </span>
+                          )}
+                        </div>
+                        <p className={`text-xs font-mono mt-3 ${isActive ? 'text-cyan-200/80' : 'text-slate-400'}`}>
+                          {role.skills}
+                        </p>
+                      </div>
+                      <div
+                        className={`mt-6 pt-3 border-t ${
+                          isActive ? 'border-cyan-400/20 text-slate-400' : 'border-white/10 text-slate-400'
+                        } flex items-center justify-between text-[10px] font-mono uppercase`}
+                      >
+                        <span>CORE ROLE {role.num}</span>
+                        <span className={isActive ? 'text-cyan-300' : ''}>5 METRICS</span>
                       </div>
                     </div>
                   );
                 })}
               </div>
-            </div>
-          </section>
+            </article>
 
-          {/* ── 06 ASSESSMENT DEPTH ── */}
-          <section style={{ marginBottom: '36px' }}>
-            <div
-              style={{
-                fontFamily: 'var(--f-mono)',
-                fontSize: '11px',
-                fontWeight: 700,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: '#000000',
-                marginBottom: '16px',
-                display: 'flex',
-                alignItems: 'baseline',
-                gap: '8px',
-              }}
-            >
-              <span style={{ color: '#0047FF' }}>06</span>
-              <span>ASSESSMENT DEPTH</span>
-              <span style={{ color: '#666666', fontWeight: 400 }}>
-                — SELECT ADAPTIVE QUESTION VOLUME
+            {/* 03 RESUME PROFILE */}
+            <article className="space-y-4" data-purpose="step-03-resume-profile">
+              <div className="flex items-center justify-between border-b border-white/15 pb-2">
+                <div className="flex items-baseline space-x-2">
+                  <span className="text-cyan-400 font-bold text-sm tracking-wider">03</span>
+                  <h2 className="text-white font-tech font-bold text-sm uppercase tracking-widest">
+                    RESUME PROFILE <span className="text-slate-500 font-mono text-xs font-normal">OPTIONAL</span>
+                  </h2>
+                </div>
+              </div>
+
+              {/* Dropzone Card */}
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                className="glass-panel p-8 rounded-lg border-2 border-dashed border-white/15 hover:border-cyan-400/50 transition-all duration-300 text-center relative overflow-hidden group cursor-pointer"
+              >
+                <div className="absolute inset-0 bg-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+                <div className="text-[11px] font-mono uppercase tracking-widest text-cyan-400 mb-1">
+                  RESUME / PROFILE
+                </div>
+                <h3 className="font-display font-black text-2xl sm:text-3xl text-white uppercase tracking-tight mb-2">
+                  {uploadedFileName ? uploadedFileName : 'DROP PROFILE HERE'}
+                </h3>
+                <p className="text-xs font-mono text-slate-400 uppercase tracking-widest mb-6">
+                  PDF / DOC / DOCX
+                </p>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    fileInputRef.current?.click();
+                  }}
+                  className="px-6 py-2.5 bg-black/60 hover:bg-cyan-950/80 text-white font-mono text-xs uppercase tracking-wider font-bold rounded border border-cyan-400/50 hover:border-cyan-400 transition-all shadow-glow-cyan-sm"
+                >
+                  {uploadedFileName ? 'CHANGE FILE' : 'SELECT FILE'}
+                </button>
+
+                {/* Bottom Skip Option */}
+                <div className="mt-8 pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono">
+                  <span className="text-slate-400">
+                    NO RESUME? <span className="text-slate-500 text-[10px]">ROLE-ONLY ASSESSMENT WILL BE USED</span>
+                  </span>
+                  <span className="text-cyan-400 hover:text-cyan-300 font-bold tracking-wider inline-flex items-center space-x-1 group-hover:translate-x-1 transition-transform">
+                    <span>CONTINUE WITHOUT RESUME</span>
+                    <span>→</span>
+                  </span>
+                </div>
+              </div>
+            </article>
+
+            {/* 04 SENIORITY LEVEL */}
+            <article className="space-y-4" data-purpose="step-04-seniority-level">
+              <div className="flex items-center justify-between border-b border-white/15 pb-2">
+                <div className="flex items-baseline space-x-2">
+                  <span className="text-cyan-400 font-bold text-sm tracking-wider">04</span>
+                  <h2 className="text-white font-tech font-bold text-sm uppercase tracking-widest">
+                    SENIORITY LEVEL
+                  </h2>
+                </div>
+              </div>
+
+              {/* 4-Segment Grid Control */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {LEVELS.map((lvl) => {
+                  const isActive = selectedLevel === lvl.id;
+                  return (
+                    <button
+                      key={lvl.id}
+                      type="button"
+                      onClick={() => setSelectedLevel(lvl.id)}
+                      className={`${
+                        isActive ? 'glass-card-active' : 'glass-card-interactive'
+                      } p-4 rounded-lg text-left relative overflow-hidden group`}
+                    >
+                      {isActive && (
+                        <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-cyan-400 rounded-full shadow-[0_0_8px_#00f0ff]" />
+                      )}
+                      <div
+                        className={`font-tech font-bold text-sm uppercase tracking-wider ${
+                          isActive ? 'text-white' : 'text-slate-200 group-hover:text-white'
+                        }`}
+                      >
+                        {lvl.label}
+                      </div>
+                      <div
+                        className={`text-[10px] font-mono mt-1 uppercase ${
+                          isActive ? 'text-cyan-300 font-semibold' : 'text-slate-400'
+                        }`}
+                      >
+                        {lvl.desc}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </article>
+
+            {/* 05 FOCUS COMPETENCIES */}
+            <article className="space-y-4" data-purpose="step-05-focus-competencies">
+              <div className="flex items-center justify-between border-b border-white/15 pb-2">
+                <div className="flex items-baseline space-x-2">
+                  <span className="text-cyan-400 font-bold text-sm tracking-wider">05</span>
+                  <h2 className="text-white font-tech font-bold text-sm uppercase tracking-widest">
+                    FOCUS COMPETENCIES
+                  </h2>
+                </div>
+              </div>
+
+              {/* Filter Badges */}
+              <div className="flex flex-wrap gap-2 pt-1">
+                {DEFAULT_COMPETENCIES.map((comp) => {
+                  const isChecked = selectedCompetencies.includes(comp.name);
+                  return (
+                    <button
+                      key={comp.id}
+                      type="button"
+                      onClick={() => toggleCompetency(comp.name)}
+                      className={`px-3.5 py-1.5 rounded font-mono text-xs font-bold uppercase tracking-wider transition ${
+                        isChecked
+                          ? 'bg-black/80 text-white border border-cyan-400/80 shadow-glow-cyan-sm'
+                          : 'bg-black/40 text-slate-400 border border-white/10 hover:border-white/30'
+                      }`}
+                    >
+                      {comp.name}
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="text-[11px] text-slate-400 font-mono uppercase tracking-wider">
+                ALL COMPETENCIES INCLUDED BY DEFAULT
+              </div>
+
+              {/* IRT Calibrated Thresholds Gauge Panel */}
+              <div className="glass-panel p-6 rounded-lg border border-cyan-500/20 space-y-4 mt-3">
+                <div className="flex items-center justify-between text-xs font-mono pb-2 border-b border-white/10">
+                  <span className="text-slate-300 font-semibold tracking-wider uppercase">
+                    COMPETENCY MODEL — {activeRoleObj.title.replace('\n', ' ')}
+                  </span>
+                  <span className="text-cyan-400 uppercase text-[10px] tracking-widest font-bold">
+                    IRT CALIBRATED THRESHOLDS
+                  </span>
+                </div>
+
+                {DEFAULT_COMPETENCIES.map((comp) => (
+                  <div key={comp.id} className="space-y-1">
+                    <div className="flex justify-between text-xs font-mono">
+                      <span className="text-slate-300 uppercase tracking-wider">{comp.name}</span>
+                      <span className="text-cyan-300 font-bold">{comp.score}</span>
+                    </div>
+                    <div className="h-2 w-full bg-slate-900/80 rounded overflow-hidden p-[1px] border border-white/10">
+                      <div
+                        className="h-full bg-gradient-to-r from-blue-600 to-cyan-400 rounded-sm shadow-[0_0_10px_#00f0ff]"
+                        style={{ width: `${comp.score}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </article>
+
+            {/* 06 ASSESSMENT DEPTH */}
+            <article className="space-y-4" data-purpose="step-06-assessment-depth">
+              <div className="flex items-center justify-between border-b border-white/15 pb-2">
+                <div className="flex items-baseline space-x-2">
+                  <span className="text-cyan-400 font-bold text-sm tracking-wider">06</span>
+                  <h2 className="text-white font-tech font-bold text-sm uppercase tracking-widest">
+                    ASSESSMENT DEPTH <span className="text-slate-500 font-mono text-xs font-normal">— SELECT ADAPTIVE QUESTION VOLUME</span>
+                  </h2>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Quick */}
+                <div
+                  onClick={() => setSelectedDepth('quick')}
+                  className={`${
+                    selectedDepth === 'quick' ? 'glass-card-active' : 'glass-card-interactive'
+                  } p-6 rounded-lg text-center flex flex-col justify-between cursor-pointer group`}
+                >
+                  <div>
+                    <h3 className="font-tech font-bold text-xl text-white uppercase tracking-wider">QUICK</h3>
+                    <div className="text-xs text-slate-300 font-mono mt-2">~5 adaptive questions</div>
+                    <div className="text-[11px] text-slate-400 font-mono mt-1">Voice interview (~10 min)</div>
+                  </div>
+                  <div className="mt-6 pt-3 border-t border-white/10 text-[10px] text-slate-400 font-mono uppercase tracking-widest">
+                    RAPID TRIAGE
+                  </div>
+                </div>
+
+                {/* Standard (Recommended) */}
+                <div
+                  onClick={() => setSelectedDepth('standard')}
+                  className={`${
+                    selectedDepth === 'standard' ? 'glass-card-active' : 'glass-card-interactive'
+                  } p-6 rounded-lg text-center flex flex-col justify-between cursor-pointer relative overflow-hidden group`}
+                >
+                  <div className="absolute -top-6 -right-6 w-16 h-16 bg-cyan-500/20 blur-xl pointer-events-none"></div>
+                  <div>
+                    <h3 className="font-tech font-bold text-xl text-white uppercase tracking-wider">STANDARD</h3>
+                    <div className="text-xs text-cyan-300 font-mono mt-2 font-semibold">~10 adaptive questions</div>
+                    <div className="text-[11px] text-cyan-200/90 font-mono mt-1">Voice interview (~20 min)</div>
+                  </div>
+                  <div className="mt-6 pt-3 border-t border-cyan-400/20 text-[10px] text-cyan-400 font-mono uppercase tracking-widest font-bold">
+                    RECOMMENDED FIDELITY
+                  </div>
+                </div>
+
+                {/* Deep */}
+                <div
+                  onClick={() => setSelectedDepth('deep')}
+                  className={`${
+                    selectedDepth === 'deep' ? 'glass-card-active' : 'glass-card-interactive'
+                  } p-6 rounded-lg text-center flex flex-col justify-between cursor-pointer group`}
+                >
+                  <div>
+                    <h3 className="font-tech font-bold text-xl text-white uppercase tracking-wider">DEEP</h3>
+                    <div className="text-xs text-slate-300 font-mono mt-2">~15 adaptive questions</div>
+                    <div className="text-[11px] text-slate-400 font-mono mt-1">Voice interview (~35 min)</div>
+                  </div>
+                  <div className="mt-6 pt-3 border-t border-white/10 text-[10px] text-slate-400 font-mono uppercase tracking-widest">
+                    HIGH PRECISION IRT
+                  </div>
+                </div>
+              </div>
+            </article>
+          </section>
+        </div>
+      </main>
+
+      {/* BEGIN: Sticky Interactive Launch Bar */}
+      <aside className="fixed bottom-0 inset-x-0 z-40 bg-black/85 backdrop-blur-2xl border-t border-cyan-400/20 px-4 lg:px-8 py-3.5 shadow-2xl" data-purpose="sticky-launch-bar">
+        <div className="max-w-[1720px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          {/* Primary Launch CTA */}
+          <button
+            onClick={handleLaunchAssessment}
+            className="w-full md:w-auto px-8 py-3 bg-white text-black font-tech font-bold text-sm tracking-wider uppercase rounded border border-white hover:bg-cyan-300 hover:border-cyan-300 hover:text-black transition-all duration-200 shadow-glow-cyan flex items-center justify-center space-x-2 group"
+            type="button"
+          >
+            <span>BEGIN ADAPTIVE INTERVIEW</span>
+            <span className="group-hover:translate-x-1 transition-transform">→</span>
+          </button>
+
+          {/* Active Selection Telemetry Recap */}
+          <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-6 gap-y-1 text-xs font-mono">
+            <div className="flex items-center space-x-2">
+              <span className="text-white font-bold tracking-wider">{activeRoleObj.title.replace('\n', ' ')}</span>
+              <span className="text-slate-600">·</span>
+              <span className="text-cyan-400 font-semibold">{selectedLevel.toUpperCase()}</span>
+            </div>
+            <span className="hidden sm:inline text-slate-700">|</span>
+            <div className="text-slate-300">
+              {selectedDepth === 'quick' ? '~5' : selectedDepth === 'deep' ? '~15' : '~10'} ADAPTIVE QUESTIONS{' '}
+              <span className="text-slate-600">·</span> VOICE INTERVIEW
+            </div>
+            <span className="hidden sm:inline text-slate-700">|</span>
+            <div className="text-cyan-400 font-bold uppercase tracking-wider">
+              ESTIMATED RUNTIME: {selectedDepth === 'quick' ? '~10' : selectedDepth === 'deep' ? '~35' : '~20'} MINUTES
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      {/* System Telemetry Footer */}
+      <footer className="border-t border-white/10 bg-black/95 pt-8 pb-20 px-4 lg:px-8 text-xs font-mono text-slate-400" data-purpose="system-telemetry-footer">
+        <div className="max-w-[1720px] mx-auto space-y-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pb-6 border-b border-white/5">
+            <div>
+              <span className="block text-[10px] text-slate-500 uppercase tracking-widest">SYSTEM LATENCY</span>
+              <span className="text-slate-200 font-semibold">180MS [p99]</span>
+            </div>
+            <div>
+              <span className="block text-[10px] text-slate-500 uppercase tracking-widest">PSYCHOMETRIC MODEL</span>
+              <span className="text-slate-200 font-semibold">IRT 3-PARAMETER</span>
+            </div>
+            <div>
+              <span className="block text-[10px] text-slate-500 uppercase tracking-widest">INTERVIEW ENGINE</span>
+              <span className="text-slate-200 font-semibold">VOICE-STREAM V2</span>
+            </div>
+            <div>
+              <span className="block text-[10px] text-slate-500 uppercase tracking-widest">SYSTEM STATUS</span>
+              <span className="text-cyan-400 font-semibold flex items-center space-x-1.5">
+                <span className="inline-block w-2 h-2 bg-cyan-400 shadow-[0_0_8px_#00f0ff] animate-pulse"></span>
+                <span>ALL ENGINES ONLINE</span>
               </span>
             </div>
+          </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-              {DURATION_OPTIONS.map((d) => {
-                const isSelected = d.value === duration;
-
-                return (
-                  <button
-                    key={d.value}
-                    onClick={() => setDuration(d.value)}
-                    style={{
-                      border: isSelected ? '2px solid #000000' : '1px solid #000000',
-                      background: '#FFFFFF',
-                      padding: '24px 20px',
-                      textAlign: 'center',
-                      cursor: 'pointer',
-                      borderRadius: 0,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      height: '140px',
-                    }}
-                  >
-                    <div>
-                      <div
-                        style={{
-                          fontFamily: 'var(--f-sans)',
-                          fontSize: '18px',
-                          fontWeight: 900,
-                          letterSpacing: '0.04em',
-                          color: '#000000',
-                        }}
-                      >
-                        {d.label}
-                      </div>
-                      <div
-                        style={{
-                          fontFamily: 'var(--f-mono)',
-                          fontSize: '10px',
-                          fontWeight: 600,
-                          color: isSelected ? '#0047FF' : '#555555',
-                          marginTop: '6px',
-                        }}
-                      >
-                        {d.countLabel}
-                      </div>
-                      <div
-                        style={{
-                          fontFamily: 'var(--f-mono)',
-                          fontSize: '9px',
-                          color: isSelected ? '#0047FF' : '#777777',
-                          marginTop: '2px',
-                        }}
-                      >
-                        {d.detail}
-                      </div>
-                    </div>
-
-                    <div
-                      style={{
-                        fontFamily: 'var(--f-mono)',
-                        fontSize: '9px',
-                        color: '#666666',
-                        letterSpacing: '0.1em',
-                        borderTop: '1px solid #EEEEEE',
-                        paddingTop: '8px',
-                      }}
-                    >
-                      {d.fidelity}
-                    </div>
-                  </button>
-                );
-              })}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
+            <div>
+              <span className="text-slate-300 font-bold">ADAPTIVE</span> © 2025 ADAPTIVE ASSESSMENT SYSTEMS INC. RAW BLOCK ARCHITECTURE.
             </div>
-          </section>
-        </main>
-      </div>
-
-      {/* ── BOTTOM DOCKED LAUNCH BAR ── */}
-      <div
-        style={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          zIndex: 90,
-          background: '#000000',
-          color: '#FFFFFF',
-          padding: '12px 24px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          fontFamily: 'var(--f-mono)',
-          fontSize: '11px',
-          borderTop: '1px solid #333333',
-        }}
-      >
-        {/* Launch Button */}
-        <button
-          onClick={handleBegin}
-          disabled={createSession.isPending}
-          style={{
-            background: '#FFFFFF',
-            color: '#000000',
-            border: '1px solid #FFFFFF',
-            padding: '10px 24px',
-            fontFamily: 'var(--f-mono)',
-            fontSize: '11px',
-            fontWeight: 800,
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            cursor: createSession.isPending ? 'not-allowed' : 'pointer',
-            borderRadius: 0,
-            transition: 'all 0.15s ease',
-          }}
-          onMouseOver={(e) => {
-            if (!createSession.isPending) {
-              e.currentTarget.style.background = '#000000';
-              e.currentTarget.style.color = '#FFFFFF';
-            }
-          }}
-          onMouseOut={(e) => {
-            if (!createSession.isPending) {
-              e.currentTarget.style.background = '#FFFFFF';
-              e.currentTarget.style.color = '#000000';
-            }
-          }}
-        >
-          {createSession.isPending ? 'INITIALIZING ENGINE...' : 'BEGIN ADAPTIVE INTERVIEW →'}
-        </button>
-
-        {/* Central Specs */}
-        <div style={{ display: 'flex', gap: '16px', alignItems: 'center', letterSpacing: '0.08em' }}>
-          <span>
-            {selectedRole.title.toUpperCase()} • {level.toUpperCase()}
-          </span>
-          <span style={{ color: '#555555' }}>|</span>
-          <span>
-            {durationObj.countLabel.toUpperCase()} • VOICE INTERVIEW
-          </span>
-          <span style={{ color: '#555555' }}>|</span>
-          <span style={{ color: '#0047FF', fontWeight: 700 }}>
-            ESTIMATED RUNTIME: ~{durationObj.value === 'quick' ? '10' : durationObj.value === 'deep' ? '35' : '20'} MINUTES
-          </span>
+            <div className="flex items-center space-x-6">
+              <a className="hover:text-cyan-400 transition" href="#telemetry">TELEMETRY</a>
+              <a className="hover:text-cyan-400 transition" href="#privacy">PRIVACY PROTOCOL</a>
+              <a className="hover:text-cyan-400 transition" href="#api">API DOCUMENTATION</a>
+            </div>
+          </div>
         </div>
-      </div>
-
-      {/* Global System Telemetry Footer */}
-      <SystemFooter />
+      </footer>
     </div>
   );
 }
