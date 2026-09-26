@@ -27,18 +27,52 @@ class Settings(BaseSettings):
     def effective_neo4j_user(self) -> str:
         return self.neo4j_user or self.neo4j_username or "neo4j"
 
-    # LLM — Groq (primary, no OpenAI dependency)
+    # LLM Configuration
+    llm_api_key: str = ""
+    llm_model: str = ""
+    llm_base_url: str = ""
+
+    # Legacy / Provider-specific LLM keys
     groq_api_key: str = ""
     groq_model: str = "llama-3.3-70b-versatile"
-
-    # Legacy OpenAI (kept for backward compat but NOT used at runtime)
     openai_api_key: str = ""
-    llm_model: str = ""  # unused — use groq_model
+
+    @property
+    def effective_llm_api_key(self) -> str:
+        return self.llm_api_key or self.groq_api_key or self.openai_api_key
+
+    @property
+    def effective_llm_base_url(self) -> str:
+        if self.llm_base_url:
+            return self.llm_base_url
+        if self.groq_api_key or (self.llm_api_key and self.llm_api_key.startswith("gsk_")):
+            return "https://api.groq.com/openai/v1"
+        return "https://api.openai.com/v1"
+
+    @property
+    def effective_llm_model(self) -> str:
+        if self.llm_model:
+            return self.llm_model
+        if "groq" in self.effective_llm_base_url:
+            return self.groq_model or "llama-3.3-70b-versatile"
+        return "gpt-4o-mini"
 
     # STT / TTS
     deepgram_api_key: str = ""
+    tts_api_key: str = ""
+    tts_model: str = ""
+    tts_voice: str = ""
     elevenlabs_api_key: str = ""
     elevenlabs_voice_id: str = ""
+
+    @property
+    def effective_tts_api_key(self) -> str:
+        return self.tts_api_key or self.elevenlabs_api_key or self.openai_api_key
+
+    @property
+    def effective_tts_voice(self) -> str:
+        return self.tts_voice or self.elevenlabs_voice_id or "21m00Tcm4TlvDq8ikWAM"
+
 
     # App
     secret_key: str = "changeme"

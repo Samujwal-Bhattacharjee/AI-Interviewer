@@ -34,6 +34,7 @@ class AssessmentSession(Base):
 
     question_count: Mapped[int] = mapped_column(Integer, nullable=False, default=10)
     current_question_index: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    current_question_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
 
     # Focus competencies for this session
     focus_competencies: Mapped[list[str]] = mapped_column(ARRAY(String), nullable=False, default=list)
