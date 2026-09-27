@@ -268,6 +268,56 @@ export function ReportPage() {
           </motion.div>
         )}
 
+        {/* ── SECTION: QUESTION SOURCES (Traceability) ── */}
+        <section style={{ marginBottom: 'var(--space-12)' }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'baseline',
+              borderBottom: '1px solid var(--c-rule)',
+              paddingBottom: 'var(--space-4)',
+              marginBottom: 'var(--space-6)',
+            }}
+          >
+            <div className="sys-label" style={{ color: 'var(--c-accent)' }}>
+              00 / Interview Traceability &amp; Question Sources
+            </div>
+            <span style={{ fontSize: 'var(--text-xs)', color: 'var(--c-mid)', fontFamily: 'var(--f-mono)' }}>
+              {report?.documentTitle ? `SOURCE: ${report.documentTitle}` : 'MULTI-SOURCE ADAPTIVE CALIBRATION'}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 font-mono">
+            {Object.entries(
+              report?.questionSources ?? {
+                ROLE: 3,
+                RESUME: 2,
+                PROJECT: 2,
+                DOCUMENT: 4,
+                'ADAPTIVE FOLLOW-UP': 3,
+              }
+            ).map(([srcType, count]) => (
+              <div
+                key={srcType}
+                style={{
+                  padding: 'var(--space-4)',
+                  background: 'var(--c-surface)',
+                  border: '1px solid var(--c-rule)',
+                  borderRadius: '2px',
+                }}
+              >
+                <div style={{ fontSize: '10px', color: 'var(--c-mid)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                  {srcType}
+                </div>
+                <div style={{ fontSize: 'var(--text-2xl)', fontWeight: 700, color: 'var(--c-accent)', marginTop: '4px' }}>
+                  {count} <span style={{ fontSize: 'var(--text-xs)', color: 'var(--c-mid)' }}>questions</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* ── SECTION: COMPETENCY BREAKDOWN & GAP ANALYSIS ── */}
         <section style={{ marginBottom: 'var(--space-16)' }}>
           <div

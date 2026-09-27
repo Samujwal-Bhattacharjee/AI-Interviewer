@@ -4,19 +4,79 @@
  * Primary: Streams ElevenLabs audio from FastAPI backend (POST /api/voice/tts).
  * Fallback: Uses browser SpeechSynthesis API if ElevenLabs API key is unconfigured.
  *
- * Provider-agnostic: Frontend plays the incoming audio without needing to know
- * API keys or provider details.
+ * Autoplay policy: The first speak() call after the "BEGIN ADAPTIVE INTERVIEW"
+ * button click happens within the user-gesture call stack, which browsers treat
+ * as an interaction event and will unlock audio. We additionally call
+ * unlockAudioContext() to ensure AudioContext is resumed if suspended.
  */
 import { apiClient, DATA_MODE } from '../lib/api';
 
+export interface VoiceEngineStatus {
+  provider: 'elevenlabs' | 'browser';
+  available: boolean;
+  voice_id: string;
+}
+
 class FrontendVoiceService {
   private activeAudio: HTMLAudioElement | null = null;
+  private audioUnlocked = false;
+  private engineStatus: VoiceEngineStatus | null = null;
+
+  /**
+   * Fetches voice engine status from the backend.
+   * Call once at interview start to update the UI badge.
+   */
+  async fetchEngineStatus(): Promise<VoiceEngineStatus> {
+    if (this.engineStatus) return this.engineStatus;
+    try {
+      if (DATA_MODE === 'api') {
+        const res = await apiClient.get<{ provider: string; available: boolean; voice_id: string }>('/api/voice/status');
+        this.engineStatus = {
+          provider: res.data.available ? 'elevenlabs' : 'browser',
+          available: res.data.available,
+          voice_id: res.data.voice_id,
+        };
+        return this.engineStatus;
+      }
+    } catch {
+      // Backend not available
+    }
+    this.engineStatus = { provider: 'browser', available: false, voice_id: '' };
+    return this.engineStatus;
+  }
+
+  /**
+   * Call this ONCE from the user-gesture click handler (BEGIN ADAPTIVE INTERVIEW).
+   * Creates a silent AudioContext to pre-unlock browser autoplay policy.
+   */
+  unlockAudioContext(): void {
+    if (this.audioUnlocked) return;
+    try {
+      // Play a 1-frame silent audio blob to unlock autoplay
+      const silent = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAA' +
+        'EAAQARAAAA+gAAABgAAADSAAAABAAA//8AAAD//wAA//8AAA==');
+      silent.volume = 0;
+      void silent.play().catch(() => {});
+      this.audioUnlocked = true;
+    } catch {
+      // Silently ignore
+    }
+    // Also resume any suspended AudioContext
+    try {
+      const ctx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+      if (ctx.state === 'suspended') {
+        void ctx.resume();
+      }
+    } catch {
+      // Browser doesn't support AudioContext — fine
+    }
+  }
 
   /**
    * Speaks the provided text out loud.
    * Resolves only when speech playback has fully completed.
    */
-  async speak(text: string): Promise<void> {
+  async speak(text: string, language?: string): Promise<void> {
     this.stop();
 
     const cleanText = text.trim();
@@ -24,23 +84,36 @@ class FrontendVoiceService {
 
     if (DATA_MODE === 'api') {
       try {
-        // Request audio from backend ElevenLabs TTS endpoint
-        const res = await apiClient.post<Blob>('/api/voice/tts', { text: cleanText }, {
-          responseType: 'blob',
-          timeout: 15000,
-        });
+        const res = await apiClient.post<Blob>(
+          '/api/voice/tts',
+          { text: cleanText, language: language || 'en-IN', language_code: language || 'en-IN' },
+          { responseType: 'blob', timeout: 25000 }
+        );
 
         if (res.data && res.data.size > 0) {
-          await this.playAudioBlob(res.data);
-          return;
+          // Check Content-Type — 503 errors can come back as JSON blobs
+          const contentType = (res.headers as Record<string, string>)['content-type'] ?? '';
+          if (contentType.includes('audio')) {
+            await this.playAudioBlob(res.data);
+            return;
+          }
+          // Non-audio response from backend — fall through to browser TTS
+          console.warn('[voiceService] TTS endpoint returned non-audio content-type:', contentType);
         }
-      } catch (err) {
-        console.warn('Backend ElevenLabs audio stream unavailable, using browser TTS fallback:', err);
+      } catch (err: unknown) {
+        const axiosErr = err as { response?: { status: number; data?: { detail?: string } }; message?: string };
+        if (axiosErr.response?.status === 503) {
+          console.info('[voiceService] ElevenLabs not configured (503). Using browser TTS fallback.');
+        } else if (axiosErr.response?.status === 400) {
+          console.warn('[voiceService] TTS request rejected (400):', axiosErr.response.data?.detail);
+        } else {
+          console.warn('[voiceService] TTS request failed, using browser fallback:', axiosErr.message);
+        }
       }
     }
 
     // Client-side fallback: Web Speech Synthesis
-    await this.speakBrowserFallback(cleanText);
+    await this.speakBrowserFallback(cleanText, language);
   }
 
   /**
@@ -58,18 +131,29 @@ class FrontendVoiceService {
         resolve();
       };
 
-      audio.onerror = () => {
+      audio.onerror = (e) => {
         URL.revokeObjectURL(url);
         this.activeAudio = null;
-        reject(new Error('Audio playback failed'));
+        const msg = `Audio playback error: ${audio.error?.message ?? String(e)}`;
+        console.error('[voiceService]', msg);
+        reject(new Error(msg));
       };
 
-      audio.play().catch((err) => {
+      audio.play().catch((err: Error) => {
         URL.revokeObjectURL(url);
         this.activeAudio = null;
-        // Autoplay restrictions or user gesture requirements
-        console.warn('Audio play() interrupted or blocked by browser policy:', err);
-        resolve(); // Continue without blocking the interview state machine
+        if (err.name === 'NotAllowedError') {
+          console.warn(
+            '[voiceService] Browser blocked audio autoplay (NotAllowedError). ' +
+            'Ensure unlockAudioContext() was called from a user gesture. ' +
+            'Falling back to browser TTS.'
+          );
+          // Don't reject — resolve so interview continues, then fallback
+          resolve();
+        } else {
+          console.warn('[voiceService] audio.play() failed:', err.message);
+          resolve(); // Continue interview even if audio fails
+        }
       });
     });
   }
@@ -77,26 +161,23 @@ class FrontendVoiceService {
   /**
    * Browser SpeechSynthesis fallback when backend ElevenLabs is offline.
    */
-  private speakBrowserFallback(text: string): Promise<void> {
+  private speakBrowserFallback(text: string, language?: string): Promise<void> {
     return new Promise<void>((resolve) => {
       if (!('speechSynthesis' in window)) {
-        console.warn('Browser does not support SpeechSynthesis');
+        console.warn('[voiceService] Browser does not support SpeechSynthesis. Skipping TTS.');
         resolve();
         return;
       }
 
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'en-US';
-      utterance.rate = 1.0;
+      utterance.lang = language || 'en-US';
+      utterance.rate = 0.95;
       utterance.pitch = 1.0;
 
-      utterance.onend = () => {
-        resolve();
-      };
-
+      utterance.onend = () => resolve();
       utterance.onerror = (e) => {
-        console.warn('SpeechSynthesis error:', e);
+        console.warn('[voiceService] SpeechSynthesis error:', e.error);
         resolve();
       };
 

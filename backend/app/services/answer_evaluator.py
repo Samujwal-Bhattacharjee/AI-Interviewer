@@ -27,6 +27,9 @@ class EvidenceItem:
     confidence: float
 
 
+from app.services.translation_service import translation_service
+
+
 @dataclass
 class EvaluationResult:
     correctness: float
@@ -35,6 +38,7 @@ class EvaluationResult:
     concepts_demonstrated: list[str]
     concepts_missing: list[str]
     evidence: list[EvidenceItem]
+    professional_english_translation: Optional[str] = None
 
 
 class AnswerEvaluator:
@@ -99,7 +103,7 @@ class AnswerEvaluator:
                     )
                     for ev in llm_eval.evidence
                 ]
-                return EvaluationResult(
+                result = EvaluationResult(
                     correctness=llm_eval.correctness,
                     assessment=llm_eval.assessment,
                     confidence=llm_eval.confidence,
@@ -107,11 +111,27 @@ class AnswerEvaluator:
                     concepts_missing=llm_eval.concepts_missing,
                     evidence=evidence,
                 )
+                result.professional_english_translation = translation_service.formulate_professional_english(
+                    transcript=cleaned_transcript,
+                    question_text=question or "",
+                    competency_name=competency_name or competency_id,
+                    concepts_demonstrated=result.concepts_demonstrated,
+                    concepts_missing=result.concepts_missing,
+                )
+                return result
             except Exception as e:
                 logger.warning(f"LLM evaluation failed, falling back to semantic matcher: {e}")
 
         # 2. Semantic evaluation fallback
-        return self._evaluate_semantic(cleaned_transcript, expected_concepts, competency_id)
+        result = self._evaluate_semantic(cleaned_transcript, expected_concepts, competency_id)
+        result.professional_english_translation = translation_service.formulate_professional_english(
+            transcript=cleaned_transcript,
+            question_text=question or "",
+            competency_name=competency_name or competency_id,
+            concepts_demonstrated=result.concepts_demonstrated,
+            concepts_missing=result.concepts_missing,
+        )
+        return result
 
     def _evaluate_semantic(
         self,

@@ -17,6 +17,8 @@ router = APIRouter(prefix="/api/voice", tags=["voice"])
 class TTSRequest(BaseModel):
     text: str
     voice_id: Optional[str] = None
+    language: Optional[str] = None
+    language_code: Optional[str] = None
 
 
 class VoiceStatusResponse(BaseModel):
@@ -54,10 +56,13 @@ async def generate_speech(body: TTSRequest):
         )
 
     try:
+        target_lang = body.language_code or body.language
         audio_stream = voice_service.generate_speech_stream(
             text=body.text,
             voice_id=body.voice_id,
+            language_code=target_lang,
         )
+
         return StreamingResponse(
             audio_stream,
             media_type="audio/mpeg",

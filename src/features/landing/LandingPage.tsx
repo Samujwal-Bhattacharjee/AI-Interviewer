@@ -43,20 +43,20 @@ export function LandingPage() {
                 An adaptive voice assessment that measures demonstrated ability against the role you're trying to reach.
               </p>
               {/* Dual Action CTAs */}
-              <div className="flex flex-wrap items-center gap-4 mb-16">
+              <div className="flex flex-wrap items-center gap-4 mb-16 font-tech">
                 <button
-                  onClick={() => navigate('/assess')}
-                  className="btn-brutal-primary px-8 py-4 text-base"
+                  onClick={() => navigate('/login')}
+                  className="btn-brutal-primary px-8 py-4 text-base cursor-pointer shadow-glow-cyan"
                   type="button"
                 >
-                  BEGIN ASSESSMENT →
+                  ENTER SYSTEM / LOGIN →
                 </button>
                 <button
-                  onClick={() => navigate('/skills')}
-                  className="btn-brutal-secondary px-8 py-4 text-base"
+                  onClick={() => navigate('/assess')}
+                  className="btn-brutal-secondary px-6 py-4 text-base cursor-pointer hover:border-cyan-400"
                   type="button"
                 >
-                  VIEW PROFILE
+                  CAREER ASSESSMENT
                 </button>
               </div>
             </div>

@@ -19,10 +19,16 @@ interface BackendQuestion {
   difficulty: string;
   question_type: string;
   question: string;
+  question_text?: string;
+  localized_question_text?: string | null;
+  question_language?: string;
   expected_concepts: string[];
   follow_up_prompts: string[];
   question_number: number;
   total_questions: number;
+  question_translated?: string | null;
+  target_language?: string;
+  interview_mode?: InterviewQuestion['interviewMode'];
 }
 
 // ── Type: backend SubmitAnswerResponse (snake_case) ───────────────────────────
@@ -43,6 +49,8 @@ interface BackendAttempt {
     evidence_analyzed: boolean;
     current_estimate: number;
   };
+  professional_english_translation?: string | null;
+  detected_language?: string | null;
 }
 
 export interface SubmitAnswerResult {
@@ -53,6 +61,7 @@ export interface SubmitAnswerResult {
   confidence: number;
   conceptsDemonstrated: string[];
   conceptsMissing: string[];
+  professionalEnglishTranslation?: string | null;
 }
 
 function mapQuestion(raw: BackendQuestion): InterviewQuestion {
@@ -60,19 +69,62 @@ function mapQuestion(raw: BackendQuestion): InterviewQuestion {
     id: raw.question_id,
     competencyId: raw.competency.id,
     difficulty: raw.difficulty as InterviewQuestion['difficulty'],
-    question: raw.question,
+    question: raw.question_text || raw.question,
+    questionText: raw.question_text || raw.question,
+    localizedQuestionText: raw.localized_question_text ?? raw.question_translated ?? null,
+    questionLanguage: raw.question_language || raw.target_language || 'en-IN',
+    questionTranslated: raw.localized_question_text ?? raw.question_translated,
+    targetLanguage: raw.target_language,
+    interviewMode: raw.interview_mode,
     questionType: raw.question_type as InterviewQuestion['questionType'],
     expectedConcepts: raw.expected_concepts,
     followUpPrompts: raw.follow_up_prompts,
   };
 }
 
+import { getActiveSessionConfig } from './assessmentService';
+import { mockDocumentQuestions } from '../mock/documentQuestions';
+
 export async function getNextQuestion(sessionId: string): Promise<InterviewQuestion> {
   if (DATA_MODE === 'mock') {
     await delay(800);
+    const sessionConfig = getActiveSessionConfig(sessionId);
+    const isDocAssessment = sessionConfig?.assessmentType === 'faculty_assigned' || !!sessionConfig?.documentTitle;
+
+    if (isDocAssessment) {
+      const allowedTopics = sessionConfig?.topics?.map((t) => t.toLowerCase()) ?? ['processes', 'threads', 'scheduling'];
+      const docQuestions = mockDocumentQuestions.filter((q) =>
+        allowedTopics.some((at) => q.topicId.toLowerCase().includes(at) || at.includes(q.topicId.toLowerCase()))
+      );
+      const pool = docQuestions.length > 0 ? docQuestions : mockDocumentQuestions;
+      const qItem = pool[mockQuestionIndex % pool.length];
+      mockQuestionIndex++;
+
+      return {
+        id: qItem.id,
+        competencyId: qItem.topicId === 'processes' ? 'comp-dsa' : qItem.topicId === 'threads' ? 'comp-python' : 'comp-debugging',
+        difficulty: qItem.difficulty,
+        question: qItem.question,
+        questionText: qItem.question,
+        questionType: 'technical',
+        expectedConcepts: qItem.expectedConcepts,
+        followUpPrompts: qItem.followUpPrompts,
+        sourceType: 'DOCUMENT',
+        documentId: qItem.documentId,
+        documentTitle: qItem.documentTitle,
+        topicId: qItem.topicId,
+        topicName: qItem.topicName,
+      };
+    }
+
     const question = mockQuestions[mockQuestionIndex % mockQuestions.length];
+    const sourceTypes = ['ROLE', 'RESUME', 'PROJECT', 'ADAPTIVE', 'FOLLOW_UP'] as const;
+    const taggedQuestion: InterviewQuestion = {
+      ...question,
+      sourceType: sourceTypes[mockQuestionIndex % sourceTypes.length],
+    };
     mockQuestionIndex++;
-    return question;
+    return taggedQuestion;
   }
   const res = await apiClient.post<BackendQuestion>(
     `/api/sessions/${sessionId}/next-question`
@@ -82,7 +134,7 @@ export async function getNextQuestion(sessionId: string): Promise<InterviewQuest
 
 export async function submitAnswer(
   sessionId: string,
-  answer: { questionId: string; answerText: string; transcript: string; durationMs?: number }
+  answer: { questionId: string; answerText: string; transcript: string; durationMs?: number; language?: string }
 ): Promise<SubmitAnswerResult> {
   if (DATA_MODE === 'mock') {
     await delay(1500);
@@ -101,6 +153,7 @@ export async function submitAnswer(
       evidence: mockEvidence,
       difficulty: 'medium',
       createdAt: new Date().toISOString(),
+      professionalEnglishTranslation: 'In professional engineering contexts: Specifically, the core architectural principle hinges on core concept and edge case handling.',
     };
     return {
       attempt,
@@ -116,6 +169,7 @@ export async function submitAnswer(
       confidence: 0.85,
       conceptsDemonstrated: ['core concept'],
       conceptsMissing: ['edge case'],
+      professionalEnglishTranslation: attempt.professionalEnglishTranslation,
     };
   }
 
@@ -123,6 +177,7 @@ export async function submitAnswer(
     question_id: answer.questionId,
     transcript: answer.transcript,
     duration_ms: answer.durationMs ?? 0,
+    language: answer.language ?? 'en-US',
   });
 
   const d = res.data;
@@ -143,6 +198,7 @@ export async function submitAnswer(
     evidence,
     difficulty: (d.adaptive_state.current_difficulty as QuestionAttempt['difficulty']) ?? 'medium',
     createdAt: new Date().toISOString(),
+    professionalEnglishTranslation: d.professional_english_translation,
   };
 
   const updatedSkillEstimates: SkillEstimate[] = (d.updated_skill_estimates ?? []).map((e) => ({
@@ -175,6 +231,7 @@ export async function submitAnswer(
     confidence: d.confidence ?? 0.85,
     conceptsDemonstrated: d.concepts_demonstrated ?? [],
     conceptsMissing: d.concepts_missing ?? [],
+    professionalEnglishTranslation: d.professional_english_translation,
   };
 }
 

@@ -4,16 +4,29 @@ export type Difficulty = 'foundational' | 'easy' | 'medium' | 'hard' | 'expert';
 export type QuestionType = 'conceptual' | 'analytical' | 'applied' | 'behavioral' | 'technical';
 export type AssessmentStatus = 'pending' | 'active' | 'completed' | 'abandoned';
 export type AssessmentDuration = 'quick' | 'standard' | 'deep';
+export type InterviewLanguageMode = 'native' | 'any_language' | 'standard' | 'mode1_native' | 'mode2_any_lang';
 
 export interface InterviewQuestion {
   id: string;
   competencyId: string;
   difficulty: Difficulty;
   question: string;
+  questionText?: string;
+  localizedQuestionText?: string | null;
+  questionLanguage?: string;
+  questionTranslated?: string | null;
+  targetLanguage?: string;
+  interviewMode?: InterviewLanguageMode;
   questionType: QuestionType;
   expectedConcepts: string[];
   followUpPrompts?: string[];
+  sourceType?: 'ROLE' | 'RESUME' | 'PROJECT' | 'DOCUMENT' | 'TOPIC' | 'FOLLOW_UP' | 'ADAPTIVE' | string;
+  documentId?: string;
+  documentTitle?: string;
+  topicId?: string;
+  topicName?: string;
 }
+
 
 export interface AnswerEvidence {
   concept: string;
@@ -32,6 +45,7 @@ export interface QuestionAttempt {
   evidence: AnswerEvidence[];
   difficulty: Difficulty;
   createdAt: string;
+  professionalEnglishTranslation?: string | null;
 }
 
 export interface AssessmentSession {
@@ -45,6 +59,16 @@ export interface AssessmentSession {
   currentQuestionIndex: number;
   focusCompetencies: string[];
   duration: AssessmentDuration;
+  interviewMode?: InterviewLanguageMode;
+  targetLanguage?: string;
+  language?: string;
+  questionLanguage?: string;
+  answerLanguage?: string;
+  assessmentType?: 'career' | 'faculty_assigned';
+  facultyAssessmentId?: string;
+  documentId?: string;
+  documentTitle?: string;
+  topics?: string[];
 }
 
 export interface AssessmentConfig {
@@ -52,6 +76,18 @@ export interface AssessmentConfig {
   level: string;
   focusCompetencies: string[];
   duration: AssessmentDuration;
+  /** Optional: matched resume profile id for personalized question weighting */
+  resumeProfileId?: string | null;
+  interviewMode?: InterviewLanguageMode;
+  targetLanguage?: string;
+  language?: string;
+  questionLanguage?: string;
+  answerLanguage?: string;
+  assessmentType?: 'career' | 'faculty_assigned';
+  facultyAssessmentId?: string;
+  documentId?: string;
+  documentTitle?: string;
+  topics?: string[];
 }
 
 export interface AdaptiveState {
@@ -104,4 +140,8 @@ export interface AssessmentReport {
   evidence?: ReportEvidence[];
   recommendations?: string[];
   resources?: ResourceRecommendations;
+  questionSources?: Record<string, number>;
+  documentTitle?: string;
+  topicsEvaluated?: string[];
+  assessmentType?: 'career' | 'faculty_assigned';
 }

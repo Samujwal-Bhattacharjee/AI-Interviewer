@@ -40,7 +40,7 @@ export interface ImprovementTask {
   observedWeakness: string;
   estimatedTime: string;
   successCriteria: string[];
-  priority: 'high' | 'medium' | 'low';
+  priority: 'critical' | 'high' | 'medium' | 'low';
   completed: boolean;
 }
 

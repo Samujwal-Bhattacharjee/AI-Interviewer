@@ -9,6 +9,7 @@ class SubmitAnswerRequest(BaseModel):
     question_id: str
     transcript: str
     duration_ms: int = 0
+    language: str | None = "en-US"
 
 
 class AnswerEvidenceSchema(BaseModel):
@@ -52,3 +53,5 @@ class SubmitAnswerResponse(BaseModel):
     evidence: list[AnswerEvidenceSchema]
     updated_skill_estimates: list[SkillEstimateSchema]
     adaptive_state: AdaptiveStateSchema
+    professional_english_translation: str | None = None
+    detected_language: str | None = None

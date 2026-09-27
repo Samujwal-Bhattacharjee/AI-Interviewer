@@ -47,9 +47,22 @@ def is_port_in_use(port: int = 5432, host: str = "127.0.0.1") -> bool:
         return s.connect_ex((host, port)) == 0
 
 
+def is_postgres_ready(bin_dir: Path, port: int = 5432, host: str = "127.0.0.1") -> bool:
+    pg_isready = bin_dir / ("pg_isready.exe" if os.name == "nt" else "pg_isready")
+    if pg_isready.exists():
+        res = subprocess.run(
+            [str(pg_isready), "-h", host, "-p", str(port)],
+            capture_output=True,
+        )
+        return res.returncode == 0
+    return is_port_in_use(port, host)
+
+
 def status_server(bin_dir: Path) -> None:
-    if is_port_in_use(5432):
-        print("PostgreSQL is currently RUNNING on localhost:5432.")
+    if is_postgres_ready(bin_dir):
+        print("PostgreSQL is currently RUNNING and ACCEPTING connections on localhost:5432.")
+    elif is_port_in_use(5432):
+        print("Port 5432 is occupied, but PostgreSQL is NOT responding to pg_isready.")
     else:
         print("PostgreSQL is NOT running on localhost:5432.")
 
@@ -63,15 +76,47 @@ def stop_server(bin_dir: Path) -> None:
         print(f"Data directory {PGDATA_DIR} or pg_ctl not found.")
 
 
+def ensure_db_and_user(bin_dir: Path) -> None:
+    createdb = bin_dir / ("createdb.exe" if os.name == "nt" else "createdb")
+    psql = bin_dir / ("psql.exe" if os.name == "nt" else "psql")
+
+    # Ensure database 'aiinterviewer' exists
+    subprocess.run(
+        [str(createdb), "-U", "postgres", "-p", "5432", "-h", "127.0.0.1", "aiinterviewer"],
+        capture_output=True,
+    )
+    # Ensure password for postgres user is 'password'
+    subprocess.run(
+        [
+            str(psql),
+            "-U", "postgres",
+            "-h", "127.0.0.1",
+            "-p", "5432",
+            "-d", "postgres",
+            "-c", "ALTER USER postgres WITH PASSWORD 'password';",
+        ],
+        capture_output=True,
+    )
+
+
 def start_server(bin_dir: Path) -> None:
-    if is_port_in_use(5432):
-        print("PostgreSQL is already active and listening on localhost:5432.")
+    if is_postgres_ready(bin_dir, 5432):
+        print("PostgreSQL is already active and accepting connections on localhost:5432.")
+        ensure_db_and_user(bin_dir)
+        print("Ensured database 'aiinterviewer' and postgres user are configured.")
         return
 
     initdb = bin_dir / ("initdb.exe" if os.name == "nt" else "initdb")
-    createdb = bin_dir / ("createdb.exe" if os.name == "nt" else "createdb")
     pg_ctl = bin_dir / ("pg_ctl.exe" if os.name == "nt" else "pg_ctl")
-    psql = bin_dir / ("psql.exe" if os.name == "nt" else "psql")
+
+    # Clean up stale postmaster.pid if port is not in use or process is dead
+    pid_file = PGDATA_DIR / "postmaster.pid"
+    if pid_file.exists() and not is_port_in_use(5432):
+        print("Removing stale postmaster.pid...")
+        try:
+            pid_file.unlink()
+        except OSError:
+            pass
 
     # 1. Initialize cluster if needed
     if not PGDATA_DIR.exists() or not (PGDATA_DIR / "PG_VERSION").exists():
@@ -89,25 +134,8 @@ def start_server(bin_dir: Path) -> None:
         check=True,
     )
 
-    # 3. Create database if not exists
-    print("Ensuring database 'aiinterviewer' exists...")
-    subprocess.run(
-        [str(createdb), "-U", "postgres", "-p", "5432", "-h", "127.0.0.1", "aiinterviewer"],
-        capture_output=True,
-    )
-
-    # 4. Set password for postgres user
-    subprocess.run(
-        [
-            str(psql),
-            "-U", "postgres",
-            "-h", "127.0.0.1",
-            "-p", "5432",
-            "-d", "aiinterviewer",
-            "-c", "ALTER USER postgres WITH PASSWORD 'password';",
-        ],
-        capture_output=True,
-    )
+    # 3. Ensure database and user
+    ensure_db_and_user(bin_dir)
 
     print("\nPostgreSQL is READY!")
     print("Connection string: postgresql+asyncpg://postgres:password@localhost:5432/aiinterviewer")

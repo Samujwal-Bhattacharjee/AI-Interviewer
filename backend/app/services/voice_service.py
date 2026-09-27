@@ -34,6 +34,7 @@ class VoiceService(ABC):
         self,
         text: str,
         voice_id: Optional[str] = None,
+        language_code: Optional[str] = None,
     ) -> AsyncIterator[bytes]:
         """Streams audio bytes for the given text."""
         pass
@@ -46,13 +47,13 @@ class ElevenLabsVoiceService(VoiceService):
         self,
         api_key: Optional[str] = None,
         default_voice_id: Optional[str] = None,
-        model_id: str = "eleven_turbo_v2_5",
+        model_id: Optional[str] = None,
     ):
         self._api_key = (api_key or settings.elevenlabs_api_key or settings.effective_tts_api_key).strip()
         self._default_voice_id = (
             default_voice_id or settings.elevenlabs_voice_id or settings.effective_tts_voice or DEFAULT_ELEVENLABS_VOICE_ID
         ).strip()
-        self._model_id = model_id
+        self._model_id = model_id or settings.tts_model or "eleven_turbo_v2_5"
         self._client = None
 
         if self._api_key and not self._api_key.startswith("sk-proj-"):
@@ -75,6 +76,7 @@ class ElevenLabsVoiceService(VoiceService):
         self,
         text: str,
         voice_id: Optional[str] = None,
+        language_code: Optional[str] = None,
     ) -> AsyncIterator[bytes]:
         if not self.is_available():
             raise RuntimeError("ElevenLabs API key is not configured.")
@@ -84,14 +86,30 @@ class ElevenLabsVoiceService(VoiceService):
         if not cleaned_text:
             raise ValueError("Cannot synthesize audio for empty text.")
 
+        # Extract 2-letter ISO language code (e.g. 'hi' from 'hi-IN')
+        lang = None
+        if language_code:
+            code = language_code.split("-")[0].strip().lower()
+            # ElevenLabs turbo v2.5 explicitly accepts language_code for en, hi, ta
+            # Other Indian languages (bn, gu, te, kn) are synthesized natively via script detection
+            if code in ("en", "hi", "ta"):
+                lang = code
+                logger.info(f"TTS LANGUAGE: {language_code} (ISO: {lang})")
+            else:
+                logger.info(f"TTS LANGUAGE: {language_code} (synthesizing via native script)")
+
+        kwargs = {
+            "voice_id": active_voice,
+            "text": cleaned_text,
+            "model_id": self._model_id,
+            "output_format": "mp3_44100_128",
+        }
+        if lang:
+            kwargs["language_code"] = lang
+
+
         try:
-            audio_stream = await self._client.text_to_speech.convert(
-                voice_id=active_voice,
-                text=cleaned_text,
-                model_id=self._model_id,
-                output_format="mp3_44100_128",
-            )
-            async for chunk in audio_stream:
+            async for chunk in self._client.text_to_speech.convert(**kwargs):
                 if chunk:
                     yield chunk
         except Exception as e:
@@ -119,6 +137,7 @@ class OpenAIVoiceService(VoiceService):
         self,
         text: str,
         voice_id: Optional[str] = None,
+        language_code: Optional[str] = None,
     ) -> AsyncIterator[bytes]:
         if not self.is_available():
             raise RuntimeError("OpenAI TTS API key is not configured.")
@@ -169,15 +188,17 @@ class UnifiedVoiceService(VoiceService):
         self,
         text: str,
         voice_id: Optional[str] = None,
+        language_code: Optional[str] = None,
     ) -> AsyncIterator[bytes]:
         if self.eleven.is_available():
-            async for chunk in self.eleven.generate_speech_stream(text, voice_id):
+            async for chunk in self.eleven.generate_speech_stream(text, voice_id, language_code):
                 yield chunk
         elif self.openai.is_available():
-            async for chunk in self.openai.generate_speech_stream(text, voice_id):
+            async for chunk in self.openai.generate_speech_stream(text, voice_id, language_code):
                 yield chunk
         else:
             raise RuntimeError("No TTS provider is configured.")
+
 
 
 # Global singleton instance

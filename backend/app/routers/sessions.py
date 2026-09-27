@@ -36,10 +36,18 @@ from app.services.answer_evaluator import AnswerEvaluator
 from app.services.skill_estimator import SkillEstimator
 from app.services.course_recommendation_service import course_recommendation_service
 from app.services.llm_service import llm_service
+from app.services.translation_service import translation_service
+from app.services.question_localization import question_localization_service
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/sessions", tags=["sessions"])
+
+
+@router.get("/languages")
+async def get_supported_languages():
+    """Returns available languages for Mode 1 (Interview in My Language) and Mode 2."""
+    return translation_service.get_supported_languages()
 
 
 @router.post("", response_model=AssessmentSessionSchema, status_code=201)
@@ -56,6 +64,8 @@ async def create_session(
         duration=body.duration,
         question_count=question_count,
         focus_competencies=body.focus_competencies,
+        interview_mode=getattr(body, "interviewMode", None) or getattr(body, "interview_mode", "native") or "native",
+        target_language=getattr(body, "language", None) or getattr(body, "target_language", "hi-IN") or "hi-IN",
         status="pending",
     )
     db.add(session)
@@ -91,7 +101,7 @@ async def start_session(session_id: str, db: AsyncSession = Depends(get_db)) -> 
 
     return StartSessionResponse(
         session=AssessmentSessionSchema.model_validate(session),
-        first_question=_question_to_response(first_question, session),
+        first_question=await _question_to_response(first_question, session),
         adaptive_state=_session_adaptive_state(session),
     )
 
@@ -112,7 +122,7 @@ async def next_question(session_id: str, db: AsyncSession = Depends(get_db)) -> 
     if not question:
         raise HTTPException(status_code=404, detail="No suitable question found")
 
-    return _question_to_response(question, session)
+    return await _question_to_response(question, session)
 
 
 @router.post("/{session_id}/answers", response_model=SubmitAnswerResponse)
@@ -229,6 +239,8 @@ async def submit_answer(
         ],
         updated_skill_estimates=[SkillEstimateSchema.model_validate(updated_estimate)],
         adaptive_state=_session_adaptive_state(session),
+        professional_english_translation=getattr(evaluation, "professional_english_translation", None),
+        detected_language=body.language or getattr(session, "target_language", "en-US"),
     )
 
 
@@ -422,19 +434,56 @@ def _session_adaptive_state(session: AssessmentSession) -> AdaptiveStateSchema:
     )
 
 
-def _question_to_response(question: Question, session: AssessmentSession) -> NextQuestionResponse:
+async def _question_to_response(question: Question, session: AssessmentSession) -> NextQuestionResponse:
     comp_name = question.competency.name if question.competency else question.competency_id
+    interview_mode = getattr(session, "interview_mode", "standard") or "standard"
+    target_lang = getattr(session, "target_language", "en-US") or "en-US"
+
+    question_translated = None
+    localized_question_text = None
+    question_lang = "en-IN" if target_lang in ("en-US", "en-IN") else target_lang
+
+    if interview_mode in ("mode1_native", "native") and target_lang not in ("en-US", "en-IN"):
+        try:
+            loc_result = await question_localization_service.localize_question(
+                question_id=question.id,
+                question_text=question.question,
+                target_language=target_lang,
+            )
+            localized_question_text = loc_result.get("localizedText")
+            question_lang = loc_result.get("language", target_lang)
+            question_translated = localized_question_text
+        except Exception as exc:
+            logger.error(f"Localization failed for {question.id} in {target_lang}: {exc}")
+            localized_question_text = f"TRANSLATION UNAVAILABLE: {question.question}"
+            question_translated = localized_question_text
+    else:
+        # Mode 2 (Answer in Any Language) or English: Question is canonical English
+        localized_question_text = question.question
+        question_lang = "en-IN" if target_lang == "en-IN" else "en-US"
+
+    logger.info(f"QUESTION LANGUAGE: {question_lang}")
+    logger.info(f"QUESTION ORIGINAL: {question.question}")
+    logger.info(f"QUESTION LOCALIZED: {localized_question_text}")
+
     return NextQuestionResponse(
         question_id=question.id,
         competency=CompetencyRefSchema(id=question.competency_id, name=comp_name),
         difficulty=question.difficulty,
         question_type=question.question_type,
         question=question.question,
+        question_text=question.question,
+        localized_question_text=localized_question_text,
+        question_language=question_lang,
         expected_concepts=question.expected_concepts,
         follow_up_prompts=question.follow_up_prompts,
         question_number=session.current_question_index + 1,
         total_questions=session.question_count,
+        question_translated=question_translated,
+        target_language=target_lang,
+        interview_mode=interview_mode,
     )
+
 
 
 def _evidence_to_schema(ev) -> "AnswerEvidenceSchema":

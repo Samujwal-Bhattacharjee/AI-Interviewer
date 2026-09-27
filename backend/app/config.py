@@ -2,11 +2,15 @@
 app/config.py — Application configuration loaded from environment variables.
 All secrets live here. Frontend never sees these values.
 """
+from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+_BACKEND_DIR = Path(__file__).resolve().parent.parent
+_ENV_FILE = str(_BACKEND_DIR / ".env")
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+    model_config = SettingsConfigDict(env_file=(_ENV_FILE, ".env"), env_file_encoding="utf-8", extra="ignore")
 
     # Database
     database_url: str = "postgresql+asyncpg://postgres:password@localhost:5432/aiinterviewer"
@@ -45,7 +49,10 @@ class Settings(BaseSettings):
     def effective_llm_base_url(self) -> str:
         if self.llm_base_url:
             return self.llm_base_url
-        if self.groq_api_key or (self.llm_api_key and self.llm_api_key.startswith("gsk_")):
+        key = self.effective_llm_api_key
+        if key.startswith("xai-"):
+            return "https://api.x.ai/v1"
+        if key.startswith("gsk_") or (self.groq_api_key and not self.groq_api_key.startswith("xai-")):
             return "https://api.groq.com/openai/v1"
         return "https://api.openai.com/v1"
 
@@ -53,6 +60,9 @@ class Settings(BaseSettings):
     def effective_llm_model(self) -> str:
         if self.llm_model:
             return self.llm_model
+        key = self.effective_llm_api_key
+        if key.startswith("xai-"):
+            return "grok-2-latest"
         if "groq" in self.effective_llm_base_url:
             return self.groq_model or "llama-3.3-70b-versatile"
         return "gpt-4o-mini"
