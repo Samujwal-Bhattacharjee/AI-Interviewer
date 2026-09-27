@@ -31,9 +31,13 @@ class AssessmentSession(Base):
     status: Mapped[str] = mapped_column(String(16), nullable=False, default="pending")
     # duration: quick | standard | deep
     duration: Mapped[str] = mapped_column(String(16), nullable=False, default="standard")
+    # Multilingual / Adaptive Modes: standard | mode1_native | mode2_any_lang
+    interview_mode: Mapped[str] = mapped_column(String(32), nullable=False, default="standard")
+    target_language: Mapped[str] = mapped_column(String(16), nullable=False, default="en-US")
 
     question_count: Mapped[int] = mapped_column(Integer, nullable=False, default=10)
     current_question_index: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    current_question_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
 
     # Focus competencies for this session
     focus_competencies: Mapped[list[str]] = mapped_column(ARRAY(String), nullable=False, default=list)

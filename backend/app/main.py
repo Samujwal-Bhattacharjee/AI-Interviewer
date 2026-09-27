@@ -18,6 +18,7 @@ import sys
 from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 
+from sqlalchemy import text
 from app.config import settings
 from app.database import Base, engine
 from app.routers import roles, sessions, users, reassess, voice
@@ -25,21 +26,47 @@ from app.services.graphiti_service import graphiti_service
 from app.ws.session_ws import handle_session_ws
 
 
-def _format_db_error_banner(db_url: str) -> str:
-    """Formats a concise, actionable error banner when PostgreSQL is unreachable."""
-    display_url = db_url
-    if "@" in display_url and ":" in display_url.split("@")[0]:
-        prefix, host_part = display_url.split("@", 1)
-        parts = prefix.split(":")
-        if len(parts) >= 3:
-            display_url = f"{parts[0]}:{parts[1]}:***@{host_part}"
+def _format_db_error_banner(db_url: str, exc: Exception | None = None) -> str:
+    """Formats a concise, actionable error banner with real diagnostics when PostgreSQL connection fails."""
+    from urllib.parse import urlparse
+    clean_url = db_url.replace("postgresql+asyncpg://", "postgresql://")
+    parsed = urlparse(clean_url)
+
+    error_cat = "Unknown Error"
+    error_msg = str(exc) if exc else "No exception provided"
+
+    if exc:
+        exc_str = str(exc).lower()
+        exc_type = type(exc).__name__
+        if "password authentication failed" in exc_str or "invalidpassword" in exc_str:
+            error_cat = "Authentication Failed"
+        elif "does not exist" in exc_str or "invalidcatalogname" in exc_str:
+            error_cat = "Database Does Not Exist"
+        elif "connection refused" in exc_str or "connectex" in exc_str or "cannotconnectnow" in exc_str:
+            error_cat = "Connection Refused / PostgreSQL Not Listening"
+        elif "timed out" in exc_str or "timeouterror" in exc_str:
+            error_cat = "Connection Timed Out"
+        elif "getaddrinfo" in exc_str or "gaierror" in exc_str or "nodename" in exc_str:
+            error_cat = "DNS / Host Failure"
+        else:
+            error_cat = f"{exc_type}"
+
+        # Sanitize any password occurrence in error_msg
+        if parsed.password and parsed.password in error_msg:
+            error_msg = error_msg.replace(parsed.password, "***")
 
     return (
         "\n"
         + "=" * 60 + "\n"
         + "POSTGRESQL CONNECTION FAILED\n"
         + "=" * 60 + "\n"
-        + f"Expected:\n  {display_url}\n\n"
+        + f"DATABASE HOST   = {parsed.hostname}\n"
+        + f"DATABASE PORT   = {parsed.port or 5432}\n"
+        + f"DATABASE USER   = {parsed.username}\n"
+        + f"DATABASE NAME   = {parsed.path.lstrip('/')}\n"
+        + f"DATABASE DRIVER = postgresql+asyncpg\n"
+        + f"ERROR CATEGORY  = {error_cat}\n"
+        + f"ERROR DETAIL    = {error_msg}\n\n"
         + "Make sure PostgreSQL is running and the database exists.\n\n"
         + "Options to start PostgreSQL:\n"
         + "  1. Windows local development:\n"
@@ -61,8 +88,17 @@ async def lifespan(app: FastAPI) -> AsyncGenerator:
     try:
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
-    except Exception:
-        sys.stderr.write(_format_db_error_banner(settings.database_url))
+            await conn.execute(
+                text("ALTER TABLE assessment_sessions ADD COLUMN IF NOT EXISTS current_question_id VARCHAR(64);")
+            )
+            await conn.execute(
+                text("ALTER TABLE assessment_sessions ADD COLUMN IF NOT EXISTS interview_mode VARCHAR(32) DEFAULT 'standard';")
+            )
+            await conn.execute(
+                text("ALTER TABLE assessment_sessions ADD COLUMN IF NOT EXISTS target_language VARCHAR(16) DEFAULT 'en-US';")
+            )
+    except Exception as exc:
+        sys.stderr.write(_format_db_error_banner(settings.database_url, exc))
         sys.stderr.flush()
         raise SystemExit(1) from None
 
@@ -118,6 +154,7 @@ async def websocket_session(session_id: str, websocket: WebSocket) -> None:
 
 # Health check
 @app.get("/health", tags=["health"])
+@app.get("/api/health", tags=["health"])
 async def health() -> dict:
     return {"status": "ok", "version": "0.2.0"}
 

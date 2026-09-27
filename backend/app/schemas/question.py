@@ -26,7 +26,14 @@ class NextQuestionResponse(BaseModel):
     difficulty: str
     question_type: str
     question: str
+    question_text: str = ""
+    localized_question_text: str | None = None
+    question_language: str = "en-IN"
     expected_concepts: list[str]
     follow_up_prompts: list[str]
     question_number: int
     total_questions: int
+    question_translated: str | None = None
+    target_language: str = "en-US"
+    interview_mode: str = "standard"
+

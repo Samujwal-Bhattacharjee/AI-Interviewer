@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { VoiceState } from '../types/interview';
-import type { InterviewQuestion, AdaptiveState, QuestionAttempt } from '../types/assessment';
+import type { InterviewQuestion, AdaptiveState, QuestionAttempt, InterviewLanguageMode } from '../types/assessment';
 import type { SkillEstimate } from '../types/skills';
 import { mockSkillEstimates } from '../mock/skills';
 import { mockAdaptiveState } from '../mock/assessment';
@@ -22,6 +22,11 @@ interface InterviewStore {
   totalQuestions: number;
   isComplete: boolean;
 
+  // Multilingual Mode: standard | mode1_native | mode2_any_lang
+  interviewMode: InterviewLanguageMode;
+  selectedLanguage: string;
+  professionalEnglishVersion: string | null;
+
   // Current question
   currentQuestion: InterviewQuestion | null;
   voiceState: VoiceState;
@@ -34,7 +39,10 @@ interface InterviewStore {
   adaptationNotice: AdaptationNotice | null;
 
   // Actions
-  setSession: (sessionId: string, targetRoleId: string, total: number) => void;
+  setSession: (sessionId: string, targetRoleId: string, total: number, mode?: InterviewLanguageMode, lang?: string) => void;
+  setInterviewMode: (mode: InterviewLanguageMode) => void;
+  setSelectedLanguage: (lang: string) => void;
+  setProfessionalEnglishVersion: (version: string | null) => void;
   setQuestion: (question: InterviewQuestion, index: number) => void;
   setVoiceState: (state: VoiceState) => void;
   setTranscript: (transcript: string) => void;
@@ -53,6 +61,9 @@ const initialState = {
   questionIndex: 0,
   totalQuestions: 10,
   isComplete: false,
+  interviewMode: 'native' as InterviewLanguageMode,
+  selectedLanguage: 'hi-IN',
+  professionalEnglishVersion: null,
   currentQuestion: null,
   voiceState: 'idle' as VoiceState,
   transcript: '',
@@ -65,8 +76,14 @@ const initialState = {
 export const useInterviewStore = create<InterviewStore>((set) => ({
   ...initialState,
 
-  setSession: (sessionId, targetRoleId, total) =>
-    set({ sessionId, targetRoleId, totalQuestions: total }),
+  setSession: (sessionId, targetRoleId, total, mode = 'native', lang = 'hi-IN') =>
+    set({ sessionId, targetRoleId, totalQuestions: total, interviewMode: mode, selectedLanguage: lang, professionalEnglishVersion: null }),
+
+  setInterviewMode: (interviewMode) => set({ interviewMode }),
+
+  setSelectedLanguage: (selectedLanguage) => set({ selectedLanguage }),
+
+  setProfessionalEnglishVersion: (professionalEnglishVersion) => set({ professionalEnglishVersion }),
 
   setQuestion: (question, index) =>
     set({ currentQuestion: question, questionIndex: index, transcript: '', voiceState: 'idle' }),

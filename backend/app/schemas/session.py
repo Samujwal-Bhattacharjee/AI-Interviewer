@@ -12,6 +12,14 @@ class CreateSessionRequest(BaseModel):
     level: str = "junior"
     focus_competencies: list[str] = []
     duration: str = "standard"  # quick | standard | deep
+    interview_mode: str = "native"  # native | any_language | standard | mode1_native | mode2_any_lang
+    target_language: str = "hi-IN"
+    language: str | None = None
+    interviewMode: str | None = None
+    questionLanguage: str | None = None
+    answerLanguage: str | None = None
+    question_language: str | None = None
+    answer_language: str | None = None
 
 
 class AssessmentSessionSchema(BaseModel):
@@ -25,6 +33,11 @@ class AssessmentSessionSchema(BaseModel):
     current_question_index: int
     focus_competencies: list[str]
     duration: str
+    interview_mode: str = "native"
+    target_language: str = "hi-IN"
+    language: str | None = None
+    question_language: str | None = None
+    answer_language: str | None = None
 
     model_config = {"from_attributes": True}
 

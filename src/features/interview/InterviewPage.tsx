@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInterview } from '../../hooks/useInterview';
@@ -8,6 +8,8 @@ import { AdaptiveStatePanel } from '../../components/interview/AdaptiveStatePane
 import { padIndex } from '../../lib/utils';
 import { mockRoles } from '../../mock/roles';
 import { SystemFooter } from '../../components/layout/SystemFooter';
+import { voiceService } from '../../services/voiceService';
+import { getLanguageByCode } from '../../config/languages';
 
 const competencyNameMap: Record<string, string> = {
   'comp-dsa': 'DSA',
@@ -34,26 +36,42 @@ export function InterviewPage() {
     startSession,
     startListening,
     stopListening,
+    voiceEngineStatus,
+    interviewMode,
+    selectedLanguage,
+    professionalEnglishVersion,
   } = useInterview();
+
+  const [showOriginalEnglish, setShowOriginalEnglish] = useState(false);
+  const [isPlayingEnglish, setIsPlayingEnglish] = useState(false);
+
+  const langConfig = getLanguageByCode(selectedLanguage || 'hi-IN');
+  const isNativeMode = interviewMode === 'mode1_native' || interviewMode === 'native';
+  const localizedText = currentQuestion?.localizedQuestionText || currentQuestion?.questionTranslated;
+  const isTranslationUnavailable = localizedText?.startsWith('TRANSLATION UNAVAILABLE');
 
   const role = mockRoles.find((r) => r.id === targetRoleId);
   const currentCompetency = currentQuestion
     ? competencyNameMap[currentQuestion.competencyId] ?? currentQuestion.competencyId
     : null;
 
-  // Auto-start when session is ready
+
+  const hasStartedRef = useRef(false);
+
+  // Auto-start when session is ready — guarded so it fires exactly once per mount
   useEffect(() => {
-    if (sessionId && targetRoleId && !currentQuestion && !isComplete) {
+    if (sessionId && targetRoleId && !currentQuestion && !isComplete && !hasStartedRef.current) {
+      hasStartedRef.current = true;
       startSession(sessionId, targetRoleId);
     }
-  }, [sessionId, targetRoleId]);
+  }, [sessionId, targetRoleId, currentQuestion, isComplete, startSession]);
 
   // If no session, redirect to assess
   useEffect(() => {
     if (!sessionId) {
       navigate('/assess');
     }
-  }, []);
+  }, [sessionId, navigate]);
 
   // When complete, redirect to report
   useEffect(() => {
@@ -61,7 +79,7 @@ export function InterviewPage() {
       const t = setTimeout(() => navigate('/report'), 2000);
       return () => clearTimeout(t);
     }
-  }, [isComplete]);
+  }, [isComplete, navigate]);
 
   const progress = totalQuestions > 0 ? (questionIndex / totalQuestions) * 100 : 0;
 
@@ -138,6 +156,47 @@ export function InterviewPage() {
                   </div>
                 </div>
               )}
+
+              {currentQuestion?.sourceType && (
+                <div className="border-l-2 border-cyan-400 pl-3">
+                  <div className="text-[10px] text-slate-400 uppercase tracking-widest">QUESTION SOURCE</div>
+                  <div className="mt-0.5 font-bold text-cyan-300 text-xs uppercase tracking-wider">
+                    {currentQuestion.sourceType}
+                  </div>
+                  {currentQuestion.documentTitle && (
+                    <div className="text-[10px] text-slate-300 truncate mt-0.5">
+                      {currentQuestion.documentTitle}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div className="border-l-2 border-slate-700 pl-3">
+                <div className="text-[10px] text-slate-400 uppercase tracking-widest">INTERVIEW MODE</div>
+                <div className="mt-1 flex items-center space-x-1.5">
+                  <span className="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-cyan-950/80 border border-cyan-400/40 text-cyan-300">
+                    {isNativeMode ? 'MODE 1: IN MY LANGUAGE' : 'MODE 2: BILINGUAL'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="border-l-2 border-slate-700 pl-3">
+                <div className="text-[10px] text-slate-400 uppercase tracking-widest">QUESTION LANGUAGE</div>
+                <div className="mt-1 flex items-center space-x-1.5">
+                  <span className="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-black/40 border border-white/10 text-cyan-300">
+                    {isNativeMode ? `${langConfig.name.toUpperCase()} (${langConfig.nativeName})` : 'ENGLISH (EN)'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="border-l-2 border-slate-700 pl-3">
+                <div className="text-[10px] text-slate-400 uppercase tracking-widest">ANSWER LANGUAGE</div>
+                <div className="mt-1 flex items-center space-x-1.5">
+                  <span className="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-black/40 border border-white/10 text-emerald-300">
+                    {isNativeMode ? `${langConfig.name.toUpperCase()} (${langConfig.nativeName})` : 'ANY LANGUAGE (AUTO)'}
+                  </span>
+                </div>
+              </div>
             </div>
 
             {/* Adaptive state panel */}
@@ -203,9 +262,71 @@ export function InterviewPage() {
                       </span>
                     </div>
 
+                    {/* Language header and explicit fallback if translation failed */}
+                    <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-wider text-slate-400">
+                      <span className="text-cyan-400 font-bold">
+                        QUESTION / {isNativeMode && !showOriginalEnglish ? `${langConfig.name.toUpperCase()}` : 'ENGLISH'}
+                      </span>
+                      {isNativeMode && (
+                        <span className="text-slate-500">
+                          {showOriginalEnglish ? 'CANONICAL REFERENCE' : `NATIVE DELIVERY (${langConfig.nativeName})`}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Question Source Banner */}
+                    {currentQuestion.sourceType && (
+                      <div className="p-2.5 rounded bg-black/40 border border-cyan-400/30 flex items-center justify-between text-xs font-mono">
+                        <div className="flex items-center gap-2">
+                          <span className="px-1.5 py-0.5 rounded bg-cyan-400/20 text-cyan-300 font-bold uppercase text-[10px] border border-cyan-400/40">
+                            SOURCE: {currentQuestion.sourceType}
+                          </span>
+                          {currentQuestion.documentTitle && (
+                            <span className="text-slate-300 truncate text-[11px]">
+                              {currentQuestion.documentTitle}
+                              {currentQuestion.topicName ? ` // Topic: ${currentQuestion.topicName}` : ''}
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-[10px] text-slate-500 uppercase tracking-widest hidden sm:inline">
+                          TRACEABLE
+                        </span>
+                      </div>
+                    )}
+
+                    {isTranslationUnavailable && (
+                      <div className="p-3 bg-amber-950/60 border border-amber-500/50 rounded flex items-center justify-between text-xs font-mono text-amber-200">
+                        <span>⚠️ TRANSLATION UNAVAILABLE</span>
+                        <button
+                          type="button"
+                          onClick={() => setShowOriginalEnglish(true)}
+                          className="px-2.5 py-1 bg-amber-500 text-black font-bold uppercase rounded hover:bg-amber-400 cursor-pointer"
+                        >
+                          USE ENGLISH
+                        </button>
+                      </div>
+                    )}
+
                     <p className="font-body text-xl sm:text-2xl text-white font-medium leading-relaxed tracking-tight" aria-live="polite">
-                      {currentQuestion.question}
+                      {isNativeMode && localizedText && !showOriginalEnglish && !isTranslationUnavailable
+                        ? localizedText
+                        : currentQuestion.question}
                     </p>
+
+                    {isNativeMode && localizedText && !isTranslationUnavailable && (
+                      <div className="flex items-center justify-between pt-1 font-mono text-xs">
+                        <button
+                          type="button"
+                          onClick={() => setShowOriginalEnglish((v) => !v)}
+                          className="text-cyan-400 hover:text-cyan-300 text-[11px] uppercase tracking-wider underline cursor-pointer"
+                        >
+                          {showOriginalEnglish ? `← VIEW ${langConfig.name.toUpperCase()} QUESTION` : 'VIEW ORIGINAL ENGLISH →'}
+                        </button>
+                        <span className="text-slate-400 text-[10px] uppercase">
+                          🗣️ ELEVENLABS {langConfig.name.toUpperCase()} VOICE
+                        </span>
+                      </div>
+                    )}
 
                     {/* Expected concepts when evaluating */}
                     <AnimatePresence>
@@ -257,6 +378,7 @@ export function InterviewPage() {
                 state={voiceState}
                 onStartListening={startListening}
                 onStopListening={stopListening}
+                voiceEngineActive={voiceEngineStatus?.available ?? false}
               />
             </div>
 
@@ -276,6 +398,63 @@ export function InterviewPage() {
                   <p className="text-slate-200 font-sans text-sm italic leading-relaxed">
                     "{transcript}"
                   </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Professional English formulation (Mode 2 & Multilingual coaching) */}
+            <AnimatePresence>
+              {professionalEnglishVersion && (
+                <motion.div
+                  initial={{ opacity: 0, y: 12, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  className="glass-panel p-6 rounded-lg w-full max-w-xl border-t-2 border-t-amber-400 font-mono text-xs space-y-3 shadow-2xl"
+                >
+                  <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-base">🚀</span>
+                      <span className="text-amber-300 font-bold uppercase tracking-wider">
+                        EXPRESSED IN PROFESSIONAL ENGLISH
+                      </span>
+                    </div>
+                    <span className="px-2 py-0.5 rounded bg-amber-400/20 text-amber-200 border border-amber-400/40 text-[9px] font-bold uppercase">
+                      BILINGUAL COACH
+                    </span>
+                  </div>
+
+                  <p className="font-body text-sm text-slate-100 italic leading-relaxed">
+                    "{professionalEnglishVersion}"
+                  </p>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-white/10">
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        setIsPlayingEnglish(true);
+                        try {
+                          await voiceService.speak(professionalEnglishVersion);
+                        } finally {
+                          setIsPlayingEnglish(false);
+                        }
+                      }}
+                      disabled={isPlayingEnglish}
+                      className="px-3 py-1.5 rounded bg-amber-400/15 hover:bg-amber-400/25 border border-amber-400/50 text-amber-300 text-[11px] font-bold uppercase flex items-center space-x-1.5 transition cursor-pointer"
+                    >
+                      <span>{isPlayingEnglish ? '🔊 SPEAKING...' : '🔊 LISTEN IN ENGLISH'}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        void navigator.clipboard.writeText(professionalEnglishVersion);
+                        alert('Copied professional English formulation to clipboard!');
+                      }}
+                      className="text-slate-400 hover:text-slate-200 underline text-[11px] uppercase cursor-pointer"
+                    >
+                      COPY FORMULATION
+                    </button>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>

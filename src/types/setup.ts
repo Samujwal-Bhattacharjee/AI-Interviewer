@@ -49,7 +49,7 @@ export interface ResumeProfile {
 
 // ── Question set ──────────────────────────────────────────────────────────────
 
-export type QuestionSource = 'role' | 'resume_skill' | 'project' | 'adaptive' | 'follow_up';
+export type QuestionSource = 'role' | 'resume_skill' | 'project' | 'adaptive' | 'follow_up' | 'document' | 'ROLE' | 'RESUME' | 'PROJECT' | 'DOCUMENT' | 'TOPIC' | 'FOLLOW_UP' | 'ADAPTIVE';
 
 export interface SetupQuestion {
   id: string;
